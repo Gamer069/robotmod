@@ -10,9 +10,8 @@ public class ModEntities {
 		Util.id("robot"),
 		EntityType.Builder
 			.create(RobotEntity::new, SpawnGroup.MISC)
-			.dimensions(0.1f, 0.1f)
+			.dimensions(1.0f, 1.4f)
 	);
-
 	public static void init() {
 		Robotmod.LOGGER.info("Initializing entities for " + Robotmod.MODID);
 	}

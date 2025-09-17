@@ -11,7 +11,7 @@
     "environment": "*",
     "entrypoints": {
         "fabric-datagen": [
-            "me.illia.robotmod.client.RobotmodDataGenerator"
+            "me.illia.robotmod.datagen.RobotmodDataGenerator"
         ],
         "client": [
             "me.illia.robotmod.client.RobotmodClient"

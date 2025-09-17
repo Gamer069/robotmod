@@ -9,6 +9,9 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 
 import java.util.function.BiFunction;
@@ -35,7 +38,25 @@ public class Util {
 		return Registry.register(
 			Registries.ITEM,
 			key,
-			func.apply(settings)
+			func.apply(settings.registryKey(key))
+		);
+	}
+
+	public static<T extends ScreenHandler> ScreenHandlerType<T> regScreenHandler(Identifier id, ScreenHandlerType.Factory<T> factory) {
+		RegistryKey<ScreenHandlerType<?>> key = RegistryKey.of(RegistryKeys.SCREEN_HANDLER, id);
+		return Registry.register(
+			Registries.SCREEN_HANDLER,
+			key,
+			new ScreenHandlerType<>(factory, FeatureSet.empty())
+		);
+	}
+
+	public static<T extends ScreenHandler> ScreenHandlerType<T> regScreenHandler(Identifier id, ScreenHandlerType.Factory<T> factory, FeatureSet featureSet) {
+		RegistryKey<ScreenHandlerType<?>> key = RegistryKey.of(RegistryKeys.SCREEN_HANDLER, id);
+		return Registry.register(
+			Registries.SCREEN_HANDLER,
+			key,
+			new ScreenHandlerType<>(factory, featureSet)
 		);
 	}
 
@@ -45,7 +66,7 @@ public class Util {
 		return (SpawnEggItem)Registry.register(
 			Registries.ITEM,
 			key,
-			func.apply(entity, settings)
+			func.apply(entity, settings.registryKey(key))
 		);
 	}
 }
