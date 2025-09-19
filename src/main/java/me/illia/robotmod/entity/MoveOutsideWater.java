@@ -1,7 +1,6 @@
 package me.illia.robotmod.entity;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.ai.pathing.Path;

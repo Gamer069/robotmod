@@ -1,15 +1,27 @@
 package me.illia.robotmod.screen;
 
+import me.illia.robotmod.actions.Action;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 
-public class RobotScreenHandler extends ScreenHandler {
-	private int robotId;
+import java.util.ArrayList;
 
-	public RobotScreenHandler(int syncId, int robotId) {
+public class RobotScreenHandler extends ScreenHandler {
+	public ArrayList<Action> actions;
+
+	public RobotScreenHandler(int syncId, ArrayList<Action> actions) {
 		super(ModScreenHandlers.ROBOT_SCREEN_HANDLER, syncId);
-		this.robotId = robotId;
+		this.actions = actions;
+	}
+
+	@Override
+	public void onClosed(PlayerEntity player) {
+		super.onClosed(player);
+	}
+
+	public ArrayList<Action> getActions() {
+		return actions;
 	}
 
 	@Override

@@ -14,5 +14,6 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 	@Override
 	public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
 		translationBuilder.add("menu.robotmod.robot", "Robot");
+		translationBuilder.add("menu.robotmod.add", "+");
 	}
 }

@@ -7,6 +7,7 @@ import me.illia.robotmod.entity.RobotEntityRenderer;
 import me.illia.robotmod.screen.ModScreenHandlers;
 import me.illia.robotmod.screen.RobotScreen;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
