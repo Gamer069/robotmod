@@ -1,15 +1,27 @@
 package me.illia.robotmod;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionType;
+import me.illia.robotmod.attachment.TeleportPoint;
+import me.illia.robotmod.attachment.TeleportPointAttachedData;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
+import net.minecraft.client.data.ItemModelGenerator;
+import net.minecraft.client.data.Model;
+import net.minecraft.client.data.TextureKey;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.item.*;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -17,13 +29,16 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Util {
 	public static final PacketCodec<? super RegistryByteBuf, Integer> INT_PC = new PacketCodec<>() {
@@ -108,11 +123,23 @@ public class Util {
 		}
 	};
 
+	public static final Codec<TeleportPoint> TELEPORT_POINT_C = RecordCodecBuilder.create(inst -> inst.group(
+		Codec.STRING.fieldOf("name").forGetter(TeleportPoint::name),
+		BlockPos.CODEC.fieldOf("pos").forGetter(TeleportPoint::pos),
+		World.CODEC.fieldOf("world").forGetter(TeleportPoint::world)
+	).apply(inst, TeleportPoint::new));
+
+	public static final Codec<TeleportPointAttachedData> TELEPORT_POINTS_C = RecordCodecBuilder.create(inst -> inst.group(
+		TELEPORT_POINT_C.listOf().fieldOf("points").forGetter(TeleportPointAttachedData::points)
+	).apply(inst, TeleportPointAttachedData::new));
+
+	public static final PacketCodec<ByteBuf, TeleportPointAttachedData> TELEPORT_POINTS_PC = PacketCodecs.codec(TELEPORT_POINTS_C);
+
 	public static Identifier id(String name) {
 		return Identifier.of(Robotmod.MODID, name);
 	}
 
-	public static <T extends Entity> EntityType<T> regEntity(Identifier id, EntityType.Builder<T> type) {
+	public static <T extends Entity> EntityType<T> entity(Identifier id, EntityType.Builder<T> type) {
 		RegistryKey<EntityType<?>> key = RegistryKey.of(RegistryKeys.ENTITY_TYPE, id);
 
 		return Registry.register(
@@ -122,7 +149,7 @@ public class Util {
 		);
 	}
 
-	public static Item regItem(Identifier id, Function<Item.Settings, Item> func, Item.Settings settings) {
+	public static Item item(Identifier id, Function<Item.Settings, Item> func, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
 		return Registry.register(
@@ -132,7 +159,7 @@ public class Util {
 		);
 	}
 
-	public static <T extends ScreenHandler> ScreenHandlerType<T> regScreenHandler(Identifier id, ScreenHandlerType.Factory<T> factory) {
+	public static <T extends ScreenHandler> ScreenHandlerType<T> screenHandler(Identifier id, ScreenHandlerType.Factory<T> factory) {
 		RegistryKey<ScreenHandlerType<?>> key = RegistryKey.of(RegistryKeys.SCREEN_HANDLER, id);
 		return Registry.register(
 			Registries.SCREEN_HANDLER,
@@ -141,7 +168,7 @@ public class Util {
 		);
 	}
 
-	public static <T extends ScreenHandler> ScreenHandlerType<T> regScreenHandler(Identifier id, ScreenHandlerType.Factory<T> factory, FeatureSet featureSet) {
+	public static <T extends ScreenHandler> ScreenHandlerType<T> screenHandler(Identifier id, ScreenHandlerType.Factory<T> factory, FeatureSet featureSet) {
 		RegistryKey<ScreenHandlerType<?>> key = RegistryKey.of(RegistryKeys.SCREEN_HANDLER, id);
 		return Registry.register(
 			Registries.SCREEN_HANDLER,
@@ -150,7 +177,7 @@ public class Util {
 		);
 	}
 
-	public static <T extends ScreenHandler, D> ExtendedScreenHandlerType<T, D> regExtendedScreenHandler(Identifier id, ExtendedScreenHandlerType.ExtendedFactory<T, D> factory, PacketCodec<RegistryByteBuf, D> codec) {
+	public static <T extends ScreenHandler, D> ExtendedScreenHandlerType<T, D> extendedScreenHandler(Identifier id, ExtendedScreenHandlerType.ExtendedFactory<T, D> factory, PacketCodec<RegistryByteBuf, D> codec) {
 		RegistryKey<ScreenHandlerType<?>> key = RegistryKey.of(RegistryKeys.SCREEN_HANDLER, id);
 		return Registry.register(
 			Registries.SCREEN_HANDLER,
@@ -159,7 +186,7 @@ public class Util {
 		);
 	}
 
-	public static SpawnEggItem regSpawnEggItem(Identifier id, BiFunction<EntityType<? extends MobEntity>, Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
+	public static SpawnEggItem spawnEgg(Identifier id, BiFunction<EntityType<? extends MobEntity>, Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
 		return (SpawnEggItem) Registry.register(
@@ -186,5 +213,54 @@ public class Util {
 			}
 		}
 		return actionName;
+	}
+
+	public static Block block(Identifier id, Function<AbstractBlock.Settings, Block> blockFactory, AbstractBlock.Settings settings) {
+		RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, id);
+		Block block = blockFactory.apply(settings.registryKey(blockKey));
+
+		RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, id);
+		BlockItem item = new BlockItem(block, new Item.Settings().registryKey(itemKey).useBlockPrefixedTranslationKey());
+		Registry.register(Registries.ITEM, itemKey, item);
+
+		return Registry.register(Registries.BLOCK, blockKey, block);
+	}
+
+	public static Block block(Identifier id, Function<AbstractBlock.Settings, Block> blockFactory, AbstractBlock.Settings settings, Rarity rarity) {
+		RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, id);
+		Block block = blockFactory.apply(settings.registryKey(blockKey));
+
+		RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, id);
+		BlockItem item = new BlockItem(block, new Item.Settings().registryKey(itemKey).useBlockPrefixedTranslationKey().rarity(rarity));
+		Registry.register(Registries.ITEM, itemKey, item);
+
+		return Registry.register(Registries.BLOCK, blockKey, block);
+	}
+
+	public static Block blockWithoutItem(Identifier id, Function<AbstractBlock.Settings, Block> blockFactory, AbstractBlock.Settings settings) {
+		RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, id);
+		Block block = blockFactory.apply(settings.registryKey(blockKey));
+		return Registry.register(Registries.BLOCK, blockKey, block);
+	}
+
+	public static ItemGroup itemGroup(Identifier id, String translationKey, ItemStack icon, Item... items) {
+		RegistryKey<ItemGroup> groupKey = RegistryKey.of(RegistryKeys.ITEM_GROUP, id);
+		ItemGroup group = Registry.register(Registries.ITEM_GROUP, groupKey, FabricItemGroup.builder().icon(() -> icon).displayName(Text.translatable(translationKey)).build());
+
+		ItemGroupEvents.modifyEntriesEvent(groupKey).register(fabricItemGroupEntries -> {
+			fabricItemGroupEntries.addAll(Arrays.stream(items).map(ItemStack::new).collect(Collectors.toSet()));
+		});
+
+		return group;
+	}
+
+	public static void itemModels(ItemModelGenerator gen, Item... items) {
+		for (Item item : items) {
+			gen.register(item, new Model(Optional.of(Util.mc("item/generated")), Optional.of("inventory"), TextureKey.LAYER0));
+		}
+	}
+
+	public static Identifier mc(String val) {
+		return Identifier.ofVanilla(val);
 	}
 }

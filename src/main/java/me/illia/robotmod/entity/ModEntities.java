@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 
 public class ModEntities {
-	public static final EntityType<RobotEntity> ROBOT = Util.regEntity(
+	public static final EntityType<RobotEntity> ROBOT = Util.entity(
 		Util.id("robot"),
 		EntityType.Builder
 			.create(RobotEntity::new, SpawnGroup.MISC)
