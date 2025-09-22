@@ -22,6 +22,7 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		translationBuilder.add("itemGroup.robotmod.robotmod", "Technology");
 		translationBuilder.add(ModItems.TELEPORTER, "Ender Teleporter");
 		translationBuilder.add(ModItems.PACKED_ENDER_PEARL, "Packed Ender Pearl");
+		translationBuilder.add(ModItems.ROBOT_SPAWN_EGG, "Robot Spawn Egg");
 		translationBuilder.add(ModBlocks.TELEPORTER_BLOCK, "Ender Teleporter Block");
 	}
 }

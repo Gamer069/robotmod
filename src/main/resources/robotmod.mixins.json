@@ -3,7 +3,11 @@
     "minVersion": "0.8",
     "package": "me.illia.robotmod.mixin",
     "compatibilityLevel": "JAVA_21",
+    "mixinextras": {
+        "minVersion": "0.5.0"
+    },
     "mixins": [
+        "FillCommandMixin"
     ],
     "client": [
         "ScreenInventoryTextMixin"

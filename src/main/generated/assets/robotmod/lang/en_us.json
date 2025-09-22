@@ -1,6 +1,7 @@
 {
   "block.robotmod.teleporter": "Ender Teleporter Block",
   "item.robotmod.packed_ender_pearl": "Packed Ender Pearl",
+  "item.robotmod.robot_spawn_egg": "Robot Spawn Egg",
   "item.robotmod.teleporter_item": "Ender Teleporter",
   "itemGroup.robotmod.robotmod": "Technology",
   "menu.robotmod.add": "+",

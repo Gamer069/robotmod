@@ -1,6 +1,19 @@
 plugins {
     id 'fabric-loom' version '1.11-SNAPSHOT'
     id 'maven-publish'
+    id 'dev.kikugie.stonecutter' version '0.7.10'
+}
+
+stonecutter.active "1.21.8"
+
+stonecutter {
+    kotlinController = false
+    centralScript = "build.gradle"
+
+    create(getRootProject()) {
+        versions("1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.8")
+        vcsVersion = "1.21.8"
+    }
 }
 
 loom {
@@ -33,6 +46,28 @@ repositories {
             includeGroup('net.tslat.smartbrainlib')
         }
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'customportalapi'
+                url = 'https://maven.kyrptonaught.dev'
+            }
+        }
+        filter {
+            includeModule('net.kyrptonaught', 'customportalapi') // Specify the module if needed
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Fuzs Mod Resources"
+                url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+            }
+        }
+        filter {
+            includeGroup('fuzs.forgeconfigscreens')
+        }
+    }
 }
 
 dependencies {
@@ -43,6 +78,10 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "net.tslat.smartbrainlib:SmartBrainLib-fabric-1.21.7:${project.sbl_version}"
+
+    modImplementation 'net.kyrptonaught:customportalapi:0.0.1-beta68-1.21.8'
+    modLocalRuntime "fuzs.forgeconfigscreens:forgeconfigscreens-fabric:v21.8.1-1.21.8-Fabric"
+    include 'net.kyrptonaught:customportalapi:0.0.1-beta68-1.21.8'
 }
 
 processResources {
