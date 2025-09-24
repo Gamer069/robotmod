@@ -1,0 +1,20 @@
+{
+    "project": "1.21.8",
+    "branch": {
+        "id": "",
+        "path": "/home/illia/proj/mc/robotmod"
+    },
+    "root": "/home/illia/proj/mc/robotmod",
+    "parameters": {
+        "dependencies": {
+            "": {
+                "type": "dev.kikugie.semver.data.SemanticVersion",
+                "components": [
+                    1,
+                    21,
+                    8
+                ]
+            }
+        }
+    }
+}

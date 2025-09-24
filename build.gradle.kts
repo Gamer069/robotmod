@@ -66,7 +66,12 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${loader_version}")
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
-    modImplementation("net.tslat.smartbrainlib:SmartBrainLib-fabric-1.21.7:${sbl_version}")
+
+    if (minecraft_version == "1.21.8") {
+        modImplementation("net.tslat.smartbrainlib:SmartBrainLib-fabric-1.21.7:${sbl_version}")
+    } else {
+        modImplementation("net.tslat.smartbrainlib:SmartBrainLib-fabric-${minecraft_version}:${sbl_version}")
+    }
 
     modImplementation("net.kyrptonaught:customportalapi:0.0.1-beta68-1.21.8")
     include("net.kyrptonaught:customportalapi:0.0.1-beta68-1.21.8")
@@ -76,13 +81,17 @@ tasks.named<ProcessResources>("processResources") {
     inputs.property("version", version)
     inputs.property("minecraft_version", minecraft_version)
     inputs.property("loader_version", loader_version)
+    inputs.property("fabric_version", fabric_version)
+    inputs.property("sbl_version", sbl_version)
     filteringCharset = "UTF-8"
 
     filesMatching("fabric.mod.json") {
         expand(
 			"version" to version,
 			"minecraft_version" to minecraft_version,
-			"loader_version" to loader_version
+			"loader_version" to loader_version,
+            "fabric_version" to fabric_version,
+            "sbl_version" to sbl_version
 		)
     }
 }
