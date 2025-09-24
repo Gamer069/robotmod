@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "charged=false": {
+      "model": "robotmod:block/teleporter"
+    },
+    "charged=true": {
+      "model": "robotmod:block/teleporter_charged"
+    }
+  }
+}

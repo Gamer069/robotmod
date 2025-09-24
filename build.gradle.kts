@@ -57,17 +57,6 @@ repositories {
             includeModule("net.kyrptonaught", "customportalapi") // Specify the module if needed
         }
     }
-    exclusiveContent {
-        forRepository {
-            maven {
-                name = "Fuzs Mod Resources"
-                url = uri("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
-            }
-        }
-        filter {
-            includeGroup("fuzs.forgeconfigscreens")
-        }
-    }
 }
 
 dependencies {
@@ -80,7 +69,6 @@ dependencies {
     modImplementation("net.tslat.smartbrainlib:SmartBrainLib-fabric-1.21.7:${sbl_version}")
 
     modImplementation("net.kyrptonaught:customportalapi:0.0.1-beta68-1.21.8")
-    modLocalRuntime("fuzs.forgeconfigscreens:forgeconfigscreens-fabric:v21.8.1-1.21.8-Fabric")
     include("net.kyrptonaught:customportalapi:0.0.1-beta68-1.21.8")
 }
 

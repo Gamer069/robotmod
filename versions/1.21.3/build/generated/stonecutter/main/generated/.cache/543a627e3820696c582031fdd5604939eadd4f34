@@ -1,0 +1,9 @@
+// 1.21.8	-999999999-01-01T00:00:00	robotmod/Model Definitions
+eaea1064c15c063cae77d8653331100a2c9d0952 assets/robotmod/blockstates/teleporter.json
+3a4c039b0875d43fd3a2b1233f5f3c51d1a5016b assets/robotmod/items/packed_ender_pearl.json
+e7290274293477169e8215dc6073888328a80d5d assets/robotmod/items/robot_spawn_egg.json
+b4ef1afe284d8e122d853af1f5641f46868ed2c1 assets/robotmod/items/teleporter.json
+4a5e9b352aa7ce1252900b497d6924bd1687e6be assets/robotmod/items/teleporter_item.json
+09756d23c267dbaf081cdd4a394d4b65416d8732 assets/robotmod/models/item/packed_ender_pearl.json
+e8ad3cc1fa6f3968cb1628f1eea57722093e19b5 assets/robotmod/models/item/robot_spawn_egg.json
+1686a8db8d82c2abf7537e3a8058759d8ccfba3a assets/robotmod/models/item/teleporter_item.json

@@ -18,7 +18,7 @@ plugins {
 }
 
 stonecutter {
-    kotlinController.set(false)
+    kotlinController.set(true)
     centralScript.set("build.gradle.kts")
 
     create(getRootProject()) {

@@ -1,0 +1,18 @@
+{
+  "mappings": {
+    "me/illia/robotmod/mixin/ScreenInventoryTextMixin": {
+      "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V": "Lnet/minecraft/class_465;method_2388(Lnet/minecraft/class_332;II)V",
+      "titleX": "field_25267:I",
+      "titleY": "field_25268:I"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "me/illia/robotmod/mixin/ScreenInventoryTextMixin": {
+        "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V": "Lnet/minecraft/class_465;method_2388(Lnet/minecraft/class_332;II)V",
+        "titleX": "field_25267:I",
+        "titleY": "field_25268:I"
+      }
+    }
+  }
+}
