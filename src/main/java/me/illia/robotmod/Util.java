@@ -13,9 +13,12 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.client.data.ItemModelGenerator;
-import net.minecraft.client.data.Model;
-import net.minecraft.client.data.TextureKey;
+//? if >= 1.21.8 {
+/*import net.minecraft.client.data.*;
+*///?} else {
+import net.minecraft.client.model.ModelTransform;
+import net.minecraft.data.client.*;
+//?}
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
@@ -197,23 +200,28 @@ public class Util {
 		);
 	}
 
-	public static String str(Action action) {
-		String actionName = "";
-		switch (action.actionType) {
+	public static Text str(Action action) {
+		// TODO: handle params and stuff
+		return str(action.actionType);
+	}
+
+	public static Text str(ActionType actionType) {
+		switch (actionType) {
 			case WalkAround -> {
-				actionName = "Walk around";
+				return Text.translatable("menu.robotmod.action_type_walk_around");
 			}
 			case Harvest -> {
-				actionName = "Harvest";
+				return Text.translatable("menu.robotmod.action_type_harvest");
 			}
 			case Wait -> {
-				actionName = "Wait";
+				return Text.translatable("menu.robotmod.action_type_wait");
 			}
 			case Home -> {
-				actionName = "Home";
+				return Text.translatable("menu.robotmod.action_type_home");
 			}
 		}
-		return actionName;
+
+		return Text.empty();
 	}
 
 	public static Block block(Identifier id, Function<AbstractBlock.Settings, Block> blockFactory, AbstractBlock.Settings settings) {
@@ -285,12 +293,22 @@ public class Util {
 			infiniburn,
 			effectsLocation,
 			ambientLight,
-			cloudHeight,
+			//? if >= 1.21.8 {
+			/*cloudHeight,
+			*///?}
 			monsterSettings
 		));
 	}
 
 	public static Identifier mc(String val) {
 		return Identifier.ofVanilla(val);
+	}
+
+	public static ModelTransform pivot(float x, float y, float z) {
+		//? if >= 1.21.8 {
+		return ModelTransform.origin(x, y, z);
+		//? } else {
+		return ModelTransform.pivot(x, y, z);
+		//? }
 	}
 }

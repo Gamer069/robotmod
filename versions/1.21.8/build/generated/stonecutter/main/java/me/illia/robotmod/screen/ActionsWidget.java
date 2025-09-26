@@ -1,10 +1,10 @@
 package me.illia.robotmod.screen;
 
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.screen.narration.NarrationPart;
@@ -29,11 +29,13 @@ public class ActionsWidget extends ClickableWidget {
 		for (Action action : actions) {
 			TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
 
-			String actionTxt = Util.str(action);
+			String actionTxt = Util.str(action).getString();
 			int y = getY() + (renderer.fontHeight + 10) * i;
 			int actionTxtW = renderer.getWidth(actionTxt);
 
 			context.fill(getX(), y, getX() + actionTxtW + action.getParams().size() * 30, y, 0xFF0000FF);
+
+			Robotmod.LOGGER.info(actionTxt);
 			context.drawText(renderer, actionTxt, getX(), y, 0xFF00FF00, true);
 			i++;
 		}
@@ -42,7 +44,7 @@ public class ActionsWidget extends ClickableWidget {
 	@Override
 	protected void appendClickableNarrations(NarrationMessageBuilder builder) {
 		for (Action action : this.actions) {
-			builder.put(NarrationPart.TITLE, Util.str(action));
+			builder.put(NarrationPart.TITLE, Util.str(action).getString());
 		}
 	}
 }

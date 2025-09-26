@@ -24,7 +24,7 @@ public class ModItems {
 
 	public static final Item PACKED_ENDER_PEARL = Util.item(
 		Util.id("packed_ender_pearl"),
-		PackedEnderPearl::new,
+		PackedEnderPearlItem::new,
 		new Item.Settings().maxCount(8).rarity(Rarity.UNCOMMON).component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true)
 	);
 

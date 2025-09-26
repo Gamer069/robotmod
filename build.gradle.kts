@@ -9,11 +9,16 @@ val loader_version: String by project
 val fabric_version: String by project
 val yarn_mappings: String by project
 val sbl_version: String by project
+val portal_version: String by project
 
 plugins {
     id("fabric-loom") version "1.11-SNAPSHOT"
     id("maven-publish")
     id("dev.kikugie.stonecutter") version "0.7.10"
+}
+
+stonecutter {
+    dependencies["loader_version"] = loader_version
 }
 
 loom {
@@ -67,14 +72,17 @@ dependencies {
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
 
-    if (minecraft_version == "1.21.8") {
-        modImplementation("net.tslat.smartbrainlib:SmartBrainLib-fabric-1.21.7:${sbl_version}")
-    } else {
-        modImplementation("net.tslat.smartbrainlib:SmartBrainLib-fabric-${minecraft_version}:${sbl_version}")
+    modImplementation("net.tslat.smartbrainlib:SmartBrainLib-fabric-${sbl_version}")
+
+    modImplementation("net.kyrptonaught:customportalapi:${portal_version}") {
+        exclude(group = "net.fabricmc.fabric-api")
+        exclude(group = "net.fabricmc")
     }
 
-    modImplementation("net.kyrptonaught:customportalapi:0.0.1-beta68-1.21.8")
-    include("net.kyrptonaught:customportalapi:0.0.1-beta68-1.21.8")
+    include("net.kyrptonaught:customportalapi:${portal_version}") {
+        exclude(group = "net.fabricmc.fabric-api")
+        exclude(group = "net.fabricmc")
+    }
 }
 
 tasks.named<ProcessResources>("processResources") {
@@ -83,6 +91,7 @@ tasks.named<ProcessResources>("processResources") {
     inputs.property("loader_version", loader_version)
     inputs.property("fabric_version", fabric_version)
     inputs.property("sbl_version", sbl_version)
+    inputs.property("portal_version", portal_version)
     filteringCharset = "UTF-8"
 
     filesMatching("fabric.mod.json") {
@@ -91,7 +100,8 @@ tasks.named<ProcessResources>("processResources") {
 			"minecraft_version" to minecraft_version,
 			"loader_version" to loader_version,
             "fabric_version" to fabric_version,
-            "sbl_version" to sbl_version
+            "sbl_version" to sbl_version,
+            "portal_version" to portal_version
 		)
     }
 }

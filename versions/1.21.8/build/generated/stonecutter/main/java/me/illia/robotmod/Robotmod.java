@@ -37,7 +37,6 @@ public class Robotmod implements ModInitializer {
 
 		PayloadTypeRegistry.playC2S().register(RequestTeleportC2SPayload.ID, RequestTeleportC2SPayload.REQUEST_TELEPORT_CODEC);
 		ModAttachmentTypes.init();
-		ModDialogs.init();
 		ModScreenHandlers.init();
 		ModItems.init();
 		ModBlocks.init();

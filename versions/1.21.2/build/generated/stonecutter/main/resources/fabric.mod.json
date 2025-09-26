@@ -1,0 +1,32 @@
+{
+    "schemaVersion": 1,
+    "id": "robotmod",
+    "version": "${version}",
+    "name": "robotmod",
+    "description": "",
+    "authors": [],
+    "contact": {},
+    "license": "unlicense",
+    "icon": "assets/robotmod/icon.png",
+    "accessWidener": "robotmod.accesswidener",
+    "environment": "*",
+    "entrypoints": {
+        "fabric-datagen": [
+            "me.illia.robotmod.datagen.RobotmodDataGenerator"
+        ],
+        "client": [
+            "me.illia.robotmod.client.RobotmodClient"
+        ],
+        "main": [
+            "me.illia.robotmod.Robotmod"
+        ]
+    },
+    "mixins": [
+        "robotmod.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${loader_version}",
+        "fabric": ">=${fabric_version}",
+        "minecraft": ">=1.21.6 <=1.21.8"
+    }
+}

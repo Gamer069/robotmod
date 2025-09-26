@@ -1,6 +1,5 @@
 {
     "project": "1.21.6",
-    "active": true,
     "branch": {
         "id": "",
         "path": "/home/illia/proj/mc/robotmod"
@@ -14,6 +13,14 @@
                     1,
                     21,
                     6
+                ]
+            },
+            "loader_version": {
+                "type": "dev.kikugie.semver.data.SemanticVersion",
+                "components": [
+                    0,
+                    17,
+                    2
                 ]
             }
         }

@@ -18,6 +18,7 @@ public abstract class ScreenInventoryTextMixin {
 	@Accessor("titleY")
 	abstract int robotmod$getTitleY();
 
+	//? if > 1.21.2 {
 	@WrapOperation(
 		method = "renderMain",
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")
@@ -29,4 +30,17 @@ public abstract class ScreenInventoryTextMixin {
 			context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), Colors.DARK_GRAY, false);
 		}
 	}
+	//?} else {
+	/*@WrapOperation(
+		method = "render",
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")
+	)
+	public void removeInventoryText(HandledScreen<?> instance, DrawContext context, int mouseX, int mouseY, Operation<Void> original) {
+		if (!(instance instanceof RobotScreen screen)) {
+			original.call(instance, context, mouseX, mouseY);
+		} else {
+			context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), -12566464, false);
+		}
+	}
+	*///?}
 }

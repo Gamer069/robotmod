@@ -18,6 +18,11 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		translationBuilder.add("menu.robotmod.robot", "Robot");
 		translationBuilder.add("menu.robotmod.add", "+");
 		translationBuilder.add("menu.robotmod.no_points", "No Teleport Points!");
+		translationBuilder.add("menu.robotmod.action_type", "Type");
+		translationBuilder.add("menu.robotmod.action_type_walk_around", "Walk Around");
+		translationBuilder.add("menu.robotmod.action_type_harvest", "Harvest");
+		translationBuilder.add("menu.robotmod.action_type_wait", "Wait");
+		translationBuilder.add("menu.robotmod.action_type_home", "Home");
 		translationBuilder.add("menu.robotmod.tp", "Teleport");
 		translationBuilder.add("itemGroup.robotmod.robotmod", "Technology");
 		translationBuilder.add(ModItems.TELEPORTER, "Ender Teleporter");

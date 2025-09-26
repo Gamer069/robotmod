@@ -6,16 +6,23 @@ import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
+//? if = 1.21.8 {
+/*import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
+*///?}
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
@@ -42,7 +49,8 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		this.actions = new ArrayList<>();
 	}
 
-	@Override
+	//? if = 1.21.8 {
+	/*@Override
 	protected void readCustomData(ReadView view) {
 		super.readCustomData(view);
 	}
@@ -57,6 +65,38 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 		super.writeCustomData(view);
 	}
+	*///?} else {
+
+	@Override
+	public void readNbt(NbtCompound nbt) {
+		super.readNbt(nbt);
+
+		actions.clear();
+		if (nbt.contains("actions", NbtElement.LIST_TYPE)) {
+			NbtList list = nbt.getList("actions", NbtElement.COMPOUND_TYPE);
+			for (int i = 0; i < list.size(); i++) {
+				NbtCompound actionNbt = list.getCompound(i);
+				Action action = Action.CODEC.decoder().decode(NbtOps.INSTANCE, actionNbt)
+					.getOrThrow().getFirst();
+				actions.add(action);
+			}
+		}
+	}
+
+	@Override
+	public NbtCompound writeNbt(NbtCompound nbt) {
+		super.writeNbt(nbt);
+
+		NbtList list = new NbtList();
+		for (Action action : actions) {
+			NbtElement actionNbt = Action.CODEC.encoder().encodeStart(NbtOps.INSTANCE, action)
+				.getOrThrow();
+			list.add(actionNbt);
+		}
+		nbt.put("actions", list);
+		return nbt;
+	}
+	//?}
 
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {
@@ -122,7 +162,8 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public BrainActivityGroup<RobotEntity> getCoreTasks() {
 		return BrainActivityGroup.coreTasks(
 			new LookAtTarget<>(),
-			new MoveToWalkTarget<>().cooldownForBetween(20, 60)
+			new MoveToWalkTarget<>(),
+			new ExecuteTask<>()
 		);
 	}
 
