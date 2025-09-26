@@ -170,8 +170,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	public BrainActivityGroup<RobotEntity> getIdleTasks() {
 		return BrainActivityGroup.idleTasks(
-			new SetPlayerLookTarget<>(),
-			new MoveOutsideWater<>()
+			new SetPlayerLookTarget<>()
 		);
 	}
 

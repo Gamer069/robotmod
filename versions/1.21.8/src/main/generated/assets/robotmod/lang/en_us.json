@@ -12,6 +12,7 @@
   "menu.robotmod.action_type_set_home": "Set Home",
   "menu.robotmod.action_type_wait": "Wait",
   "menu.robotmod.action_type_walk_around": "Walk Around",
+  "menu.robotmod.actions": "Actions",
   "menu.robotmod.add": "+",
   "menu.robotmod.no_points": "No Teleport Points!",
   "menu.robotmod.robot": "Robot",

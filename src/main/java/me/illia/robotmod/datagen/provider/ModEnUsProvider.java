@@ -26,6 +26,7 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		translationBuilder.add("menu.robotmod.action_type_set_home", "Set Home");
 		translationBuilder.add("menu.robotmod.action_param_walk_around", "around ");
 		translationBuilder.add("menu.robotmod.action_param_wait_sec", "for seconds");
+		translationBuilder.add("menu.robotmod.actions", "Actions");
 		translationBuilder.add("menu.robotmod.tp", "Teleport");
 		translationBuilder.add("itemGroup.robotmod.robotmod", "Technology");
 		translationBuilder.add(ModItems.TELEPORTER, "Ender Teleporter");

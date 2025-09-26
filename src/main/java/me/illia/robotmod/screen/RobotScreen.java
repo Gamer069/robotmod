@@ -1,5 +1,6 @@
 package me.illia.robotmod.screen;
 
+import com.google.common.collect.Lists;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionType;
@@ -15,12 +16,13 @@ import net.minecraft.client.gui.widget.CyclingButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 	private CyclingButtonWidget<ActionType> actionTypeBtn;
 	private ActionsWidget actionsWidget;
+
+	public static final ActionType[] ACTION_TYPES = ActionType.values();
 
 	public RobotScreen(RobotScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
@@ -31,7 +33,9 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		int x = (width - backgroundWidth) / 2 + titleX;
 		int y = (height - backgroundHeight) / 2 + titleY;
 
-		actionTypeBtn = CyclingButtonWidget.<ActionType>builder(Util::str).values(Arrays.asList(ActionType.values())).build(x + 25, y + 20, 100, 20, Text.translatable("menu.robotmod.action_type"));
+		actionTypeBtn = CyclingButtonWidget.<ActionType>builder(Util::str)
+			.values(ACTION_TYPES)
+			.build(x + 25, y + 20, 100, 20, Text.translatable("menu.robotmod.action_type"));
 		this.addDrawableChild(actionTypeBtn);
 
 		actionsWidget = new ActionsWidget(x, y + 50, 90, 50, handler.getActions());
