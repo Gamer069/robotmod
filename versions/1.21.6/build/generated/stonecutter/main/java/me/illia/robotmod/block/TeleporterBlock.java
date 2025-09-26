@@ -10,7 +10,7 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -38,7 +38,8 @@ public class TeleporterBlock extends SlabBlock {
 	@Override
 	protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (stack.getItem() == ModItems.PACKED_ENDER_PEARL) {
-			TeleportPointAttachedData data = world.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
+			ServerWorld serverWorld = (ServerWorld)world;
+			TeleportPointAttachedData data = serverWorld.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
 			if (data.findPointByPos(pos).isPresent()) return ActionResult.CONSUME;
 
 			world.setBlockState(pos, state.with(CHARGED, true));
@@ -49,7 +50,7 @@ public class TeleporterBlock extends SlabBlock {
 
 			player.setStackInHand(hand, stack2);
 
-			world.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.addPoint(new TeleportPoint("" + (data.points().size() + 1), pos, world.getRegistryKey())));
+			serverWorld.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.addPoint(new TeleportPoint("" + (data.points().size() + 1), pos, world.getRegistryKey())));
 
 			return ActionResult.CONSUME;
 		}
@@ -63,8 +64,9 @@ public class TeleporterBlock extends SlabBlock {
 			player.giveItemStack(new ItemStack(ModItems.PACKED_ENDER_PEARL));
 			world.setBlockState(pos, state.with(CHARGED, false));
 
-			TeleportPointAttachedData data = world.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
-			world.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.removePointByPos(pos));
+			ServerWorld serverWorld = (ServerWorld)world;
+			TeleportPointAttachedData data = serverWorld.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
+			serverWorld.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.removePointByPos(pos));
 		}
 
 		return super.onUse(state, world, pos, player, hit);
@@ -83,8 +85,9 @@ public class TeleporterBlock extends SlabBlock {
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		TeleportPointAttachedData data = world.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
-		world.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.removePointByPos(pos));
+		ServerWorld serverWorld = (ServerWorld)world;
+		TeleportPointAttachedData data = serverWorld.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
+		serverWorld.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.removePointByPos(pos));
 
 		return super.onBreak(world, pos, state, player);
 	}

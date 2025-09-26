@@ -162,7 +162,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public BrainActivityGroup<RobotEntity> getCoreTasks() {
 		return BrainActivityGroup.coreTasks(
 			new LookAtTarget<>(),
-			new MoveToWalkTarget<>().cooldownForBetween(20, 60),
+			new MoveToWalkTarget<>(),
 			new ExecuteTask<>()
 		);
 	}

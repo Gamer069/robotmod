@@ -35,8 +35,8 @@ public class ActionsWidget extends ClickableWidget {
 
 			context.fill(getX(), y, getX() + actionTxtW + action.getParams().size() * 30, y, 0xFF0000FF);
 
-			Robotmod.LOGGER.info(actionTxt);
 			context.drawText(renderer, actionTxt, getX(), y, 0xFF00FF00, true);
+
 			i++;
 		}
 	}

@@ -8,16 +8,16 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.data.DataWriter;
 import net.minecraft.util.Identifier;
 //? if >= 1.21.8 {
-/*import net.minecraft.client.data.*;
+import net.minecraft.client.data.*;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 
 public class ModModelProvider extends FabricModelProvider {
-*///?} else {
-import net.minecraft.data.client.*;
+//?} else {
+/*import net.minecraft.data.client.*;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 
 public class ModModelProvider extends FabricModelProvider {
-//?}
+*///?}
 
 	public ModModelProvider(FabricDataOutput output) {
 		super(output);
@@ -30,18 +30,18 @@ public class ModModelProvider extends FabricModelProvider {
 
 		blockStateModelGenerator.blockStateCollector.accept(
 			//? if >= 1.21.8 {
-			/*VariantsBlockModelDefinitionCreator.of(ModBlocks.TELEPORTER_BLOCK)
+			VariantsBlockModelDefinitionCreator.of(ModBlocks.TELEPORTER_BLOCK)
 				.with(BlockStateVariantMap.models(TeleporterBlock.CHARGED)
 					.register(true, BlockStateModelGenerator.createWeightedVariant(chargedModelId))
 					.register(false, BlockStateModelGenerator.createWeightedVariant(unchargedModelId)))
-			*///?} else {
-			VariantsBlockStateSupplier.create(ModBlocks.TELEPORTER_BLOCK)
+			//?} else {
+			/*VariantsBlockStateSupplier.create(ModBlocks.TELEPORTER_BLOCK)
 				.coordinate(
 					BlockStateVariantMap.create(TeleporterBlock.CHARGED)
 						.register(true, BlockStateVariant.create().put(VariantSettings.MODEL, chargedModelId))
 						.register(false, BlockStateVariant.create().put(VariantSettings.MODEL, unchargedModelId))
 				)
-			//?}
+			*///?}
 		);
 	}
 

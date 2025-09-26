@@ -15,6 +15,7 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 //? if >= 1.21.8 {
 /*import net.minecraft.client.data.*;
+import net.minecraft.client.model.ModelTransform;
 *///?} else {
 import net.minecraft.data.client.*;
 //?}
@@ -37,7 +38,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
+import org.apache.commons.io.function.IOQuadFunction;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -199,6 +202,20 @@ public class Util {
 		);
 	}
 
+	public static SpawnEggItem spawnEgg(Identifier id, IOQuadFunction<EntityType<? extends MobEntity>, Integer, Integer, Item.Settings, SpawnEggItem> func, EntityType<? extends MobEntity> entity, int primaryColor, int secondaryColor, Item.Settings settings) {
+		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
+
+		try {
+			return Registry.register(
+				Registries.ITEM,
+				key,
+				func.apply(entity, primaryColor, secondaryColor, settings.registryKey(key))
+			);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static Text str(Action action) {
 		// TODO: handle params and stuff
 		return str(action.actionType);
@@ -217,6 +234,9 @@ public class Util {
 			}
 			case Home -> {
 				return Text.translatable("menu.robotmod.action_type_home");
+			}
+			case SetHome -> {
+				return Text.translatable("menu.robotmod.action_type_set_home");
 			}
 		}
 
@@ -301,5 +321,13 @@ public class Util {
 
 	public static Identifier mc(String val) {
 		return Identifier.ofVanilla(val);
+	}
+
+	public static ModelTransform pivot(float x, float y, float z) {
+		//? if >= 1.21.8 {
+		/*return ModelTransform.origin(x, y, z);
+		*///?} else {
+		return ModelTransform.pivot(x, y, z);
+		//?}
 	}
 }

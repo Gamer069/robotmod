@@ -9,12 +9,23 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Rarity;
 
 public class ModItems {
+	//? if > 1.21.2 {
 	public static final SpawnEggItem ROBOT_SPAWN_EGG = Util.spawnEgg(
 		Util.id("robot_spawn_egg"),
 		SpawnEggItem::new,
 		ModEntities.ROBOT,
 		new Item.Settings()
 	);
+	//?} else {
+	/*public static final SpawnEggItem ROBOT_SPAWN_EGG = Util.spawnEgg(
+		Util.id("robot_spawn_egg"),
+		SpawnEggItem::new,
+		ModEntities.ROBOT,
+		0x4682B4,
+		0xC0C0C0,
+		new Item.Settings()
+	);
+	*///?}
 
 	public static final Item TELEPORTER = Util.item(
 		Util.id("teleporter_item"),

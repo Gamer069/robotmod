@@ -1,5 +1,6 @@
 package me.illia.robotmod.entity;
 
+import me.illia.robotmod.Util;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.state.LivingEntityRenderState;
@@ -24,7 +25,7 @@ public class RobotEntityModel extends EntityModel<LivingEntityRenderState> {
 	public static TexturedModelData getTexturedModelData() {
 		ModelData modelData = new ModelData();
 		ModelPartData modelPartData = modelData.getRoot();
-		ModelPartData head = modelPartData.addChild("head", ModelPartBuilder.create().uv(0, 0).cuboid(-5.0F, -6.0F, -2.0F, 10.0F, 6.0F, 4.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 12.0F, 0.0F));
+		ModelPartData head = modelPartData.addChild("head", ModelPartBuilder.create().uv(0, 0).cuboid(-5.0F, -6.0F, -2.0F, 10.0F, 6.0F, 4.0F, new Dilation(0.0F)), Util.pivot(0.0F, 12.0F, 0.0F));
 
 		ModelPartData antenna_r1 = head.addChild("antenna_r1", ModelPartBuilder.create().uv(8, 26).cuboid(-1.0F, -3.0F, -1.0F, 1.0F, 3.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-2.0F, -6.0F, 0.0F, 0.0F, 0.0F, -0.6981F));
 
@@ -35,10 +36,10 @@ public class RobotEntityModel extends EntityModel<LivingEntityRenderState> {
 		ModelPartData antenna_r4 = head.addChild("antenna_r4", ModelPartBuilder.create().uv(24, 16).cuboid(-1.0F, -3.0F, -1.0F, 1.0F, 3.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(3.0F, -5.25F, 0.0F, 0.0F, 0.0F, 0.6981F));
 
 		ModelPartData legs = modelPartData.addChild("legs", ModelPartBuilder.create().uv(24, 10).cuboid(1.0F, -4.0F, -1.0F, 2.0F, 4.0F, 2.0F, new Dilation(0.0F))
-		.uv(0, 26).cuboid(-3.0F, -4.0F, -1.0F, 2.0F, 4.0F, 2.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 24.0F, 0.0F));
+		.uv(0, 26).cuboid(-3.0F, -4.0F, -1.0F, 2.0F, 4.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
 
 		ModelPartData bb_main = modelPartData.addChild("bb_main", ModelPartBuilder.create().uv(0, 10).cuboid(-4.0F, -11.0F, -2.0F, 8.0F, 7.0F, 4.0F, new Dilation(0.0F))
-		.uv(0, 21).cuboid(-1.0F, -12.0F, -2.0F, 2.0F, 1.0F, 4.0F, new Dilation(0.0F)), ModelTransform.origin(0.0F, 24.0F, 0.0F));
+		.uv(0, 21).cuboid(-1.0F, -12.0F, -2.0F, 2.0F, 1.0F, 4.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
 		return TexturedModelData.of(modelData, 32, 32);
 	}
 

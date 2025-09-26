@@ -1,8 +1,8 @@
 package me.illia.robotmod.screen;
 
-import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
+import me.illia.robotmod.actions.ActionParamDescriptor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -35,8 +35,21 @@ public class ActionsWidget extends ClickableWidget {
 
 			context.fill(getX(), y, getX() + actionTxtW + action.getParams().size() * 30, y, 0xFF0000FF);
 
-			Robotmod.LOGGER.info(actionTxt);
 			context.drawText(renderer, actionTxt, getX(), y, 0xFF00FF00, true);
+
+			for (ActionParamDescriptor desc : action.actionType.getParams()) {
+				context.drawText(renderer, desc.name(), getX() + actionTxtW + 20, y, 0xFF0000FF, true);
+
+				switch (desc.type()) {
+					case Int -> {
+					}
+					case Float -> {
+					}
+					case Boolean -> {
+					}
+				}
+			}
+
 			i++;
 		}
 	}

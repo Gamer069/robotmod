@@ -19,7 +19,7 @@ public abstract class ScreenInventoryTextMixin {
 	abstract int robotmod$getTitleY();
 
 	//? if > 1.21.2 {
-	/*@WrapOperation(
+	@WrapOperation(
 		method = "renderMain",
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")
 	)
@@ -30,8 +30,8 @@ public abstract class ScreenInventoryTextMixin {
 			context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), Colors.DARK_GRAY, false);
 		}
 	}
-	*///?} else {
-	@WrapOperation(
+	//?} else {
+	/*@WrapOperation(
 		method = "render",
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")
 	)
@@ -42,5 +42,5 @@ public abstract class ScreenInventoryTextMixin {
 			context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), -12566464, false);
 		}
 	}
-	//?}
+	*///?}
 }

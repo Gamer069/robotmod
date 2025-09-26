@@ -4,10 +4,10 @@ import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionType;
 //? if = 1.21.8 {
-/*import net.minecraft.client.gl.RenderPipelines;
-*///?} else {
-import net.minecraft.client.render.RenderLayer;
-//?}
+import net.minecraft.client.gl.RenderPipelines;
+//?} else {
+/*import net.minecraft.client.render.RenderLayer;
+*///?}
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -55,10 +55,10 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		int y = (height - backgroundHeight) / 2;
 
 		//? if = 1.21.8 {
-		/*context.drawTexture(RenderPipelines.GUI, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
-		*///?} else {
-		context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
-		//?}
+		context.drawTexture(RenderPipelines.GUI, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		//?} else {
+		/*context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		*///?}
 	}
 
 	@Override

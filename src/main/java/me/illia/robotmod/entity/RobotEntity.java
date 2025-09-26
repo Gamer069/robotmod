@@ -20,9 +20,9 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if = 1.21.8 {
-/*import net.minecraft.storage.ReadView;
+import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
-*///?}
+//?}
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
@@ -50,7 +50,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	}
 
 	//? if = 1.21.8 {
-	/*@Override
+	@Override
 	protected void readCustomData(ReadView view) {
 		super.readCustomData(view);
 	}
@@ -65,9 +65,9 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 		super.writeCustomData(view);
 	}
-	*///?} else {
+	//?} else {
 
-	@Override
+	/*@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 
@@ -96,7 +96,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		nbt.put("actions", list);
 		return nbt;
 	}
-	//?}
+	*///?}
 
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {
@@ -170,8 +170,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	public BrainActivityGroup<RobotEntity> getIdleTasks() {
 		return BrainActivityGroup.idleTasks(
-			new SetPlayerLookTarget<>(),
-			new MoveOutsideWater<>()
+			new SetPlayerLookTarget<>()
 		);
 	}
 
