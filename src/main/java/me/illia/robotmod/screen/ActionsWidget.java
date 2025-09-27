@@ -11,8 +11,9 @@ import net.minecraft.client.gui.screen.narration.NarrationPart;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextContent;
+import net.minecraft.text.TranslatableTextContent;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
@@ -136,6 +137,12 @@ public class ActionsWidget extends ClickableWidget {
 								return false;
 							}
 						});
+						TranslatableTextContent content = (TranslatableTextContent)desc.name().getContent();
+						Action.ParamValue val = action.getParams().get(content.getKey());
+						if (val instanceof Action.ParamValue.IntParam(int value)) {
+							widget.setText(Integer.toString(value));
+						}
+
 						paramWidgets.add(new ParamWidgetDescriptor(widget, desc, actionI));
 					}
 					case Float -> {
@@ -149,11 +156,25 @@ public class ActionsWidget extends ClickableWidget {
 								return false;
 							}
 						});
+
+						TranslatableTextContent content = (TranslatableTextContent)desc.name().getContent();
+						Action.ParamValue val = action.getParams().get(content.getKey());
+						if (val instanceof Action.ParamValue.FloatParam(float value)) {
+							widget.setText(Float.toString(value));
+						}
+
 						paramWidgets.add(new ParamWidgetDescriptor(widget, desc, actionI));
 					}
 					case Boolean -> {
 						CyclingButtonWidget<Boolean> boolWidget = CyclingButtonWidget.onOffBuilder()
 							.build(widgetX, widgetY, 60, 20, desc.name());
+
+						TranslatableTextContent content = (TranslatableTextContent)desc.name().getContent();
+						Action.ParamValue val = action.getParams().get(content.getKey());
+						if (val instanceof Action.ParamValue.BoolParam(boolean value)) {
+							boolWidget.setValue(value);
+						}
+
 						paramWidgets.add(new ParamWidgetDescriptor(boolWidget, desc, actionI));
 					}
 				}
