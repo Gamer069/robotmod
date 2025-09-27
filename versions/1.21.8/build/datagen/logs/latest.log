@@ -1,5 +1,5 @@
-[22:43:15] [main/INFO] (FabricLoader/GameProvider) Loading Minecraft 1.21.8 with Fabric Loader 0.17.2
-[22:43:15] [main/INFO] (FabricLoader) Loading 52 mods:
+[19:13:36] [main/INFO] (FabricLoader/GameProvider) Loading Minecraft 1.21.8 with Fabric Loader 0.17.2
+[19:13:36] [main/INFO] (FabricLoader) Loading 52 mods:
 	- customportalapi 0.0.1-beta68-1.21.8
 	- fabric-api 0.133.4+1.21.8
 	- fabric-api-base 0.5.0+cd8c0daa2c
@@ -52,29 +52,8 @@
 	- mixinextras 0.5.0
 	- robotmod 1.0.0
 	- smartbrainlib 1.16.10
-[22:43:15] [main/INFO] (FabricLoader/Mixin) SpongePowered MIXIN Subsystem Version=0.8.7 Source=file:/home/illia/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.16.3+mixin.0.8.7/3e535042688d1265447e52ad86950b7d9678a5fa/sponge-mixin-0.16.3+mixin.0.8.7.jar Service=Knot/Fabric Env=CLIENT
-[22:43:15] [main/INFO] (FabricLoader/Mixin) Loaded Fabric development mappings for mixin remapper!
-[22:43:15] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_21
-[22:43:16] [main/INFO] (FabricLoader/MixinExtras|Service) Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.0).
-[22:43:17] [Datafixer Bootstrap/INFO] (Minecraft) 269 Datafixer optimizations took 296 milliseconds
-[22:43:20] [Render thread/INFO] (Minecraft) Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
-[22:43:20] [Render thread/INFO] (Minecraft) Setting user: Player170
-[22:43:20] [Render thread/INFO] (robotmod) initializing attachment types for robotmod
-[22:43:20] [Render thread/INFO] (robotmod) Initializing screen handlers for robotmod
-[22:43:20] [Render thread/INFO] (robotmod) Initializing items for robotmod
-[22:43:20] [Render thread/INFO] (robotmod) registering mod blocks for robotmod
-[22:43:20] [Render thread/INFO] (robotmod) registering item groups for robotmod
-[22:43:20] [Render thread/INFO] (robotmod) Initializing entities for robotmod
-[22:43:20] [Render thread/INFO] (Indigo) [Indigo] Registering Indigo renderer!
-[22:43:20] [Render thread/INFO] (FabricDataGenHelper) Running data generator for robotmod
-[22:43:20] [Render thread/INFO] (Minecraft) Starting provider: robotmod/Language (en_us)
-[22:43:21] [Worker-Main-1/INFO] (robotmod) registering dimensions for robotmod
-[22:43:21] [Render thread/INFO] (Minecraft) robotmod/Language (en_us) finished after 233 ms
-[22:43:21] [Render thread/INFO] (Minecraft) Starting provider: robotmod/Model Definitions
-[22:43:21] [Render thread/INFO] (Minecraft) robotmod/Model Definitions finished after 41 ms
-[22:43:21] [Render thread/INFO] (Minecraft) Starting provider: robotmod/robotmod recipes
-[22:43:21] [Render thread/INFO] (Minecraft) robotmod/robotmod recipes finished after 21 ms
-[22:43:21] [Render thread/INFO] (Minecraft) Starting provider: robotmod/World provider
-[22:43:21] [Render thread/INFO] (Minecraft) robotmod/World provider finished after 4 ms
-[22:43:21] [Render thread/INFO] (Minecraft) All providers took: 302 ms
-[22:43:21] [Render thread/INFO] (Minecraft) Caching: total files: 16, old count: 16, new count: 17, removed stale: 0, written: 1
+[19:13:36] [main/INFO] (FabricLoader/Mixin) SpongePowered MIXIN Subsystem Version=0.8.7 Source=file:/home/illia/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.16.3+mixin.0.8.7/3e535042688d1265447e52ad86950b7d9678a5fa/sponge-mixin-0.16.3+mixin.0.8.7.jar Service=Knot/Fabric Env=CLIENT
+[19:13:36] [main/INFO] (FabricLoader/Mixin) Loaded Fabric development mappings for mixin remapper!
+[19:13:36] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_21
+[19:13:37] [main/INFO] (FabricLoader/MixinExtras|Service) Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.0).
+[19:13:37] [Datafixer Bootstrap/INFO] (Minecraft) 269 Datafixer optimizations took 213 milliseconds

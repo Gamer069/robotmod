@@ -8,8 +8,9 @@ import net.minecraft.block.MapColor;
 
 public class ModBlocks {
 	public static final Block TELEPORTER_BLOCK = Util.block(Util.id("teleporter"), TeleporterBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.TEAL));
+	public static final Block LUNAR_PANEL_BLOCK = Util.block(Util.id("lunar_panel"), LunarPanelBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.PALE_YELLOW));
 
 	public static void init() {
-		Robotmod.LOGGER.info("registering mod blocks for " + Robotmod.MODID);
+		Robotmod.LOGGER.info("Registering mod blocks for " + Robotmod.MODID);
 	}
 }

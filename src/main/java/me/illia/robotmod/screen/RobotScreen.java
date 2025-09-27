@@ -72,7 +72,6 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 	public void close() {
 		// WHAT DO I DO WITH THIS
 		getRobot().save(actionsWidget.save());
-		// ???
 		super.close();
 	}
 

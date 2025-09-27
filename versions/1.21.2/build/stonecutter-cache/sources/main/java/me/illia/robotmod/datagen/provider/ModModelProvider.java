@@ -1,6 +1,7 @@
 package me.illia.robotmod.datagen.provider;
 
 import me.illia.robotmod.Util;
+import me.illia.robotmod.block.LunarPanelBlock;
 import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.block.TeleporterBlock;
 import me.illia.robotmod.item.ModItems;
@@ -25,21 +26,40 @@ public class ModModelProvider extends FabricModelProvider {
 
 	@Override
 	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-		Identifier chargedModelId = Util.id("block/teleporter_charged");
-		Identifier unchargedModelId = Util.id("block/teleporter");
+		Identifier chargedTeleporterModelId = Util.id("block/teleporter_charged");
+		Identifier unchargedTeleporterModelId = Util.id("block/teleporter");
 
 		blockStateModelGenerator.blockStateCollector.accept(
 			//? if >= 1.21.8 {
 			/*VariantsBlockModelDefinitionCreator.of(ModBlocks.TELEPORTER_BLOCK)
 				.with(BlockStateVariantMap.models(TeleporterBlock.CHARGED)
-					.register(true, BlockStateModelGenerator.createWeightedVariant(chargedModelId))
-					.register(false, BlockStateModelGenerator.createWeightedVariant(unchargedModelId)))
+					.register(true, BlockStateModelGenerator.createWeightedVariant(chargedTeleporterModelId))
+					.register(false, BlockStateModelGenerator.createWeightedVariant(unchargedTeleporterModelId)))
 			*///?} else {
 			VariantsBlockStateSupplier.create(ModBlocks.TELEPORTER_BLOCK)
 				.coordinate(
 					BlockStateVariantMap.create(TeleporterBlock.CHARGED)
-						.register(true, BlockStateVariant.create().put(VariantSettings.MODEL, chargedModelId))
-						.register(false, BlockStateVariant.create().put(VariantSettings.MODEL, unchargedModelId))
+						.register(true, BlockStateVariant.create().put(VariantSettings.MODEL, chargedTeleporterModelId))
+						.register(false, BlockStateVariant.create().put(VariantSettings.MODEL, unchargedTeleporterModelId))
+				)
+			//?}
+		);
+
+		Identifier activatedLunarPanelModelId = Util.id("block/lunar_panel_active");
+		Identifier unactivatedLunarPanelModelId = Util.id("block/lunar_panel");
+
+		blockStateModelGenerator.blockStateCollector.accept(
+			//? if >= 1.21.8 {
+			/*VariantsBlockModelDefinitionCreator.of(ModBlocks.LUNAR_PANEL_BLOCK)
+				.with(BlockStateVariantMap.models(LunarPanelBlock.ACTIVE)
+					.register(true, BlockStateModelGenerator.createWeightedVariant(activatedLunarPanelModelId))
+					.register(false, BlockStateModelGenerator.createWeightedVariant(unactivatedLunarPanelModelId)))
+			*///?} else {
+			VariantsBlockStateSupplier.create(ModBlocks.LUNAR_PANEL_BLOCK)
+				.coordinate(
+					BlockStateVariantMap.create(LunarPanelBlock.ACTIVE)
+						.register(true, BlockStateVariant.create().put(VariantSettings.MODEL, activatedLunarPanelModelId))
+						.register(false, BlockStateVariant.create().put(VariantSettings.MODEL, unactivatedLunarPanelModelId))
 				)
 			//?}
 		);

@@ -58,6 +58,7 @@ public class Util {
 			return buf.readInt();
 		}
 	};
+
 	public static final PacketCodec<RegistryByteBuf, ArrayList<Action>> ACTIONS_PC = new PacketCodec<>() {
 		@Override
 		public void encode(RegistryByteBuf buf, ArrayList<Action> actions) {
@@ -67,29 +68,30 @@ public class Util {
 				buf.writeVarInt(action.getActionType().getId());
 
 				// Write params
-				HashMap<String, Object> params = action.getParams();
+				HashMap<String, Action.ParamValue> params = action.getParams();
 				buf.writeVarInt(params.size());
 
-				for (Map.Entry<String, Object> entry : params.entrySet()) {
+				for (Map.Entry<String, Action.ParamValue> entry : params.entrySet()) {
 					String key = entry.getKey();
-					Object value = entry.getValue();
+					Action.ParamValue value = entry.getValue();
 
 					buf.writeString(key);
 
-					if (value instanceof Integer) {
-						buf.writeByte(0); // tag
-						buf.writeVarInt((int) value);
-					} else if (value instanceof Double) {
-						buf.writeByte(1);
-						buf.writeDouble((double) value);
-					} else if (value instanceof Boolean) {
-						buf.writeByte(2);
-						buf.writeBoolean((boolean) value);
-					} else if (value instanceof String) {
-						buf.writeByte(3);
-						buf.writeString((String) value);
-					} else {
-						throw new IllegalArgumentException("Unsupported param type: " + value.getClass().getName());
+					// Write type tag and value based on ParamValue type
+					switch (value) {
+						case Action.ParamValue.IntParam intParam -> {
+							buf.writeByte(0); // tag for int
+							buf.writeVarInt(intParam.value());
+						}
+						case Action.ParamValue.FloatParam floatParam -> {
+							buf.writeByte(1); // tag for float
+							buf.writeFloat(floatParam.value());
+						}
+						case Action.ParamValue.BoolParam boolParam -> {
+							buf.writeByte(2); // tag for bool
+							buf.writeBoolean(boolParam.value());
+						}
+						default -> throw new IllegalArgumentException("Unsupported ParamValue type: " + value.getClass().getName());
 					}
 				}
 			}
@@ -105,17 +107,16 @@ public class Util {
 				ActionType type = ActionType.from(typeId);
 
 				int paramCount = buf.readVarInt();
-				HashMap<String, Object> params = new HashMap<>(paramCount);
+				HashMap<String, Action.ParamValue> params = new HashMap<>(paramCount);
 
 				for (int j = 0; j < paramCount; j++) {
 					String key = buf.readString();
 					byte tag = buf.readByte();
 
-					Object value = switch (tag) {
-						case 0 -> buf.readVarInt();
-						case 1 -> buf.readDouble();
-						case 2 -> buf.readBoolean();
-						case 3 -> buf.readString();
+					Action.ParamValue value = switch (tag) {
+						case 0 -> new Action.ParamValue.IntParam(buf.readVarInt());
+						case 1 -> new Action.ParamValue.FloatParam(buf.readFloat());
+						case 2 -> new Action.ParamValue.BoolParam(buf.readBoolean());
 						default -> throw new IllegalArgumentException("Unknown param tag: " + tag);
 					};
 
@@ -183,7 +184,7 @@ public class Util {
 		);
 	}
 
-	public static <T extends ScreenHandler, D> ExtendedScreenHandlerType<T, D> extendedScreenHandler(Identifier id, ExtendedScreenHandlerType.ExtendedFactory<T, D> factory, PacketCodec<RegistryByteBuf, D> codec) {
+	public static <T extends ScreenHandler, D> ExtendedScreenHandlerType<T, D> extendedScreenHandler(Identifier id, ExtendedScreenHandlerType.ExtendedFactory<T, D> factory, PacketCodec<ByteBuf, D> codec) {
 		RegistryKey<ScreenHandlerType<?>> key = RegistryKey.of(RegistryKeys.SCREEN_HANDLER, id);
 		return Registry.register(
 			Registries.SCREEN_HANDLER,
