@@ -38,7 +38,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 			.build(x + 25, y + 20, 100, 20, Text.translatable("menu.robotmod.action_type"));
 		this.addDrawableChild(actionTypeBtn);
 
-		actionsWidget = new ActionsWidget(x, y + 50, 90, 50, handler.getActions());
+		actionsWidget = new ActionsWidget(x, y + 50, 140, 50, handler.getActions());
 		this.addDrawableChild(actionsWidget);
 
 		this.addDrawableChild(ButtonWidget.builder(Text.translatable("menu.robotmod.add"), button -> {

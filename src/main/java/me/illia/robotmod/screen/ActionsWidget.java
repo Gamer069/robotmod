@@ -14,6 +14,7 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -31,10 +32,8 @@ public class ActionsWidget extends ClickableWidget {
 
 	@Override
 	public boolean charTyped(char chr, int modifiers) {
-		for (ClickableWidget widget : paramWidgets) {
-			if (widget instanceof TextFieldWidget tf) {
-				tf.charTyped(chr, modifiers);
-			}
+		for (ClickableWidget w : paramWidgets) {
+			if (w instanceof TextFieldWidget tf && tf.isFocused()) tf.setText(tf.getText() + chr);
 		}
 		return super.charTyped(chr, modifiers);
 	}
@@ -43,6 +42,14 @@ public class ActionsWidget extends ClickableWidget {
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		boolean handled = false;
 		for (ClickableWidget widget : paramWidgets) {
+			if (widget instanceof TextFieldWidget tf) {
+				if (tf.isMouseOver(mouseX, mouseY) && button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+					for (ClickableWidget w : paramWidgets) {
+						w.setFocused(false);
+					}
+					tf.setFocused(true);
+				}
+			}
 			handled |= widget.mouseClicked(mouseX, mouseY, button);
 		}
 		return handled || super.mouseClicked(mouseX, mouseY, button);
@@ -53,7 +60,7 @@ public class ActionsWidget extends ClickableWidget {
 		boolean handled = false;
 		for (ClickableWidget w : paramWidgets) {
 			if (w instanceof TextFieldWidget tf) handled |= tf.keyPressed(keyCode, scanCode, modifiers);
-		}
+		};
 		return handled || super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
@@ -127,7 +134,7 @@ public class ActionsWidget extends ClickableWidget {
 
 		// Render all param widgets
 		for (ClickableWidget widget : paramWidgets) {
-			widget.renderWidget(context, mouseX, mouseY, deltaTicks);
+			widget.render(context, mouseX, mouseY, deltaTicks);
 		}
 	}
 
