@@ -63,15 +63,15 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 
-		actions.clear();
 		if (nbt.contains("actions", NbtElement.LIST_TYPE)) {
-			NbtList list = nbt.getList("actions", NbtElement.COMPOUND_TYPE);
-			for (int i = 0; i < list.size(); i++) {
-				NbtCompound actionNbt = list.getCompound(i);
-				Action action = Action.CODEC.decoder().decode(NbtOps.INSTANCE, actionNbt)
-					.getOrThrow().getFirst();
-				actions.add(action);
-			}
+			this.actions = new ArrayList<>(
+				Action.CODEC.codec().listOf()
+					.parse(NbtOps.INSTANCE, nbt.get("actions"))
+					.resultOrPartial(error -> LOGGER.error("Failed to read actions: {}", error))
+					.orElse(List.of())
+			);
+		} else {
+			this.actions = new ArrayList<>();
 		}
 	}
 
@@ -79,13 +79,11 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public NbtCompound writeNbt(NbtCompound nbt) {
 		super.writeNbt(nbt);
 
-		NbtList list = new NbtList();
-		for (Action action : actions) {
-			NbtElement actionNbt = Action.CODEC.encoder().encodeStart(NbtOps.INSTANCE, action)
-				.getOrThrow();
-			list.add(actionNbt);
-		}
-		nbt.put("actions", list);
+		Action.CODEC.codec().listOf()
+			.encodeStart(NbtOps.INSTANCE, this.actions)
+			.resultOrPartial(error -> LOGGER.error("Failed to write actions: {}", error))
+			.ifPresent(nbtElement -> nbt.put("actions", nbtElement));
+
 		return nbt;
 	}
 	*///?}
