@@ -1,18 +1,15 @@
 package me.illia.robotmod.screen;
 
-import me.illia.robotmod.actions.Action;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 
-import java.util.ArrayList;
-
 public class RobotScreenHandler extends ScreenHandler {
-	public ArrayList<Action> actions;
+	public int eid;
 
-	public RobotScreenHandler(int syncId, ArrayList<Action> actions) {
+	public RobotScreenHandler(int syncId, int eid) {
 		super(ModScreenHandlers.ROBOT_SCREEN_HANDLER, syncId);
-		this.actions = actions;
+		this.eid = eid;
 	}
 
 	@Override
@@ -20,8 +17,8 @@ public class RobotScreenHandler extends ScreenHandler {
 		super.onClosed(player);
 	}
 
-	public ArrayList<Action> getActions() {
-		return actions;
+	public int getEid() {
+		return eid;
 	}
 
 	@Override

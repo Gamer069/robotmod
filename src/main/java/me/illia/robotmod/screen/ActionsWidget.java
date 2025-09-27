@@ -29,7 +29,7 @@ public class ActionsWidget extends ClickableWidget {
 		initParamWidgets();
 	}
 
-	public NbtCompound save() {
+	public ArrayList<Action> save() {
 		for (ParamWidgetDescriptor desc : paramWidgets) {
 			Action action = actions.get(desc.actionI());
 			ActionParamDescriptor paramDesc = desc.desc();
@@ -73,9 +73,7 @@ public class ActionsWidget extends ClickableWidget {
 			}
 		}
 
-		NbtCompound root = new NbtCompound();
-		root.put("action", Action.CODEC.codec().listOf(), actions);
-		return root;
+		return actions;
 	}
 
 	@Override

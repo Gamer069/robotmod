@@ -1,21 +1,15 @@
 package me.illia.robotmod.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -57,11 +51,9 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	@Override
 	protected void writeCustomData(WriteView view) {
-		WriteView list = view.getList("actions").add();
+		WriteView actions = view.get("actions");
 
-		for (Action action : actions) {
-			list.put("action", Action.CODEC.codec(), action);
-		}
+		actions.put("action", Action.CODEC.codec().listOf(), this.actions);
 
 		super.writeCustomData(view);
 	}
@@ -101,29 +93,13 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {
 		if (!this.getWorld().isClient && !player.isSneaking()) {
-			player.openHandledScreen(new ExtendedScreenHandlerFactory<ArrayList<Action>>() {
+			player.openHandledScreen(new ExtendedScreenHandlerFactory<Integer>() {
+				private final int id = RobotEntity.this.getId();
+
 				@Override
-				public ArrayList<Action> getScreenOpeningData(ServerPlayerEntity player) {
-					return actions;
+				public Integer getScreenOpeningData(ServerPlayerEntity player) {
+					return id;
 				}
-
-				private int id = RobotEntity.this.getId();
-				private final PropertyDelegate delegate = new PropertyDelegate() {
-					@Override
-					public int get(int index) {
-						return id;
-					}
-
-					@Override
-					public void set(int index, int value) {
-						id = value;
-					}
-
-					@Override
-					public int size() {
-						return 1;
-					}
-				};
 
 				@Override
 				public Text getDisplayName() {
@@ -132,7 +108,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 				@Override
 				public RobotScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-					return new RobotScreenHandler(syncId, actions);
+					return new RobotScreenHandler(syncId, id);
 				}
 			});
 		}
@@ -189,5 +165,9 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	public Arm getMainArm() {
 		return Arm.RIGHT;
+	}
+
+	public void save(ArrayList<Action> actions) {
+		this.actions = actions;
 	}
 }
