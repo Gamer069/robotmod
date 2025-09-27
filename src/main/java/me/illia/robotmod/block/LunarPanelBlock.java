@@ -3,6 +3,7 @@ package me.illia.robotmod.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -12,6 +13,12 @@ public class LunarPanelBlock extends Block {
 
 	public LunarPanelBlock(Settings settings) {
 		super(settings);
+	}
+
+	@Override
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+		builder.add(ACTIVE);
+		super.appendProperties(builder);
 	}
 
 	@Override

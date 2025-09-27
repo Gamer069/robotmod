@@ -57,3 +57,42 @@
 [19:13:36] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_21
 [19:13:37] [main/INFO] (FabricLoader/MixinExtras|Service) Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.0).
 [19:13:37] [Datafixer Bootstrap/INFO] (Minecraft) 269 Datafixer optimizations took 213 milliseconds
+[19:13:40] [Render thread/INFO] (Minecraft) Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[19:13:40] [Render thread/INFO] (Minecraft) Setting user: Player50
+[19:13:40] [Render thread/INFO] (robotmod) initializing attachment types for robotmod
+[19:13:40] [Render thread/INFO] (robotmod) Initializing screen handlers for robotmod
+[19:13:40] [Render thread/INFO] (robotmod) Initializing items for robotmod
+[19:13:40] [Render thread/INFO] (robotmod) Registering mod blocks for robotmod
+[19:13:40] [Render thread/INFO] (robotmod) registering item groups for robotmod
+[19:13:40] [Render thread/INFO] (robotmod) Initializing entities for robotmod
+[19:13:41] [Render thread/INFO] (Indigo) [Indigo] Registering Indigo renderer!
+[19:13:41] [Render thread/INFO] (FabricDataGenHelper) Running data generator for robotmod
+[19:13:41] [Render thread/INFO] (Minecraft) Starting provider: robotmod/Language (en_us)
+[19:13:41] [Worker-Main-1/INFO] (robotmod) registering dimensions for robotmod
+[19:13:41] [Render thread/INFO] (Minecraft) robotmod/Language (en_us) finished after 203 ms
+[19:13:41] [Render thread/INFO] (Minecraft) Starting provider: robotmod/Model Definitions
+[19:13:41] [Render thread/ERROR] (FabricDataGenHelper) Failed to run data generation
+java.lang.RuntimeException: Failed to run data generator from mod (robotmod)
+	at knot/net.fabricmc.fabric.impl.datagen.FabricDataGenHelper.runInternal(FabricDataGenHelper.java:156) ~[fabric-data-generation-api-v1-a5b452c0-23.2.7+0b1ef9762c.jar:?]
+	at knot/net.fabricmc.fabric.impl.datagen.FabricDataGenHelper.run(FabricDataGenHelper.java:95) [fabric-data-generation-api-v1-a5b452c0-23.2.7+0b1ef9762c.jar:?]
+	at knot/net.minecraft.client.MinecraftClient.handler$zka000$fabric-data-generation-api-v1$main(MinecraftClient.java:5085) [minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at knot/net.minecraft.client.MinecraftClient.<init>(MinecraftClient.java:494) [minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at knot/net.minecraft.client.main.Main.main(Main.java:249) [minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at net.fabricmc.loader.impl.game.minecraft.MinecraftGameProvider.launch(MinecraftGameProvider.java:506) [fabric-loader-0.17.2.jar:?]
+	at net.fabricmc.loader.impl.launch.knot.Knot.launch(Knot.java:72) [fabric-loader-0.17.2.jar:?]
+	at net.fabricmc.loader.impl.launch.knot.KnotClient.main(KnotClient.java:23) [fabric-loader-0.17.2.jar:?]
+	at net.fabricmc.devlaunchinjector.Main.main(Main.java:86) [dev-launch-injector-0.2.1+build.8.jar:?]
+Caused by: java.lang.IllegalStateException: Property BooleanProperty{name=active, clazz=class java.lang.Boolean, values=[true, false]} is not defined for block Block{robotmod:lunar_panel}
+	at knot/net.minecraft.client.data.VariantsBlockModelDefinitionCreator.method_67854(VariantsBlockModelDefinitionCreator.java:34) ~[minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[?:?]
+	at knot/net.minecraft.client.data.VariantsBlockModelDefinitionCreator.validateAndAddProperties(VariantsBlockModelDefinitionCreator.java:32) ~[minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at knot/net.minecraft.client.data.VariantsBlockModelDefinitionCreator$Empty.with(VariantsBlockModelDefinitionCreator.java:100) ~[minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at knot/me.illia.robotmod.datagen.provider.ModModelProvider.generateBlockStateModels(ModModelProvider.java:54) ~[main/:?]
+	at knot/net.minecraft.client.data.ModelProvider.wrapOperation$zkd000$fabric-data-generation-api-v1$registerBlockStateModels(ModelProvider.java:557) ~[minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at knot/net.minecraft.client.data.ModelProvider.run(ModelProvider.java:163) ~[minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at knot/net.minecraft.data.DataCache.run(DataCache.java:192) ~[minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at knot/net.minecraft.data.DataGenerator.method_46563(DataGenerator.java:52) ~[minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at java.base/java.util.LinkedHashMap.forEach(LinkedHashMap.java:986) ~[?:?]
+	at knot/net.minecraft.data.DataGenerator.run(DataGenerator.java:45) ~[minecraft-merged-70e38329a2-1.21.8-net.fabricmc.yarn.1_21_8.1.21.8+build.1-v2.jar:?]
+	at knot/net.fabricmc.fabric.impl.datagen.FabricDataGenHelper.runInternal(FabricDataGenHelper.java:151) ~[fabric-data-generation-api-v1-a5b452c0-23.2.7+0b1ef9762c.jar:?]
+	... 8 more
