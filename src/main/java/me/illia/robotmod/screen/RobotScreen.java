@@ -42,7 +42,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		this.addDrawableChild(actionsWidget);
 
 		this.addDrawableChild(ButtonWidget.builder(Text.translatable("menu.robotmod.add"), button -> {
-			HashMap<String, Object> args = new HashMap<>();
+			HashMap<String, Action.ParamValue> args = new HashMap<>();
 			handler.actions.add(new Action(actionTypeBtn.getValue(), args));
 
 			this.remove(actionsWidget);
@@ -51,6 +51,14 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		}).dimensions(x, y + 20, 20, 20).build());
 
 		super.init();
+	}
+
+	@Override
+	public void close() {
+		// WHAT DO I DO WITH THIS
+		actionsWidget.save();
+		// ???
+		super.close();
 	}
 
 	@Override
