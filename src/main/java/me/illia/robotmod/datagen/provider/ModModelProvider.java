@@ -45,7 +45,7 @@ public class ModModelProvider extends FabricModelProvider {
 			*///?}
 		);
 
-		Identifier activatedLunarPanelModelId = Util.id("block/lunar_panel_active");
+		Identifier activatedLunarPanelModelId = Util.id("block/lunar_panel_activated");
 		Identifier unactivatedLunarPanelModelId = Util.id("block/lunar_panel");
 
 		blockStateModelGenerator.blockStateCollector.accept(

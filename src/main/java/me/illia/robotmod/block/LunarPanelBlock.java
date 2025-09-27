@@ -7,9 +7,12 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 
 public class LunarPanelBlock extends Block {
 	public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
+	public static final VoxelShape SHAPE = VoxelShapes.cuboid(0, 0, 0, 1, 0.4, 1);
 
 	public LunarPanelBlock(Settings settings) {
 		super(settings);
