@@ -85,9 +85,9 @@ public class TeleporterBlock extends SlabBlock {
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		ServerWorld serverWorld = (ServerWorld)world;
-		TeleportPointAttachedData data = serverWorld.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
-		serverWorld.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.removePointByPos(pos));
+//		ServerWorld serverWorld = (ServerWorld)world;
+		TeleportPointAttachedData data = world.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
+		world.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.removePointByPos(pos));
 
 		return super.onBreak(world, pos, state, player);
 	}

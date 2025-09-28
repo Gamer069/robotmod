@@ -4,7 +4,7 @@
       "model": "robotmod:block/lunar_panel"
     },
     "active=true": {
-      "model": "robotmod:block/lunar_panel_active"
+      "model": "robotmod:block/lunar_panel_activated"
     }
   }
 }

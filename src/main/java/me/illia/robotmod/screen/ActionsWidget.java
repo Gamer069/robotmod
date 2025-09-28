@@ -12,11 +12,9 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextContent;
 import net.minecraft.text.TranslatableTextContent;
 import org.lwjgl.glfw.GLFW;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +58,7 @@ public class ActionsWidget extends ClickableWidget {
 						yield null;
 					}
 				}
-				case Boolean -> {
+				case Bool -> {
 					if (widget instanceof CyclingButtonWidget<?> cb && cb.getValue() instanceof Boolean val) {
 						yield new Action.ParamValue.BoolParam(val);
 					} else {
@@ -165,7 +163,7 @@ public class ActionsWidget extends ClickableWidget {
 
 						paramWidgets.add(new ParamWidgetDescriptor(widget, desc, actionI));
 					}
-					case Boolean -> {
+					case Bool -> {
 						CyclingButtonWidget<Boolean> boolWidget = CyclingButtonWidget.onOffBuilder()
 							.build(widgetX, widgetY, 60, 20, desc.name());
 

@@ -4,12 +4,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.text.Text;
+import me.illia.robotmod.Util;
+import me.illia.robotmod.entity.RobotEntity;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.List;
 
 public class Action {
 	public static final Codec<HashMap<String, ParamValue>> PARAMS_CODEC = Codec.unboundedMap(Codec.STRING, ParamValue.CODEC)
@@ -64,9 +70,66 @@ public class Action {
 		this.params = params;
 	}
 
+	public void run(RobotEntity robotEntity) {
+		List<ActionParamDescriptor> paramDescs = actionType.getParams();
+
+		switch (actionType) {
+			case WalkAround -> {
+				ActionParamDescriptor radiusParamDesc = paramDescs.get(0);
+				ParamValue val = params.get(Util.key(radiusParamDesc.name()));
+				int r = 0;
+				if (val instanceof ParamValue.IntParam(int value)) {
+					r = value;
+				} else {
+					throw new RuntimeException("param isn't int for some reason");
+				}
+
+				EntityNavigation nav = robotEntity.getNavigation();
+
+				BlockPos center = robotEntity.getBlockPos();
+				int segments = 36;
+				double speed = 1.0;
+
+				List<Vec3d> path = new ArrayList<>();
+				for (int i = 0; i < segments; i++) {
+					double angle = 2 * Math.PI * i / segments;
+					double x = center.getX() + 0.5 + r * Math.cos(angle);
+					double z = center.getZ() + 0.5 + r * Math.sin(angle);
+					double y = center.getY();
+					path.add(new Vec3d(x, y, z));
+				}
+				path.add(new Vec3d(center.getX() + 0.5, center.getY(), center.getZ() + 0.5));
+
+				int[] index = {0}; // tiny mutable holder
+
+				robotEntity.getWorld().getServer().execute(() -> {
+					ServerTickEvents.START_SERVER_TICK.register((minecraftServer -> {
+						if (index[0] < path.size()) {
+							Vec3d target = path.get(index[0]);
+							if (robotEntity.squaredDistanceTo(target) < 1.0) {
+								index[0]++; // next point
+							} else {
+								nav.startMovingTo(target.x, target.y, target.z, speed);
+							}
+						}
+					}));
+				});
+
+			}
+			case Harvest -> {
+			}
+			case Wait -> {
+			}
+			case Home -> {
+			}
+			case SetHome -> {
+			}
+		}
+	}
+
 	public sealed interface ParamValue permits ParamValue.IntParam, ParamValue.FloatParam, ParamValue.BoolParam {
 		Codec<ParamValue> CODEC = Codec.INT.<ParamValue>dispatch(
-			ParamValue::getTypeTag,
+			ParamValue::typeTag,
 			ParamValue::codecSelector
 		);
 
@@ -81,7 +144,8 @@ public class Action {
 			};
 		}
 
-		int getTypeTag();
+		int typeTag();
+		ActionParamType type();
 
 		record IntParam(int value) implements ParamValue {
 			public static final Codec<IntParam> CODEC = Codec.INT.xmap(IntParam::new, IntParam::value);
@@ -92,8 +156,13 @@ public class Action {
 			}
 
 			@Override
-			public int getTypeTag() {
+			public int typeTag() {
 				return 0;
+			}
+
+			@Override
+			public ActionParamType type() {
+				return ActionParamType.Int;
 			}
 		}
 
@@ -106,8 +175,13 @@ public class Action {
 			}
 
 			@Override
-			public int getTypeTag() {
+			public int typeTag() {
 				return 1;
+			}
+
+			@Override
+			public ActionParamType type() {
+				return ActionParamType.Float;
 			}
 		}
 
@@ -120,8 +194,13 @@ public class Action {
 			}
 
 			@Override
-			public int getTypeTag() {
+			public int typeTag() {
 				return 2;
+			}
+
+			@Override
+			public ActionParamType type() {
+				return ActionParamType.Bool;
 			}
 		}
 	}

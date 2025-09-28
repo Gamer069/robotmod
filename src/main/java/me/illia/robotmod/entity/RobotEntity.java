@@ -1,6 +1,7 @@
 package me.illia.robotmod.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -90,7 +91,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-		if (!this.getWorld().isClient && !player.isSneaking()) {
+		if (!this.getWorld().isClient && !player.isSneaking() && !Util.night(this.getWorld())) {
 			player.openHandledScreen(new ExtendedScreenHandlerFactory<Integer>() {
 				private final int id = RobotEntity.this.getId();
 
@@ -111,6 +112,16 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			});
 		}
 		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public void tickMovement() {
+		if (Util.night(getWorld())) {
+			for (Action action : actions) {
+				action.run(this);
+			}
+		}
+		super.tickMovement();
 	}
 
 	@Override
