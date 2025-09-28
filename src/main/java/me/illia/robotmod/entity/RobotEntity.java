@@ -4,7 +4,9 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
+import me.illia.robotmod.networking.RobotActionsSyncC2SPayload;
 import me.illia.robotmod.screen.RobotScreenHandler;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.brain.Brain;
@@ -46,7 +48,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	//? if = 1.21.8 {
 	@Override
 	protected void readCustomData(ReadView view) {
-		this.actions = new ArrayList<>(view.<List<Action>>read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
+		this.actions = new ArrayList<>(view.read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
 
 		super.readCustomData(view);
 	}
@@ -173,5 +175,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	public void save(ArrayList<Action> actions) {
 		this.actions = actions;
+		ClientPlayNetworking.send(new RobotActionsSyncC2SPayload(getId(), actions.stream().toList(), getWorld().getRegistryKey()));
 	}
 }
