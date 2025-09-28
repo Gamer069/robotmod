@@ -94,9 +94,9 @@ public class Action {
 				List<Vec3d> path = new ArrayList<>();
 				for (int i = 0; i < segments; i++) {
 					double angle = 2 * Math.PI * i / segments;
-					double x = center.getX() + r * Math.cos(angle);
+					double x = center.getX() + r * Math.sin(angle);
 					double y = center.getY();
-					double z = center.getZ() + r * Math.sin(angle);
+					double z = center.getZ() + r * Math.cos(angle);
 					path.add(new Vec3d(x, y, z));
 				}
 				path.add(new Vec3d(center.getX(), center.getY(), center.getZ()));
@@ -123,8 +123,11 @@ public class Action {
 			case Wait -> {
 			}
 			case Home -> {
+				BlockPos home = robotEntity.home;
+				robotEntity.getNavigation().startMovingTo(home.x, home.y, home.z, 1.0);
 			}
 			case SetHome -> {
+				robotEntity.home = robotEntity.getBlockPos();
 			}
 		}
 	}

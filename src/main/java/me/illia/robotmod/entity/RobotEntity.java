@@ -24,6 +24,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
 import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
@@ -39,6 +40,7 @@ import java.util.List;
 
 public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<RobotEntity> {
 	public ArrayList<Action> actions;
+	public BlockPos home;
 	public boolean ranActions;
 
 	public RobotEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
