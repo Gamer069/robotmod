@@ -1,33 +1,33 @@
 package me.illia.robotmod.actions;
 
+import me.illia.robotmod.Robotmod;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.entity.RobotEntity;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 
 public class Action {
 	public static final Codec<HashMap<String, ParamValue>> PARAMS_CODEC = Codec.unboundedMap(Codec.STRING, ParamValue.CODEC)
 		.xmap(
 			HashMap::new,
-			map -> map
+			Function.identity()
 		);
 
 	public static final MapCodec<Action> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-		Codec.INT.fieldOf("action_type").forGetter((Action inst) -> inst.getActionType().getId()),
-		PARAMS_CODEC.optionalFieldOf("params", new HashMap<>()).forGetter(Action::getParams)
+		Codec.INT.fieldOf("actionType").forGetter((Action inst) -> inst.getActionType().getId()),
+		PARAMS_CODEC.fieldOf("params").forGetter(Action::getParams)
 	).apply(instance, (id, params) -> new Action(ActionType.from(id), params)));
 
 	private static JsonElement toJsonElement(Object obj) {
@@ -82,40 +82,41 @@ public class Action {
 				if (val instanceof ParamValue.IntParam(int value)) {
 					r = value;
 				} else {
-					throw new RuntimeException("param isn't int for some reason, instead its " + val.type());
+					throw new RuntimeException("param isn't int for some reason, instead it's " + val.type());
 				}
 
 				EntityNavigation nav = robotEntity.getNavigation();
 
 				BlockPos center = robotEntity.getBlockPos();
-				int segments = 36;
+				int segments = 72;
 				double speed = 1.0;
 
 				List<Vec3d> path = new ArrayList<>();
 				for (int i = 0; i < segments; i++) {
 					double angle = 2 * Math.PI * i / segments;
-					double x = center.getX() + 0.5 + r * Math.cos(angle);
-					double z = center.getZ() + 0.5 + r * Math.sin(angle);
+					double x = center.getX() + r * Math.cos(angle);
 					double y = center.getY();
+					double z = center.getZ() + r * Math.sin(angle);
 					path.add(new Vec3d(x, y, z));
 				}
-				path.add(new Vec3d(center.getX() + 0.5, center.getY(), center.getZ() + 0.5));
+				path.add(new Vec3d(center.getX(), center.getY(), center.getZ()));
 
-				int[] index = {0}; // tiny mutable holder
+				Robotmod.LOGGER.info("path: " + path.toString());
 
-				robotEntity.getWorld().getServer().execute(() -> {
-					ServerTickEvents.START_SERVER_TICK.register((minecraftServer -> {
-						if (index[0] < path.size()) {
-							Vec3d target = path.get(index[0]);
-							if (robotEntity.squaredDistanceTo(target) < 1.0) {
-								index[0]++; // next point
-							} else {
+				AtomicInteger index = new AtomicInteger(0);
+
+				ServerTickEvents.START_SERVER_TICK.register((minecraftServer -> {
+					if (index.get() < path.size() && Util.night(robotEntity.getWorld())) {
+						Vec3d target = path.get(index.get());
+						if (robotEntity.squaredDistanceTo(target) < 1.0) {
+							index.incrementAndGet(); // next point
+						} else {
+							if (!nav.isFollowingPath()) {
 								nav.startMovingTo(target.x, target.y, target.z, speed);
 							}
 						}
-					}));
-				});
-
+					}
+				}));
 			}
 			case Harvest -> {
 			}
@@ -138,9 +139,9 @@ public class Action {
 
 		public static MapCodec<? extends ParamValue> codecSelector(int tag) {
 			return switch (tag) {
-				case 0 -> BoolParam.CODEC.fieldOf("value");
+				case 0 -> IntParam.CODEC.fieldOf("value");
 				case 1 -> FloatParam.CODEC.fieldOf("value");
-				case 2 -> IntParam.CODEC.fieldOf("value");
+				case 2 -> BoolParam.CODEC.fieldOf("value");
 				default -> throw new IllegalArgumentException("Invalid PV tag: " + tag);
 			};
 		}

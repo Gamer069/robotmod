@@ -1,0 +1,7 @@
+// 1.21.8	-999999999-01-01T00:00:00	robotmod/robotmod recipes
+a019c55e54faf3e789c7dca434439d408aaf4255 data/robotmod/advancement/recipes/transportation/packed_ender_pearl.json
+8fda41b5d825048e3804c23ca8141d7f1f2309b6 data/robotmod/advancement/recipes/transportation/teleporter.json
+c932642fac9c28ee8d8f372c4669de3f89f8734d data/robotmod/advancement/recipes/transportation/teleporter_item.json
+daaf3c8450c13a3bec023fc0d9deea1f89fe13d7 data/robotmod/recipe/packed_ender_pearl.json
+7e4bc931777708d54e7c4947b54561e7da69bb9b data/robotmod/recipe/teleporter.json
+983d9eb2aa55aba367e19ebee1dfc74835f6835d data/robotmod/recipe/teleporter_item.json

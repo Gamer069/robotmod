@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "robotmod:item/teleporter_item"
+  }
+}

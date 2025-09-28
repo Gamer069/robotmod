@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:overworld",
+    "generator": {
+        "type": "minecraft:flat",
+        "settings": {
+            "layers": [
+                {
+                    "height": 5,
+                    "block": "minecraft:white_concrete"
+                },
+                {
+                    "height": 5,
+                    "block": "light_gray_concrete"
+                },
+                {
+                    "height": 5,
+                    "block": "gray_concrete"
+                },
+                {
+                    "height": 5,
+                    "block": "black_concrete"
+                }
+            ],
+            "structure_overrides": []
+        }
+    }
+}

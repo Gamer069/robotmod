@@ -39,6 +39,7 @@ import java.util.List;
 
 public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<RobotEntity> {
 	public ArrayList<Action> actions;
+	public boolean ranActions;
 
 	public RobotEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
 		super(entityType, world);
@@ -123,12 +124,18 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	protected void mobTick(ServerWorld world) {
 		tickBrain(this);
+
 		if (Util.night(world)) {
-			Robotmod.LOGGER.info(actions.toString());
-			for (Action action : actions) {
-				action.run(this);
+			if (!ranActions) {
+				for (Action action : actions) {
+					action.run(this);
+				}
+				ranActions = true;
 			}
+		} else {
+			ranActions = false;
 		}
+
 		super.mobTick(world);
 	}
 
