@@ -124,7 +124,7 @@ public class Action {
 			}
 			case Home -> {
 				BlockPos home = robotEntity.home;
-				robotEntity.getNavigation().startMovingTo(home.x, home.y, home.z, 1.0);
+				robotEntity.getNavigation().startMovingTo(home.getX(), home.getY(), home.getZ(), 1.0);
 			}
 			case SetHome -> {
 				robotEntity.home = robotEntity.getBlockPos();
