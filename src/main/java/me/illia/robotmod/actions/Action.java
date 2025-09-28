@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.entity.RobotEntity;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;

@@ -132,7 +132,7 @@ public class ActionsWidget extends ClickableWidget {
 								Integer.parseInt(s);
 								return true;
 							} catch (NumberFormatException _e) {
-								return false;
+								return s.isEmpty();
 							}
 						});
 						TranslatableTextContent content = (TranslatableTextContent)desc.name().getContent();
