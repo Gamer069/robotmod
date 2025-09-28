@@ -47,7 +47,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	//? if = 1.21.8 {
 	@Override
 	protected void readCustomData(ReadView view) {
-		this.actions = new ArrayList<>(view.<List<Action>>read("actions", Action.CODEC.codec().listOf()).get());
+		this.actions = new ArrayList<>(view.<List<Action>>read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
 
 		super.readCustomData(view);
 	}
