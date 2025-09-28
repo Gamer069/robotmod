@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.entity.RobotEntity;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -81,7 +82,7 @@ public class Action {
 				if (val instanceof ParamValue.IntParam(int value)) {
 					r = value;
 				} else {
-					throw new RuntimeException("param isn't int for some reason");
+					throw new RuntimeException("param isn't int for some reason, instead its " + val.type());
 				}
 
 				EntityNavigation nav = robotEntity.getNavigation();

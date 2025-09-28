@@ -8,6 +8,17 @@
       "renderMain": "Lnet/minecraft/class_465;method_71085(Lnet/minecraft/class_332;IIF)V",
       "titleX": "field_25267:I",
       "titleY": "field_25268:I"
+    },
+    "me/illia/robotmod/mixin/WorldBorderBorderMixin": {
+      "getSize": "Lnet/minecraft/class_2784;method_11965()D"
+    },
+    "me/illia/robotmod/mixin/WorldBorderMixin": {
+      "Lnet/minecraft/util/math/MathHelper;clamp(DDD)D": "Lnet/minecraft/class_3532;method_15350(DDD)D",
+      "tick": "Lnet/minecraft/class_1657;method_5773()V"
+    },
+    "me/illia/robotmod/mixin/WorldBorderWorldMixin": {
+      "isInvalidVertically": "Lnet/minecraft/class_1937;method_25952(I)Z",
+      "isValidHorizontally": "Lnet/minecraft/class_1937;method_8558(Lnet/minecraft/class_2338;)Z"
     }
   },
   "data": {
@@ -20,6 +31,17 @@
         "renderMain": "Lnet/minecraft/class_465;method_71085(Lnet/minecraft/class_332;IIF)V",
         "titleX": "field_25267:I",
         "titleY": "field_25268:I"
+      },
+      "me/illia/robotmod/mixin/WorldBorderBorderMixin": {
+        "getSize": "Lnet/minecraft/class_2784;method_11965()D"
+      },
+      "me/illia/robotmod/mixin/WorldBorderMixin": {
+        "Lnet/minecraft/util/math/MathHelper;clamp(DDD)D": "Lnet/minecraft/class_3532;method_15350(DDD)D",
+        "tick": "Lnet/minecraft/class_1657;method_5773()V"
+      },
+      "me/illia/robotmod/mixin/WorldBorderWorldMixin": {
+        "isInvalidVertically": "Lnet/minecraft/class_1937;method_25952(I)Z",
+        "isValidHorizontally": "Lnet/minecraft/class_1937;method_8558(Lnet/minecraft/class_2338;)Z"
       }
     }
   }

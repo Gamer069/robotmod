@@ -1,6 +1,7 @@
 package me.illia.robotmod.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.screen.RobotScreenHandler;
@@ -10,8 +11,6 @@ import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if = 1.21.8 {
@@ -115,16 +114,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	}
 
 	@Override
-	public void tickMovement() {
-		if (Util.night(getWorld())) {
-			for (Action action : actions) {
-				action.run(this);
-			}
-		}
-		super.tickMovement();
-	}
-
-	@Override
 	protected Brain.Profile<?> createBrainProfile() {
 		return new SmartBrainProvider<>(this);
 	}
@@ -132,6 +121,12 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	protected void mobTick(ServerWorld world) {
 		tickBrain(this);
+		if (Util.night(world)) {
+			Robotmod.LOGGER.info(actions.toString());
+			for (Action action : actions) {
+				action.run(this);
+			}
+		}
 		super.mobTick(world);
 	}
 

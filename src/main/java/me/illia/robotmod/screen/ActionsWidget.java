@@ -34,7 +34,7 @@ public class ActionsWidget extends ClickableWidget {
 			ActionParamDescriptor paramDesc = desc.desc();
 			ClickableWidget widget = desc.widget();
 
-			String paramName = paramDesc.name().getString();
+			String paramName = Util.key(paramDesc.name());
 			Action.ParamValue paramValue = switch (paramDesc.type()) {
 				case Int -> {
 					if (widget instanceof TextFieldWidget tf) {
