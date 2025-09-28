@@ -108,12 +108,9 @@ public class Action {
 				ServerTickEvents.START_SERVER_TICK.register((minecraftServer -> {
 					if (index.get() < path.size() && Util.night(robotEntity.getWorld())) {
 						Vec3d target = path.get(index.get());
-						if (robotEntity.squaredDistanceTo(target) < 1.0) {
+						if (!nav.isFollowingPath()) {
+							nav.startMovingTo(target.x, target.y, target.z, speed);
 							index.incrementAndGet(); // next point
-						} else {
-							if (!nav.isFollowingPath()) {
-								nav.startMovingTo(target.x, target.y, target.z, speed);
-							}
 						}
 					}
 				}));
