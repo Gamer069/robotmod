@@ -240,6 +240,9 @@ public class Util {
 			case SetHome -> {
 				return Text.translatable("menu.robotmod.action_type_set_home");
 			}
+			case SwitchToSlot -> {
+				return Text.translatable("menu.robotmod.action_type_switch_slot");
+			}
 		}
 
 		return Text.empty();

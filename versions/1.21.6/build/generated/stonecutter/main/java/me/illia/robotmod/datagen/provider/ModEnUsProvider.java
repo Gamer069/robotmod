@@ -23,14 +23,18 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		translationBuilder.add("menu.robotmod.action_type_harvest", "Harvest");
 		translationBuilder.add("menu.robotmod.action_type_wait", "Wait");
 		translationBuilder.add("menu.robotmod.action_type_home", "Home");
+		translationBuilder.add("menu.robotmod.action_type_switch_slot", "Switch Slot");
 		translationBuilder.add("menu.robotmod.action_type_set_home", "Set Home");
 		translationBuilder.add("menu.robotmod.action_param_walk_around", "around ");
 		translationBuilder.add("menu.robotmod.action_param_wait_sec", "for seconds");
+		translationBuilder.add("menu.robotmod.action_param_switch_slot", " to ");
+		translationBuilder.add("menu.robotmod.actions", "Actions");
 		translationBuilder.add("menu.robotmod.tp", "Teleport");
 		translationBuilder.add("itemGroup.robotmod.robotmod", "Technology");
 		translationBuilder.add(ModItems.TELEPORTER, "Ender Teleporter");
 		translationBuilder.add(ModItems.PACKED_ENDER_PEARL, "Packed Ender Pearl");
 		translationBuilder.add(ModItems.ROBOT_SPAWN_EGG, "Robot Spawn Egg");
 		translationBuilder.add(ModBlocks.TELEPORTER_BLOCK, "Ender Teleporter Block");
+		translationBuilder.add(ModBlocks.LUNAR_PANEL_BLOCK, "Lunar Panel Block");
 	}
 }

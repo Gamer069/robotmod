@@ -60,8 +60,10 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 			HashMap<String, Action.ParamValue> args = new HashMap<>();
 			robot.actions.add(new Action(actionTypeBtn.getValue(), args));
 
+			int prevWidth = actionsWidget.getWidth();
+			int prevHeight = actionsWidget.getHeight();
 			this.remove(actionsWidget);
-			actionsWidget = new ActionsWidget(x, y + 50, 90, 50, robot.actions);
+			actionsWidget = new ActionsWidget(x, y + 50, prevWidth, prevHeight, robot.actions);
 			this.addDrawableChild(actionsWidget);
 		}).dimensions(x, y + 20, 20, 20).build());
 

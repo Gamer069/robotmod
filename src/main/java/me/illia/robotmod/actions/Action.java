@@ -132,6 +132,18 @@ public class Action {
 			case SetHome -> {
 				robotEntity.home = robotEntity.getBlockPos();
 			}
+			case SwitchToSlot -> {
+				ActionParamDescriptor slotParamDesc = paramDescs.get(0);
+				ParamValue val = params.get(Util.key(slotParamDesc.name()));
+				int slot;
+				if (val instanceof ParamValue.IntParam(int value)) {
+					slot = value;
+				} else {
+					throw new RuntimeException("param isn't int for some reason, instead it's " + val.type());
+				}
+
+				robotEntity.slot = slot;
+			}
 		}
 	}
 

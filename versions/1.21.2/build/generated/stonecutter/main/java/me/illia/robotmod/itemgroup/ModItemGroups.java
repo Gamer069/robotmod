@@ -16,7 +16,8 @@ public class ModItemGroups {
 		ModItems.ROBOT_SPAWN_EGG,
 		ModItems.TELEPORTER,
 		ModItems.PACKED_ENDER_PEARL,
-		ModBlocks.TELEPORTER_BLOCK.asItem()
+		ModBlocks.TELEPORTER_BLOCK.asItem(),
+		ModBlocks.LUNAR_PANEL_BLOCK.asItem()
 	);
 
 	public static void init() {

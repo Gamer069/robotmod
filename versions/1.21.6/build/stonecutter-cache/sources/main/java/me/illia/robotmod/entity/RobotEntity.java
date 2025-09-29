@@ -1,22 +1,21 @@
 package me.illia.robotmod.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import me.illia.robotmod.Robotmod;
+import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
+import me.illia.robotmod.networking.RobotActionsSyncC2SPayload;
 import me.illia.robotmod.screen.RobotScreenHandler;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.brain.Activity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if = 1.21.8 {
@@ -28,6 +27,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
 import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
@@ -43,43 +43,72 @@ import java.util.List;
 
 public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<RobotEntity> {
 	public ArrayList<Action> actions;
+	public BlockPos home;
+	public boolean ranActions;
+	public SimpleInventory inv;
+	public int slot;
 
 	public RobotEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
 		super(entityType, world);
 		this.actions = new ArrayList<>();
+		this.inv = new SimpleInventory(16);
+		this.home = getBlockPos();
 	}
 
 	//? if = 1.21.8 {
 	/*@Override
 	protected void readCustomData(ReadView view) {
+		this.actions = new ArrayList<>(view.read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
+		this.home = view.read("home", BlockPos.CODEC).orElse(BlockPos.ORIGIN);
+		ReadView.TypedListReadView<ItemStack> invListView = view.getTypedListView("inv", ItemStack.CODEC);
+		inv.readDataList(invListView);
+		this.slot = view.getInt("slot", 0);
+
 		super.readCustomData(view);
 	}
 
 	@Override
 	protected void writeCustomData(WriteView view) {
-		WriteView list = view.getList("actions").add();
+		view.put("actions", Action.CODEC.codec().listOf(), this.actions);
+		view.put("home", BlockPos.CODEC, this.home);
+		WriteView.ListAppender<ItemStack> invAppender = view.getListAppender("inv", ItemStack.CODEC);
+		inv.toDataList(invAppender);
 
-		for (Action action : actions) {
-			list.put("action", Action.CODEC.codec(), action);
-		}
+		view.putInt("slot", this.slot);
 
 		super.writeCustomData(view);
 	}
+
+	@Override
+	public ItemStack getMainHandStack() {
+		return inv.getStack(slot);
+	}
+
+	@Override
+	protected void dropLoot(ServerWorld world, DamageSource damageSource, boolean causedByPlayer) {
+		for (ItemStack stack : inv.heldStacks) {
+			dropStack(world, stack);
+		}
+		super.dropLoot(world, damageSource, causedByPlayer);
+	}
+
 	*///?} else {
+
+	 TODO: properly write home, inventory AND held slot for odler versions!
 
 	@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 
-		actions.clear();
 		if (nbt.contains("actions", NbtElement.LIST_TYPE)) {
-			NbtList list = nbt.getList("actions", NbtElement.COMPOUND_TYPE);
-			for (int i = 0; i < list.size(); i++) {
-				NbtCompound actionNbt = list.getCompound(i);
-				Action action = Action.CODEC.decoder().decode(NbtOps.INSTANCE, actionNbt)
-					.getOrThrow().getFirst();
-				actions.add(action);
-			}
+			this.actions = new ArrayList<>(
+				Action.CODEC.codec().listOf()
+					.parse(NbtOps.INSTANCE, nbt.get("actions"))
+					.resultOrPartial(error -> LOGGER.error("Failed to read actions: {}", error))
+					.orElse(List.of())
+			);
+		} else {
+			this.actions = new ArrayList<>();
 		}
 	}
 
@@ -87,43 +116,25 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public NbtCompound writeNbt(NbtCompound nbt) {
 		super.writeNbt(nbt);
 
-		NbtList list = new NbtList();
-		for (Action action : actions) {
-			NbtElement actionNbt = Action.CODEC.encoder().encodeStart(NbtOps.INSTANCE, action)
-				.getOrThrow();
-			list.add(actionNbt);
-		}
-		nbt.put("actions", list);
+		Action.CODEC.codec().listOf()
+			.encodeStart(NbtOps.INSTANCE, this.actions)
+			.resultOrPartial(error -> LOGGER.error("Failed to write actions: {}", error))
+			.ifPresent(nbtElement -> nbt.put("actions", nbtElement));
+
 		return nbt;
 	}
 	//?}
 
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-		if (!this.getWorld().isClient && !player.isSneaking()) {
-			player.openHandledScreen(new ExtendedScreenHandlerFactory<ArrayList<Action>>() {
+		if (!this.getWorld().isClient && !player.isSneaking() && !Util.night(this.getWorld())) {
+			player.openHandledScreen(new ExtendedScreenHandlerFactory<Integer>() {
+				private final int id = RobotEntity.this.getId();
+
 				@Override
-				public ArrayList<Action> getScreenOpeningData(ServerPlayerEntity player) {
-					return actions;
+				public Integer getScreenOpeningData(ServerPlayerEntity player) {
+					return id;
 				}
-
-				private int id = RobotEntity.this.getId();
-				private final PropertyDelegate delegate = new PropertyDelegate() {
-					@Override
-					public int get(int index) {
-						return id;
-					}
-
-					@Override
-					public void set(int index, int value) {
-						id = value;
-					}
-
-					@Override
-					public int size() {
-						return 1;
-					}
-				};
 
 				@Override
 				public Text getDisplayName() {
@@ -132,7 +143,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 				@Override
 				public RobotScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-					return new RobotScreenHandler(syncId, actions);
+					return new RobotScreenHandler(syncId, id);
 				}
 			});
 		}
@@ -147,6 +158,18 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	protected void mobTick(ServerWorld world) {
 		tickBrain(this);
+
+		if (Util.night(world)) {
+			if (!ranActions) {
+				for (Action action : actions) {
+					action.run(this);
+				}
+				ranActions = true;
+			}
+		} else {
+			ranActions = false;
+		}
+
 		super.mobTick(world);
 	}
 
@@ -170,8 +193,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	public BrainActivityGroup<RobotEntity> getIdleTasks() {
 		return BrainActivityGroup.idleTasks(
-			new SetPlayerLookTarget<>(),
-			new MoveOutsideWater<>()
+			new SetPlayerLookTarget<>()
 		);
 	}
 
@@ -190,5 +212,32 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	public Arm getMainArm() {
 		return Arm.RIGHT;
+	}
+
+	public void save(ArrayList<Action> actions) {
+		this.actions = actions;
+		ClientPlayNetworking.send(new RobotActionsSyncC2SPayload(getId(), actions.stream().toList(), getWorld().getRegistryKey()));
+	}
+
+	@Override
+	public boolean canPickupItem(ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public boolean canPickUpLoot() {
+		return true;
+	}
+
+	@Override
+	protected void loot(ServerWorld world, ItemEntity itemEntity) {
+		ItemStack stack = itemEntity.getStack();
+		ItemStack leftover = inv.addStack(stack.copy());
+		if (leftover.isEmpty()) {
+			itemEntity.discard(); // remove the item if fully picked up
+		} else {
+			stack.setCount(leftover.getCount()); // leave remaining
+		}
+		super.loot(world, itemEntity);
 	}
 }

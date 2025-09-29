@@ -32,6 +32,7 @@ import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
@@ -239,6 +240,9 @@ public class Util {
 			case SetHome -> {
 				return Text.translatable("menu.robotmod.action_type_set_home");
 			}
+			case SwitchToSlot -> {
+				return Text.translatable("menu.robotmod.action_type_switch_slot");
+			}
 		}
 
 		return Text.empty();
@@ -330,5 +334,17 @@ public class Util {
 		*///?} else {
 		return ModelTransform.pivot(x, y, z);
 		//?}
+	}
+
+	public static boolean night(World world) {
+		long timeOfDay = world.getTimeOfDay() % 24000L;
+		return timeOfDay >= 13000L && timeOfDay <= 23000L;
+	}
+
+	public static String key(Text name) {
+		if (name.getContent() instanceof TranslatableTextContent ttc) {
+			return ttc.getKey();
+		}
+		return null;
 	}
 }

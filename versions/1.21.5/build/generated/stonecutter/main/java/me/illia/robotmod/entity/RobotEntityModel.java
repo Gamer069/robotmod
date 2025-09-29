@@ -3,16 +3,20 @@ package me.illia.robotmod.entity;
 import me.illia.robotmod.Util;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.state.LivingEntityRenderState;
-
-import java.util.function.Function;
+import net.minecraft.client.render.entity.model.ModelWithArms;
+import net.minecraft.client.render.entity.state.ArmedEntityRenderState;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Arm;
+import net.minecraft.util.math.RotationAxis;
 
 // Made with Blockbench 4.12.6
 // Exported for Minecraft version 1.17+ for Yarn
 // Paste this class into your mod and generate all required imports
-public class RobotEntityModel extends EntityModel<LivingEntityRenderState> {
+public class RobotEntityModel extends EntityModel<ArmedEntityRenderState> implements ModelWithArms {
 	private final ModelPart head;
 	private final ModelPart legs;
+	private final ModelPart left;
+	private final ModelPart right;
 	private final ModelPart bb_main;
 
 	public RobotEntityModel(ModelPart root) {
@@ -20,6 +24,8 @@ public class RobotEntityModel extends EntityModel<LivingEntityRenderState> {
 		this.head = root.getChild("head");
 		this.legs = root.getChild("legs");
 		this.bb_main = root.getChild("bb_main");
+		this.left = root.getChild("left");
+		this.right = root.getChild("right");
 	}
 
 	public static TexturedModelData getTexturedModelData() {
@@ -40,11 +46,33 @@ public class RobotEntityModel extends EntityModel<LivingEntityRenderState> {
 
 		ModelPartData bb_main = modelPartData.addChild("bb_main", ModelPartBuilder.create().uv(0, 10).cuboid(-4.0F, -11.0F, -2.0F, 8.0F, 7.0F, 4.0F, new Dilation(0.0F))
 		.uv(0, 21).cuboid(-1.0F, -12.0F, -2.0F, 2.0F, 1.0F, 4.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
+
+		ModelPartData right = modelPartData.addChild("right", ModelPartBuilder.create().uv(0, 0).cuboid(-6.0F, -10.0F, -1.0F, 1.0F, 6.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
+
+		ModelPartData left = modelPartData.addChild("left", ModelPartBuilder.create().uv(0, 0).cuboid(5.0F, -10.0F, -1.0F, 1.0F, 6.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
+
+		ModelPartData arms = modelPartData.addChild("arms", ModelPartBuilder.create().uv(0, 0).cuboid(4.0F, -10.0F, -1.0F, 1.0F, 2.0F, 2.0F, new Dilation(0.0F))
+			.uv(0, 0).cuboid(-5.0F, -10.0F, -1.0F, 1.0F, 2.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
+
 		return TexturedModelData.of(modelData, 32, 32);
 	}
 
 	@Override
-	public void setAngles(LivingEntityRenderState state) {
+	public void setAngles(ArmedEntityRenderState state) {
 		super.setAngles(state);
+	}
+
+	@Override
+	public void setArmAngle(Arm arm, MatrixStack matrices) {
+		ModelPart armPart = arm == Arm.RIGHT ? right : left;
+
+		//? if >1.21.5 {
+		/*matrices.translate(armPart.originX / 16.0F, armPart.originY / 16.0F, armPart.originZ / 16.0F);
+		*///?} else {
+		matrices.translate(armPart.pivotX / 16.0F, armPart.pivotY / 16.0F, armPart.pivotZ / 16.0F);
+		//?}
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(armPart.pitch));
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(armPart.yaw));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(armPart.roll));
 	}
 }

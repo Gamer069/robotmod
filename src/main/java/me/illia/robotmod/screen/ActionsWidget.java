@@ -117,16 +117,16 @@ public class ActionsWidget extends ClickableWidget {
 		for (Action action : actions) {
 			String actionTxt = Util.str(action).getString();
 			int actionTxtW = renderer.getWidth(actionTxt);
+			int y = getY() + (renderer.fontHeight + 10) * actionI;
 
 			int i = 0;
 			for (ActionParamDescriptor desc : action.actionType.getParams()) {
 				i++;
 				int widgetX = getX() + actionTxtW + 20;
-				int widgetY = getY() + yOffset + 20 * i;
 
 				switch (desc.type()) {
 					case Int -> {
-						TextFieldWidget widget = new TextFieldWidget(renderer, widgetX, widgetY, 60, 20, desc.name());
+						TextFieldWidget widget = new TextFieldWidget(renderer, widgetX, y, 60, 20, desc.name());
 						widget.setTextPredicate(s -> {
 							try {
 								Integer.parseInt(s);
@@ -144,7 +144,7 @@ public class ActionsWidget extends ClickableWidget {
 						paramWidgets.add(new ParamWidgetDescriptor(widget, desc, actionI));
 					}
 					case Float -> {
-						TextFieldWidget widget = new TextFieldWidget(renderer, widgetX, widgetY, 60, 20, desc.name());
+						TextFieldWidget widget = new TextFieldWidget(renderer, widgetX, y, 60, 20, desc.name());
 						widget.setTextPredicate(s -> {
 							if (s.isEmpty() || s.equals("-") || s.equals(".") || s.equals("-.")) return true;
 							try {
@@ -165,7 +165,7 @@ public class ActionsWidget extends ClickableWidget {
 					}
 					case Bool -> {
 						CyclingButtonWidget<Boolean> boolWidget = CyclingButtonWidget.onOffBuilder()
-							.build(widgetX, widgetY, 60, 20, desc.name());
+							.build(widgetX, y, 60, 20, desc.name());
 
 						TranslatableTextContent content = (TranslatableTextContent)desc.name().getContent();
 						Action.ParamValue val = action.getParams().get(content.getKey());
@@ -203,6 +203,23 @@ public class ActionsWidget extends ClickableWidget {
 
 		// Render all param widgets
 		for (ParamWidgetDescriptor widget : paramWidgets) {
+			setWidth(Math.max(getWidth(), renderer.getWidth(widget.desc().name().getString())));
+			setHeight(Math.max(getHeight(), (renderer.fontHeight + 10) * widget.actionI() + widget.widget().getHeight()));
+
+			String paramName = widget.desc().name().getString();
+			context.drawText(
+				renderer,
+				paramName,
+				getX() + renderer.getWidth(paramName) + renderer.getWidth(
+					Util.str(actions.get(widget.actionI())).getString()
+				),
+				getY() + (renderer.fontHeight + 10) * widget.actionI(),
+				0xFF0000FF,
+				true
+			);
+
+			setWidth(Math.max(getWidth(), widget.widget().getWidth() + renderer.getWidth(widget.desc().name().getString())));
+
 			widget.widget().render(context, mouseX, mouseY, deltaTicks);
 		}
 	}
