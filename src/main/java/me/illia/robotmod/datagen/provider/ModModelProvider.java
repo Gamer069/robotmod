@@ -6,19 +6,15 @@ import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.block.TeleporterBlock;
 import me.illia.robotmod.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.data.DataWriter;
 import net.minecraft.util.Identifier;
 //? if >= 1.21.8 {
 import net.minecraft.client.data.*;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-
-public class ModModelProvider extends FabricModelProvider {
 //?} else {
 /*import net.minecraft.data.client.*;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-
-public class ModModelProvider extends FabricModelProvider {
 *///?}
+public class ModModelProvider extends FabricModelProvider {
 
 	public ModModelProvider(FabricDataOutput output) {
 		super(output);

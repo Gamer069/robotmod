@@ -83,7 +83,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		int y = (height - backgroundHeight) / 2;
 
 		//? if = 1.21.8 {
-		context.drawTexture(RenderPipelines.GUI, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		context.drawTexture(RenderPipelines.GUI_TEXTURED, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
 		//?} else {
 		/*context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
 		*///?}
