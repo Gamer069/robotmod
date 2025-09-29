@@ -9,10 +9,15 @@ import me.illia.robotmod.screen.RobotScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.ContainerLock;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if = 1.21.8 {
@@ -23,6 +28,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
@@ -42,16 +48,19 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public ArrayList<Action> actions;
 	public BlockPos home;
 	public boolean ranActions;
+	public SimpleInventory inv;
 
 	public RobotEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
 		super(entityType, world);
 		this.actions = new ArrayList<>();
+		this.inv = new SimpleInventory(16);
 	}
 
 	//? if = 1.21.8 {
 	@Override
 	protected void readCustomData(ReadView view) {
 		this.actions = new ArrayList<>(view.read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
+		this.home = view.read("home", BlockPos.CODEC).orElse(BlockPos.ORIGIN);
 
 		super.readCustomData(view);
 	}
@@ -59,10 +68,13 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	protected void writeCustomData(WriteView view) {
 		view.put("actions", Action.CODEC.codec().listOf(), this.actions);
+		view.put("home", BlockPos.CODEC, this.home);
 
 		super.writeCustomData(view);
 	}
 	//?} else {
+
+	// TODO: properly write home for odler versions!
 
 	/*@Override
 	public void readNbt(NbtCompound nbt) {
@@ -185,5 +197,27 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public void save(ArrayList<Action> actions) {
 		this.actions = actions;
 		ClientPlayNetworking.send(new RobotActionsSyncC2SPayload(getId(), actions.stream().toList(), getWorld().getRegistryKey()));
+	}
+
+	@Override
+	public boolean canPickupItem(ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public boolean canPickUpLoot() {
+		return true;
+	}
+
+	@Override
+	protected void loot(ServerWorld world, ItemEntity itemEntity) {
+		ItemStack stack = itemEntity.getStack();
+		ItemStack leftover = inv.addStack(stack.copy());
+		if (leftover.isEmpty()) {
+			itemEntity.discard(); // remove the item if fully picked up
+		} else {
+			stack.setCount(leftover.getCount()); // leave remaining
+		}
+		super.loot(world, itemEntity);
 	}
 }

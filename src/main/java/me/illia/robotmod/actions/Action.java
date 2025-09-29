@@ -9,7 +9,9 @@ import me.illia.robotmod.Util;
 import me.illia.robotmod.entity.RobotEntity;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CropBlock;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -117,6 +119,9 @@ public class Action {
 				}));
 			}
 			case Harvest -> {
+				if (robotEntity.getWorld().getBlockState(robotEntity.getBlockPos().up()).getBlock() instanceof CropBlock) {
+					robotEntity.getWorld().breakBlock(robotEntity.getBlockPos().up(), true);
+				}
 			}
 			case Wait -> {
 			}
