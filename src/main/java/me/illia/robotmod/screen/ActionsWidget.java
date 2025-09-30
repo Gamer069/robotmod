@@ -3,6 +3,7 @@ package me.illia.robotmod.screen;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionParamDescriptor;
+import me.illia.robotmod.actions.Direction;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -65,6 +66,13 @@ public class ActionsWidget extends ClickableWidget {
 						yield null;
 					}
 				}
+				case Dir -> {
+					if (widget instanceof CyclingButtonWidget<?> cb && cb.getValue() instanceof Direction val) {
+						yield new Action.ParamValue.DirParam(val);
+					} else {
+						yield null;
+					}
+				}
 			};
 
 			if (paramValue != null) {
@@ -122,7 +130,8 @@ public class ActionsWidget extends ClickableWidget {
 			int i = 0;
 			for (ActionParamDescriptor desc : action.actionType.getParams()) {
 				i++;
-				int widgetX = getX() + actionTxtW + 20;
+				int widgetX = getX() + actionTxtW + 60 * (i - 1);
+				int paramLabelX = getX() + actionTxtW + 60 * i;
 
 				switch (desc.type()) {
 					case Int -> {
@@ -141,7 +150,7 @@ public class ActionsWidget extends ClickableWidget {
 							widget.setText(Integer.toString(value));
 						}
 
-						paramWidgets.add(new ParamWidgetDescriptor(widget, desc, actionI));
+						paramWidgets.add(new ParamWidgetDescriptor(widget, desc, actionI, paramLabelX));
 					}
 					case Float -> {
 						TextFieldWidget widget = new TextFieldWidget(renderer, widgetX, y, 60, 20, desc.name());
@@ -161,10 +170,11 @@ public class ActionsWidget extends ClickableWidget {
 							widget.setText(Float.toString(value));
 						}
 
-						paramWidgets.add(new ParamWidgetDescriptor(widget, desc, actionI));
+						paramWidgets.add(new ParamWidgetDescriptor(widget, desc, actionI, paramLabelX));
 					}
 					case Bool -> {
 						CyclingButtonWidget<Boolean> boolWidget = CyclingButtonWidget.onOffBuilder()
+							.omitKeyText()
 							.build(widgetX, y, 60, 20, desc.name());
 
 						TranslatableTextContent content = (TranslatableTextContent)desc.name().getContent();
@@ -173,7 +183,23 @@ public class ActionsWidget extends ClickableWidget {
 							boolWidget.setValue(value);
 						}
 
-						paramWidgets.add(new ParamWidgetDescriptor(boolWidget, desc, actionI));
+						paramWidgets.add(new ParamWidgetDescriptor(boolWidget, desc, actionI, paramLabelX));
+					}
+					case Dir -> {
+						CyclingButtonWidget<Direction> dirWidget = CyclingButtonWidget.<Direction>builder((d) -> Text.translatable(d.asString()))
+							.values(Direction.values())
+							.initially(Direction.North)
+							.omitKeyText()
+							.build(widgetX, y, 60, 20, desc.name());
+
+						TranslatableTextContent content = (TranslatableTextContent)desc.name().getContent();
+						Action.ParamValue val = action.getParams().get(content.getKey());
+						if (val instanceof Action.ParamValue.DirParam(Direction value)) {
+							dirWidget.setValue(value);
+						}
+
+
+						paramWidgets.add(new ParamWidgetDescriptor(dirWidget, desc, actionI, paramLabelX));
 					}
 				}
 
@@ -204,16 +230,15 @@ public class ActionsWidget extends ClickableWidget {
 		// Render all param widgets
 		for (ParamWidgetDescriptor widget : paramWidgets) {
 			setWidth(Math.max(getWidth(), renderer.getWidth(widget.desc().name().getString())));
-			setHeight(Math.max(getHeight(), (renderer.fontHeight + 10) * widget.actionI() + widget.widget().getHeight()));
+			int actionH = (renderer.fontHeight + 10) * widget.actionI();
+			setHeight(Math.max(getHeight(), actionH + widget.widget().getHeight()));
 
 			String paramName = widget.desc().name().getString();
 			context.drawText(
 				renderer,
 				paramName,
-				getX() + renderer.getWidth(paramName) + renderer.getWidth(
-					Util.str(actions.get(widget.actionI())).getString()
-				),
-				getY() + (renderer.fontHeight + 10) * widget.actionI(),
+				widget.paramLabelX(),
+				getY() + actionH,
 				0xFF0000FF,
 				true
 			);
@@ -228,6 +253,11 @@ public class ActionsWidget extends ClickableWidget {
 	protected void appendClickableNarrations(NarrationMessageBuilder builder) {
 		for (Action action : this.actions) {
 			builder.put(NarrationPart.TITLE, Util.str(action).getString());
+			for (ActionParamDescriptor desc : action.actionType.getParams()) {
+				builder.put(NarrationPart.HINT, desc.name().getString());
+				Action.ParamValue value = action.getParams().get(((TranslatableTextContent)desc.name().getContent()).getKey());
+				builder.put(NarrationPart.HINT, Action.ParamValue.val(value));
+			}
 		}
 	}
 }

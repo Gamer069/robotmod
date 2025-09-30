@@ -28,6 +28,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 	public RobotScreen(RobotScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
+		this.backgroundWidth = 226;
 	}
 
 	public RobotEntity getRobot() {
@@ -53,7 +54,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 		RobotEntity robot = getRobot();
 
-		actionsWidget = new ActionsWidget(x, y + 50, 140, 50, robot.actions);
+		actionsWidget = new ActionsWidget(x, y + 50, 180, 50, robot.actions);
 		this.addDrawableChild(actionsWidget);
 
 		this.addDrawableChild(ButtonWidget.builder(Text.translatable("menu.robotmod.add"), button -> {

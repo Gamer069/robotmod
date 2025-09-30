@@ -33,15 +33,6 @@ public class Action {
 		PARAMS_CODEC.fieldOf("params").forGetter(Action::getParams)
 	).apply(instance, (id, params) -> new Action(ActionType.from(id), params)));
 
-	private static JsonElement toJsonElement(Object obj) {
-		return switch (obj) {
-			case Number number -> new JsonPrimitive(number);
-			case Boolean bool -> new JsonPrimitive(bool);
-			case String str -> new JsonPrimitive(str);
-			default -> throw new IllegalArgumentException("Unsupported param type: " + obj.getClass().getName());
-		};
-	}
-
 	public Action(ActionType actionType, HashMap<String, ParamValue> params) {
 		this.actionType = actionType;
 		this.params = params;
@@ -144,10 +135,39 @@ public class Action {
 
 				robotEntity.slot = slot;
 			}
+			case Walk -> {
+				ActionParamDescriptor walkParamDesc = paramDescs.get(0);
+				ParamValue walkVal = params.get(Util.key(walkParamDesc.name()));
+				Direction dir;
+				if (walkVal instanceof ParamValue.DirParam(Direction dirValue)) {
+					dir = dirValue;
+				} else {
+					throw new RuntimeException("param isn't dir for some reason, instead it's " + walkVal.type());
+				}
+
+				ActionParamDescriptor blocksParamDesc = paramDescs.get(1);
+				ParamValue blocksVal = params.get(Util.key(blocksParamDesc.name()));
+				int blocks;
+				if (blocksVal instanceof ParamValue.IntParam(int blocksValue)) {
+					blocks = blocksValue;
+				} else {
+					throw new RuntimeException("param isn't int for some reason, instead it's " + blocksVal.type());
+				}
+
+				net.minecraft.util.math.Direction mcDir = switch (dir) {
+					case North -> net.minecraft.util.math.Direction.NORTH;
+					case East -> net.minecraft.util.math.Direction.EAST;
+					case South -> net.minecraft.util.math.Direction.SOUTH;
+					case West -> net.minecraft.util.math.Direction.WEST;
+				};
+
+				BlockPos pos = robotEntity.getBlockPos().offset(mcDir, blocks);
+				robotEntity.getNavigation().startMovingTo(pos.getX(), pos.getY(), pos.getZ(), 1.0f);
+			}
 		}
 	}
 
-	public sealed interface ParamValue permits ParamValue.IntParam, ParamValue.FloatParam, ParamValue.BoolParam {
+	public sealed interface ParamValue permits ParamValue.IntParam, ParamValue.FloatParam, ParamValue.BoolParam, ParamValue.DirParam {
 		Codec<ParamValue> CODEC = Codec.INT.<ParamValue>dispatch(
 			ParamValue::typeTag,
 			ParamValue::codecSelector
@@ -160,8 +180,30 @@ public class Action {
 				case 0 -> IntParam.CODEC.fieldOf("value");
 				case 1 -> FloatParam.CODEC.fieldOf("value");
 				case 2 -> BoolParam.CODEC.fieldOf("value");
+				case 3 -> DirParam.CODEC.fieldOf("value");
 				default -> throw new IllegalArgumentException("Invalid PV tag: " + tag);
 			};
+		}
+
+		public static String val(ParamValue val) {
+			if (val == null) {
+				return "";
+			}
+
+			switch (val) {
+				case IntParam(int value) -> {
+					return Integer.toString(value);
+				}
+				case FloatParam(float value) -> {
+					return Float.toString(value);
+				}
+				case BoolParam(boolean value) -> {
+					return Text.translatable("bool.robotmod." + value).getString();
+				}
+				case DirParam(Direction dir) -> {
+					return dir.asString();
+				}
+			}
 		}
 
 		int typeTag();
@@ -221,6 +263,25 @@ public class Action {
 			@Override
 			public ActionParamType type() {
 				return ActionParamType.Bool;
+			}
+		}
+
+		record DirParam(Direction dir) implements ParamValue {
+			public static final Codec<DirParam> CODEC = Direction.CODEC.xmap(DirParam::new, DirParam::dir);
+
+			@Override
+			public Codec<? extends ParamValue> codec() {
+				return CODEC;
+			}
+
+			@Override
+			public int typeTag() {
+				return 3;
+			}
+
+			@Override
+			public ActionParamType type() {
+				return ActionParamType.Dir;
 			}
 		}
 	}

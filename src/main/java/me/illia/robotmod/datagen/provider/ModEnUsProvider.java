@@ -19,6 +19,7 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		translationBuilder.add("menu.robotmod.add", "+");
 		translationBuilder.add("menu.robotmod.no_points", "No Teleport Points!");
 		translationBuilder.add("menu.robotmod.action_type", "Type");
+		translationBuilder.add("menu.robotmod.action_type_walk", "Walk");
 		translationBuilder.add("menu.robotmod.action_type_walk_around", "Walk Around");
 		translationBuilder.add("menu.robotmod.action_type_harvest", "Harvest");
 		translationBuilder.add("menu.robotmod.action_type_wait", "Wait");
@@ -28,8 +29,16 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		translationBuilder.add("menu.robotmod.action_param_walk_around", "around ");
 		translationBuilder.add("menu.robotmod.action_param_wait_sec", "for seconds");
 		translationBuilder.add("menu.robotmod.action_param_switch_slot", " to ");
+		translationBuilder.add("menu.robotmod.action_param_walk_to", " to ");
+		translationBuilder.add("menu.robotmod.action_param_walk_blocks", " for ");
+		translationBuilder.add("bool.robotmod.true", "True");
+		translationBuilder.add("bool.robotmod.false", "False");
 		translationBuilder.add("menu.robotmod.actions", "Actions");
 		translationBuilder.add("menu.robotmod.tp", "Teleport");
+		translationBuilder.add("direction.robotmod.north", "North");
+		translationBuilder.add("direction.robotmod.east", "East");
+		translationBuilder.add("direction.robotmod.south", "South");
+		translationBuilder.add("direction.robotmod.west", "West");
 		translationBuilder.add("itemGroup.robotmod.robotmod", "Technology");
 		translationBuilder.add(ModItems.TELEPORTER, "Ender Teleporter");
 		translationBuilder.add(ModItems.PACKED_ENDER_PEARL, "Packed Ender Pearl");

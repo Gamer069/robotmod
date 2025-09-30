@@ -243,6 +243,9 @@ public class Util {
 			case SwitchToSlot -> {
 				return Text.translatable("menu.robotmod.action_type_switch_slot");
 			}
+			case Walk -> {
+				return Text.translatable("menu.robotmod.action_type_walk");
+			}
 		}
 
 		return Text.empty();
