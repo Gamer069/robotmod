@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -116,6 +117,7 @@ public class Action {
 				}
 			}
 			case Wait -> {
+				// TODO: implement wait
 			}
 			case Home -> {
 				BlockPos home = robotEntity.home;
@@ -169,10 +171,26 @@ public class Action {
 				robotEntity.dropItem(robotEntity.inv.getStack(robotEntity.slot), false, false);
 				robotEntity.inv.setStack(robotEntity.slot, ItemStack.EMPTY);
 			}
+			case Say -> {
+				ActionParamDescriptor msgParamDesc = paramDescs.get(0);
+				ParamValue msgVal = params.get(Util.key(msgParamDesc.name()));
+				String msg;
+				if (msgVal instanceof ParamValue.StringParam(String value)) {
+					msg = value;
+				} else {
+					throw new RuntimeException("param isn't string for some reason, instead it's " + msgVal.type());
+				}
+
+				Text text = robotEntity.getName().copy().append(" > ").append(msg);
+
+				for (PlayerEntity player : robotEntity.getWorld().getPlayers()) {
+					player.sendMessage(text, false);
+				}
+			}
 		}
 	}
 
-	public sealed interface ParamValue permits ParamValue.IntParam, ParamValue.FloatParam, ParamValue.BoolParam, ParamValue.DirParam {
+	public sealed interface ParamValue permits ParamValue.BoolParam, ParamValue.DirParam, ParamValue.FloatParam, ParamValue.IntParam, ParamValue.StringParam {
 		Codec<ParamValue> CODEC = Codec.INT.<ParamValue>dispatch(
 			ParamValue::typeTag,
 			ParamValue::codecSelector
@@ -186,6 +204,7 @@ public class Action {
 				case 1 -> FloatParam.CODEC.fieldOf("value");
 				case 2 -> BoolParam.CODEC.fieldOf("value");
 				case 3 -> DirParam.CODEC.fieldOf("value");
+				case 4 -> StringParam.CODEC.fieldOf("value");
 				default -> throw new IllegalArgumentException("Invalid PV tag: " + tag);
 			};
 		}
@@ -204,6 +223,9 @@ public class Action {
 				}
 				case BoolParam(boolean value) -> {
 					return Text.translatable("bool.robotmod." + value).getString();
+				}
+				case StringParam(String value) -> {
+					return value;
 				}
 				case DirParam(Direction dir) -> {
 					return dir.asString();
@@ -287,6 +309,25 @@ public class Action {
 			@Override
 			public ActionParamType type() {
 				return ActionParamType.Dir;
+			}
+		}
+
+		public record StringParam(String value) implements ParamValue {
+			public static final Codec<StringParam> CODEC = Codec.STRING.xmap(StringParam::new, StringParam::value);
+
+			@Override
+			public Codec<? extends ParamValue> codec() {
+				return CODEC;
+			}
+
+			@Override
+			public int typeTag() {
+				return 4;
+			}
+
+			@Override
+			public ActionParamType type() {
+				return ActionParamType.String;
 			}
 		}
 	}

@@ -28,6 +28,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 	public RobotScreen(RobotScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
+		this.backgroundWidth = 226;
 	}
 
 	public RobotEntity getRobot() {
@@ -53,15 +54,17 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 		RobotEntity robot = getRobot();
 
-		actionsWidget = new ActionsWidget(x, y + 50, 140, 50, robot.actions);
+		actionsWidget = new ActionsWidget(x, y + 50, 180, 50, robot.actions);
 		this.addDrawableChild(actionsWidget);
 
 		this.addDrawableChild(ButtonWidget.builder(Text.translatable("menu.robotmod.add"), button -> {
 			HashMap<String, Action.ParamValue> args = new HashMap<>();
 			robot.actions.add(new Action(actionTypeBtn.getValue(), args));
 
+			int prevWidth = actionsWidget.getWidth();
+			int prevHeight = actionsWidget.getHeight();
 			this.remove(actionsWidget);
-			actionsWidget = new ActionsWidget(x, y + 50, 90, 50, robot.actions);
+			actionsWidget = new ActionsWidget(x, y + 50, prevWidth, prevHeight, robot.actions);
 			this.addDrawableChild(actionsWidget);
 		}).dimensions(x, y + 20, 20, 20).build());
 
@@ -70,7 +73,6 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 	@Override
 	public void close() {
-		// WHAT DO I DO WITH THIS
 		getRobot().save(actionsWidget.save());
 		super.close();
 	}
@@ -81,7 +83,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		int y = (height - backgroundHeight) / 2;
 
 		//? if = 1.21.8 {
-		/*context.drawTexture(RenderPipelines.GUI, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		/*context.drawTexture(RenderPipelines.GUI_TEXTURED, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
 		*///?} else {
 		context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
 		//?}

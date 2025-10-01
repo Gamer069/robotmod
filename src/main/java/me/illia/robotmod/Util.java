@@ -249,6 +249,9 @@ public class Util {
 			case Drop -> {
 				return Text.translatable("menu.robotmod.action_type_drop");
 			}
+			case Say -> {
+				return Text.translatable("menu.robotmod.action_type_say");
+			}
 		}
 
 		return Text.empty();

@@ -94,8 +94,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	*///?} else {
 
-	 TODO: properly write home, inventory AND held slot for odler versions!
-
 	@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);

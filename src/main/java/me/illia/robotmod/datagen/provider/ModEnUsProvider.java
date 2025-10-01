@@ -31,7 +31,9 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		translationBuilder.add("menu.robotmod.action_param_switch_slot", " to ");
 		translationBuilder.add("menu.robotmod.action_param_walk_to", " to ");
 		translationBuilder.add("menu.robotmod.action_param_walk_blocks", " for ");
+		translationBuilder.add("menu.robotmod.action_param_say", "text");
 		translationBuilder.add("menu.robotmod.action_type_drop", "Drop");
+		translationBuilder.add("menu.robotmod.action_type_say", "Say");
 		translationBuilder.add("bool.robotmod.true", "True");
 		translationBuilder.add("bool.robotmod.false", "False");
 		translationBuilder.add("menu.robotmod.actions", "Actions");

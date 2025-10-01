@@ -2,12 +2,14 @@ package me.illia.robotmod.entity;
 
 import me.illia.robotmod.Util;
 import me.illia.robotmod.client.RobotmodClient;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
 import net.minecraft.client.render.entity.state.ArmedEntityRenderState;
 import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.client.render.entity.state.LivingEntityRenderState;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 public class RobotEntityRenderer extends MobEntityRenderer<RobotEntity, ArmedEntityRenderState, RobotEntityModel> {

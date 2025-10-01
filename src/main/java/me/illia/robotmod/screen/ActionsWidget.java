@@ -59,6 +59,13 @@ public class ActionsWidget extends ClickableWidget {
 						yield null;
 					}
 				}
+				case String -> {
+					if (widget instanceof TextFieldWidget tf) {
+						yield new Action.ParamValue.StringParam(tf.getText());
+					} else {
+						yield null;
+					}
+				}
 				case Bool -> {
 					if (widget instanceof CyclingButtonWidget<?> cb && cb.getValue() instanceof Boolean val) {
 						yield new Action.ParamValue.BoolParam(val);
@@ -168,6 +175,17 @@ public class ActionsWidget extends ClickableWidget {
 						Action.ParamValue val = action.getParams().get(content.getKey());
 						if (val instanceof Action.ParamValue.FloatParam(float value)) {
 							widget.setText(Float.toString(value));
+						}
+
+						paramWidgets.add(new ParamWidgetDescriptor(widget, desc, actionI, paramLabelX));
+					}
+					case String -> {
+						TextFieldWidget widget = new TextFieldWidget(renderer, widgetX, y, 60, 20, desc.name());
+
+						TranslatableTextContent content = (TranslatableTextContent)desc.name().getContent();
+						Action.ParamValue val = action.getParams().get(content.getKey());
+						if (val instanceof Action.ParamValue.StringParam(String value)) {
+							widget.setText(value);
 						}
 
 						paramWidgets.add(new ParamWidgetDescriptor(widget, desc, actionI, paramLabelX));
