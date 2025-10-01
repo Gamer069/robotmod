@@ -3,6 +3,7 @@ package me.illia.robotmod.entity;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
+import me.illia.robotmod.actions.ActionRunner;
 import me.illia.robotmod.networking.RobotActionsSyncC2SPayload;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -160,7 +161,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		if (Util.night(world)) {
 			if (!ranActions) {
 				for (Action action : actions) {
-					action.run(this);
+					ActionRunner.run(action, this);
 				}
 				ranActions = true;
 			}
