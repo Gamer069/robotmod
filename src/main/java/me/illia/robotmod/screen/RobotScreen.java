@@ -73,7 +73,6 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 	@Override
 	public void close() {
-		// WHAT DO I DO WITH THIS
 		getRobot().save(actionsWidget.save());
 		super.close();
 	}

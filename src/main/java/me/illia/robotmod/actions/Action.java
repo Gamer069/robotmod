@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -163,6 +164,10 @@ public class Action {
 
 				BlockPos pos = robotEntity.getBlockPos().offset(mcDir, blocks);
 				robotEntity.getNavigation().startMovingTo(pos.getX(), pos.getY(), pos.getZ(), 1.0f);
+			}
+			case Drop -> {
+				robotEntity.dropItem(robotEntity.inv.getStack(robotEntity.slot), false, false);
+				robotEntity.inv.setStack(robotEntity.slot, ItemStack.EMPTY);
 			}
 		}
 	}

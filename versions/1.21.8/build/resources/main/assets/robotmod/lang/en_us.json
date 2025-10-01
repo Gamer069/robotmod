@@ -1,6 +1,8 @@
 {
   "block.robotmod.lunar_panel": "Lunar Panel Block",
   "block.robotmod.teleporter": "Ender Teleporter Block",
+  "bool.robotmod.false": "False",
+  "bool.robotmod.true": "True",
   "direction.robotmod.east": "East",
   "direction.robotmod.north": "North",
   "direction.robotmod.south": "South",
@@ -15,6 +17,7 @@
   "menu.robotmod.action_param_walk_blocks": " for ",
   "menu.robotmod.action_param_walk_to": " to ",
   "menu.robotmod.action_type": "Type",
+  "menu.robotmod.action_type_drop": "Drop",
   "menu.robotmod.action_type_harvest": "Harvest",
   "menu.robotmod.action_type_home": "Home",
   "menu.robotmod.action_type_set_home": "Set Home",

@@ -11,7 +11,8 @@ public enum ActionType {
 	Home(3),
 	SetHome(4),
 	SwitchToSlot(5),
-	Walk(6);
+	Walk(6),
+	Drop(7);
 
 	private static final Map<Integer, ActionType> BY_ID = new HashMap<>();
 	public static final Map<Integer, List<ActionParamDescriptor>> ID2PARAMS = new HashMap<>();
