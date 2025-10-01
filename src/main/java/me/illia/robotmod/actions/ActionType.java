@@ -13,7 +13,8 @@ public enum ActionType {
 	SwitchToSlot(5),
 	Walk(6),
 	Drop(7),
-	Say(8);
+	Say(8),
+	HitNearestEntity(9);
 
 	private static final Map<Integer, ActionType> BY_ID = new HashMap<>();
 	public static final Map<Integer, List<ActionParamDescriptor>> ID2PARAMS = new HashMap<>();

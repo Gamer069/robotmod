@@ -252,6 +252,9 @@ public class Util {
 			case Say -> {
 				return Text.translatable("menu.robotmod.action_type_say");
 			}
+			case HitNearestEntity -> {
+				return Text.translatable("menu.robotmod.action_type_hit_nearest_entity");
+			}
 		}
 
 		return Text.empty();

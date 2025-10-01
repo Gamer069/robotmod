@@ -1,6 +1,7 @@
 package me.illia.robotmod.datagen.provider;
 
 import me.illia.robotmod.block.ModBlocks;
+import me.illia.robotmod.entity.ModEntities;
 import me.illia.robotmod.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -34,6 +35,7 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		translationBuilder.add("menu.robotmod.action_param_say", "text");
 		translationBuilder.add("menu.robotmod.action_type_drop", "Drop");
 		translationBuilder.add("menu.robotmod.action_type_say", "Say");
+		translationBuilder.add("menu.robotmod.action_type_hit_nearest_entity", "Hit Nearest Entity");
 		translationBuilder.add("bool.robotmod.true", "True");
 		translationBuilder.add("bool.robotmod.false", "False");
 		translationBuilder.add("menu.robotmod.actions", "Actions");
@@ -48,5 +50,6 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		translationBuilder.add(ModItems.ROBOT_SPAWN_EGG, "Robot Spawn Egg");
 		translationBuilder.add(ModBlocks.TELEPORTER_BLOCK, "Ender Teleporter Block");
 		translationBuilder.add(ModBlocks.LUNAR_PANEL_BLOCK, "Lunar Panel Block");
+		translationBuilder.add(ModEntities.ROBOT, "Robot");
 	}
 }

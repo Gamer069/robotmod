@@ -1,5 +1,6 @@
 package me.illia.robotmod.actions;
 
+import com.ibm.icu.util.CharsTrie;
 import me.illia.robotmod.Robotmod;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
@@ -10,12 +11,23 @@ import me.illia.robotmod.entity.RobotEntity;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
+import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import java.util.ArrayList;
@@ -34,6 +46,8 @@ public class Action {
 		Codec.INT.fieldOf("actionType").forGetter((Action inst) -> inst.getActionType().getId()),
 		PARAMS_CODEC.fieldOf("params").forGetter(Action::getParams)
 	).apply(instance, (id, params) -> new Action(ActionType.from(id), params)));
+
+	public static final int HIT_RADIUS = 8;
 
 	public Action(ActionType actionType, HashMap<String, ParamValue> params) {
 		this.actionType = actionType;
@@ -185,6 +199,44 @@ public class Action {
 
 				for (PlayerEntity player : robotEntity.getWorld().getPlayers()) {
 					player.sendMessage(text, false);
+				}
+			}
+			case HitNearestEntity -> {
+				Box box = new Box(
+					robotEntity.getX() - HIT_RADIUS, robotEntity.getY() - HIT_RADIUS, robotEntity.getZ() - HIT_RADIUS,
+					robotEntity.getX() + HIT_RADIUS, robotEntity.getY() + HIT_RADIUS, robotEntity.getZ() + HIT_RADIUS
+				);
+
+				List<Entity> entities = robotEntity.getWorld().getEntitiesByClass(Entity.class, box, e -> !e.equals(robotEntity));
+
+				Robotmod.LOGGER.info("Entities: " + entities);
+
+				Entity nearest = entities.stream()
+					.filter(e -> e.squaredDistanceTo(robotEntity) <= HIT_RADIUS * HIT_RADIUS)
+					.min(Comparator.comparingDouble(e -> e.squaredDistanceTo(robotEntity)))
+					.orElse(null);
+
+				if (nearest != null) {
+					double baseDamage = robotEntity.getAttributeValue(EntityAttributes.ATTACK_DAMAGE);
+					double baseKnockback = robotEntity.getAttributeValue(EntityAttributes.ATTACK_KNOCKBACK);
+
+					Robotmod.LOGGER.info("baseDamage: " + baseDamage + ", baseKnockback: " + baseKnockback);
+
+					nearest.damage((ServerWorld) robotEntity.getWorld(),
+						robotEntity.getWorld().getDamageSources().mobAttackNoAggro(robotEntity),
+						(float) baseDamage);
+
+					double dx = nearest.getX() - robotEntity.getX();
+					double dz = nearest.getZ() - robotEntity.getZ();
+					double distance = Math.sqrt(dx * dx + dz * dz);
+					if (distance == 0) distance = 0.01;
+
+					nearest.setVelocity(
+						dx / distance * baseKnockback,
+						0.2, // small vertical knockback
+						dz / distance * baseKnockback
+					);
+					nearest.velocityModified = true;
 				}
 			}
 		}

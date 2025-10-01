@@ -218,11 +218,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	}
 
 	@Override
-	public boolean canPickupItem(ItemStack stack) {
-		return true;
-	}
-
-	@Override
 	public boolean canPickUpLoot() {
 		return true;
 	}
