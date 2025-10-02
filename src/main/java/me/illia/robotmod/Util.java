@@ -8,6 +8,7 @@ import me.illia.robotmod.actions.ActionType;
 import me.illia.robotmod.attachment.TeleportPoint;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.world.dimension.Dimension;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
@@ -255,6 +256,15 @@ public class Util {
 			case HitNearestEntity -> {
 				return Text.translatable("menu.robotmod.action_type_hit_nearest_entity");
 			}
+			case SetYaw -> {
+				return Text.translatable("menu.robotmod.action_type_set_yaw");
+			}
+			case SetPitch -> {
+				return Text.translatable("menu.robotmod.action_type_set_pitch");
+			}
+			case BreakBlock -> {
+				return Text.translatable("menu.robotmod.action_type_break_block");
+			}
 		}
 
 		return Text.empty();
@@ -358,5 +368,21 @@ public class Util {
 			return ttc.getKey();
 		}
 		return null;
+	}
+
+	public static void add(FabricLanguageProvider.TranslationBuilder builder, String key, String string) {
+		builder.add(key, string);
+	}
+
+	public static void add(FabricLanguageProvider.TranslationBuilder builder, Item key, String string) {
+		builder.add(key, string);
+	}
+
+	public static void add(FabricLanguageProvider.TranslationBuilder builder, Block key, String string) {
+		builder.add(key, string);
+	}
+
+	public static void add(FabricLanguageProvider.TranslationBuilder builder, EntityType<?> key, String string) {
+		builder.add(key, string);
 	}
 }

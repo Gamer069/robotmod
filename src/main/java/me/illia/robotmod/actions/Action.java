@@ -1,38 +1,10 @@
 package me.illia.robotmod.actions;
 
-import com.ibm.icu.util.CharsTrie;
-import me.illia.robotmod.Robotmod;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import me.illia.robotmod.Util;
-import me.illia.robotmod.entity.RobotEntity;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CropBlock;
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSources;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
 
-import java.util.Comparator;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.function.Function;
 
 public class Action {

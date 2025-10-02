@@ -4,7 +4,10 @@ import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.entity.RobotEntity;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -12,6 +15,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -27,7 +32,7 @@ import static me.illia.robotmod.actions.ActionType.*;
 public class ActionRunner {
 	public static final int HIT_RADIUS = 8;
 
-	public static void run(Action action, RobotEntity robotEntity) {
+	public static void run(Action action, RobotEntity robot) {
 		List<ActionParamDescriptor> paramDescs = action.getActionType().getParams();
 		HashMap<String, Action.ParamValue> params = action.getParams();
 
@@ -39,12 +44,12 @@ public class ActionRunner {
 				if (val instanceof Action.ParamValue.IntParam(int value)) {
 					r = value;
 				} else {
-					throw new RuntimeException("param isn't int for some reason, instead it's " + val.type());
+					throw new RuntimeException("radius isn't int for some reason, instead it's " + val.type());
 				}
 
-				EntityNavigation nav = robotEntity.getNavigation();
+				EntityNavigation nav = robot.getNavigation();
 
-				BlockPos center = robotEntity.getBlockPos();
+				BlockPos center = robot.getBlockPos();
 				int segments = 72;
 				double speed = 1.0;
 
@@ -61,7 +66,7 @@ public class ActionRunner {
 				AtomicInteger index = new AtomicInteger(0);
 
 				ServerTickEvents.START_SERVER_TICK.register((minecraftServer -> {
-					if (index.get() < path.size() && Util.night(robotEntity.getWorld())) {
+					if (index.get() < path.size() && Util.night(robot.getWorld())) {
 						Vec3d target = path.get(index.get());
 						if (!nav.isFollowingPath()) {
 							nav.startMovingTo(target.x, target.y, target.z, speed);
@@ -71,19 +76,19 @@ public class ActionRunner {
 				}));
 			}
 			case Harvest -> {
-				if (robotEntity.getWorld().getBlockState(robotEntity.getBlockPos().up()).getBlock() instanceof CropBlock) {
-					robotEntity.getWorld().breakBlock(robotEntity.getBlockPos().up(), true);
+				if (robot.getWorld().getBlockState(robot.getBlockPos().up()).getBlock() instanceof CropBlock) {
+					robot.getWorld().breakBlock(robot.getBlockPos().up(), true);
 				}
 			}
 			case Wait -> {
 				// TODO: implement wait
 			}
 			case Home -> {
-				BlockPos home = robotEntity.home;
-				robotEntity.getNavigation().startMovingTo(home.getX(), home.getY(), home.getZ(), 1.0);
+				BlockPos home = robot.home;
+				robot.getNavigation().startMovingTo(home.getX(), home.getY(), home.getZ(), 1.0);
 			}
 			case SetHome -> {
-				robotEntity.home = robotEntity.getBlockPos();
+				robot.home = robot.getBlockPos();
 			}
 			case SwitchToSlot -> {
 				ActionParamDescriptor slotParamDesc = paramDescs.get(0);
@@ -92,10 +97,10 @@ public class ActionRunner {
 				if (val instanceof Action.ParamValue.IntParam(int value)) {
 					slot = value;
 				} else {
-					throw new RuntimeException("param isn't int for some reason, instead it's " + val.type());
+					throw new RuntimeException("slot index isn't int for some reason, instead it's " + val.type());
 				}
 
-				robotEntity.slot = slot;
+				robot.slot = slot;
 			}
 			case Walk -> {
 				ActionParamDescriptor walkParamDesc = paramDescs.get(0);
@@ -113,7 +118,7 @@ public class ActionRunner {
 				if (blocksVal instanceof Action.ParamValue.IntParam(int blocksValue)) {
 					blocks = blocksValue;
 				} else {
-					throw new RuntimeException("param isn't int for some reason, instead it's " + blocksVal.type());
+					throw new RuntimeException("block amount isn't int for some reason, instead it's " + blocksVal.type());
 				}
 
 				net.minecraft.util.math.Direction mcDir = switch (dir) {
@@ -123,12 +128,12 @@ public class ActionRunner {
 					case West -> net.minecraft.util.math.Direction.WEST;
 				};
 
-				BlockPos pos = robotEntity.getBlockPos().offset(mcDir, blocks);
-				robotEntity.getNavigation().startMovingTo(pos.getX(), pos.getY(), pos.getZ(), 1.0f);
+				BlockPos pos = robot.getBlockPos().offset(mcDir, blocks);
+				robot.getNavigation().startMovingTo(pos.getX(), pos.getY(), pos.getZ(), 1.0f);
 			}
 			case Drop -> {
-				robotEntity.dropItem(robotEntity.inv.getStack(robotEntity.slot), false, false);
-				robotEntity.inv.setStack(robotEntity.slot, ItemStack.EMPTY);
+				robot.dropItem(robot.inv.getStack(robot.slot), false, false);
+				robot.inv.setStack(robot.slot, ItemStack.EMPTY);
 			}
 			case Say -> {
 				ActionParamDescriptor msgParamDesc = paramDescs.get(0);
@@ -137,38 +142,38 @@ public class ActionRunner {
 				if (msgVal instanceof Action.ParamValue.StringParam(String value)) {
 					msg = value;
 				} else {
-					throw new RuntimeException("param isn't string for some reason, instead it's " + msgVal.type());
+					throw new RuntimeException("msg isn't string for some reason, instead it's " + msgVal.type());
 				}
 
-				Text text = robotEntity.getName().copy().append(" > ").append(msg);
+				Text text = robot.getName().copy().append(" > ").append(msg);
 
-				for (PlayerEntity player : robotEntity.getWorld().getPlayers()) {
+				for (PlayerEntity player : robot.getWorld().getPlayers()) {
 					player.sendMessage(text, false);
 				}
 			}
 			case HitNearestEntity -> {
 				Box box = new Box(
-					robotEntity.getX() - HIT_RADIUS, robotEntity.getY() - HIT_RADIUS, robotEntity.getZ() - HIT_RADIUS,
-					robotEntity.getX() + HIT_RADIUS, robotEntity.getY() + HIT_RADIUS, robotEntity.getZ() + HIT_RADIUS
+					robot.getX() - HIT_RADIUS, robot.getY() - HIT_RADIUS, robot.getZ() - HIT_RADIUS,
+					robot.getX() + HIT_RADIUS, robot.getY() + HIT_RADIUS, robot.getZ() + HIT_RADIUS
 				);
 
-				List<Entity> entities = robotEntity.getWorld().getEntitiesByClass(Entity.class, box, e -> !e.equals(robotEntity));
+				List<Entity> entities = robot.getWorld().getEntitiesByClass(Entity.class, box, e -> !e.equals(robot));
 
 				Entity nearest = entities.stream()
-					.filter(e -> e.squaredDistanceTo(robotEntity) <= HIT_RADIUS * HIT_RADIUS)
-					.min(Comparator.comparingDouble(e -> e.squaredDistanceTo(robotEntity)))
+					.filter(e -> e.squaredDistanceTo(robot) <= HIT_RADIUS * HIT_RADIUS)
+					.min(Comparator.comparingDouble(e -> e.squaredDistanceTo(robot)))
 					.orElse(null);
 
 				if (nearest != null) {
-					double baseDamage = robotEntity.getAttributeValue(EntityAttributes.ATTACK_DAMAGE);
-					double baseKnockback = robotEntity.getAttributeValue(EntityAttributes.ATTACK_KNOCKBACK);
+					double baseDamage = robot.getAttributeValue(EntityAttributes.ATTACK_DAMAGE);
+					double baseKnockback = robot.getAttributeValue(EntityAttributes.ATTACK_KNOCKBACK);
 
-					nearest.damage((ServerWorld) robotEntity.getWorld(),
-						robotEntity.getWorld().getDamageSources().mobAttackNoAggro(robotEntity),
+					nearest.damage((ServerWorld) robot.getWorld(),
+						robot.getWorld().getDamageSources().mobAttackNoAggro(robot),
 						(float) baseDamage);
 
-					double dx = nearest.getX() - robotEntity.getX();
-					double dz = nearest.getZ() - robotEntity.getZ();
+					double dx = nearest.getX() - robot.getX();
+					double dz = nearest.getZ() - robot.getZ();
 					double distance = Math.sqrt(dx * dx + dz * dz);
 					if (distance == 0) distance = 0.01;
 
@@ -178,6 +183,55 @@ public class ActionRunner {
 						dz / distance * baseKnockback
 					);
 					nearest.velocityModified = true;
+				}
+			}
+			case SetYaw -> {
+				ActionParamDescriptor yawParamDesc = paramDescs.get(0);
+				Action.ParamValue yawVal = params.get(Util.key(yawParamDesc.name()));
+				float yaw;
+				if (yawVal instanceof Action.ParamValue.FloatParam(float value)) {
+					yaw = value;
+				} else {
+					throw new RuntimeException("yaw isn't float for some reason, instead it's " + yawVal.type());
+				}
+
+				robot.setYaw(yaw);
+			}
+			case SetPitch -> {
+				ActionParamDescriptor pitchParamDesc = paramDescs.get(0);
+				Action.ParamValue pitchVal = params.get(Util.key(pitchParamDesc.name()));
+				float pitch;
+				if (pitchVal instanceof Action.ParamValue.FloatParam(float value)) {
+					pitch = value;
+				} else {
+					throw new RuntimeException("pitch isn't float for some reason, instead it's " + pitchVal.type());
+				}
+
+				robot.setPitch(pitch);
+			}
+			case BreakBlock -> {
+				ActionParamDescriptor breakFluidDesc = paramDescs.get(0);
+				Action.ParamValue breakFluidVal = params.get(Util.key(breakFluidDesc.name()));
+				boolean breakFluid;
+				if (breakFluidVal instanceof Action.ParamValue.BoolParam(boolean value)) {
+					breakFluid = value;
+				} else {
+					throw new RuntimeException("break fluid isn't bool for some reason, instead it's " + breakFluidVal.type());
+				}
+
+				HitResult res = robot.raycast(5, 1.0F, breakFluid);
+				if (res instanceof BlockHitResult blockHit) {
+					BlockPos pos = blockHit.getBlockPos();
+					BlockState state = robot.getWorld().getBlockState(pos);
+//					float ticksToBreak = (state.getHardness(robot.getWorld(), pos) * 20) / robot.inv.getStack(robot.slot).getMiningSpeedMultiplier(state);
+
+					// TODO: implement block breaking progress using setBlockBreakingInfo
+
+					if (robot.getWorld().getBlockState(blockHit.getBlockPos()).getBlock() instanceof FluidBlock && breakFluid) {
+						robot.getWorld().setBlockState(pos, Blocks.AIR.getDefaultState());
+					} else {
+						robot.getWorld().breakBlock(pos, true);
+					}
 				}
 			}
 		}
