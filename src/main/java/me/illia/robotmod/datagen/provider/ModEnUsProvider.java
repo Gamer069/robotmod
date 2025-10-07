@@ -4,6 +4,7 @@ import me.illia.robotmod.Util;
 import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.entity.ModEntities;
 import me.illia.robotmod.item.ModItems;
+import me.illia.robotmod.registry.ModRegistries;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.registry.RegistryWrapper;
@@ -22,18 +23,20 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		Util.add(b, "menu.robotmod.no_points", "No Teleport Points!");
 
 		Util.add(b, "menu.robotmod.action_type", "Type");
-		Util.add(b, "menu.robotmod.action_type_walk", "Walk");
-		Util.add(b, "menu.robotmod.action_type_walk_around", "Walk Around");
-		Util.add(b, "menu.robotmod.action_type_harvest", "Harvest");
-		Util.add(b, "menu.robotmod.action_type_wait", "Wait");
-		Util.add(b, "menu.robotmod.action_type_home", "Home");
-		Util.add(b, "menu.robotmod.action_type_switch_slot", "Switch Slot");
-		Util.add(b, "menu.robotmod.action_type_set_yaw", "Set Yaw");
-		Util.add(b, "menu.robotmod.action_type_set_pitch", "Set Pitch");
-		Util.add(b, "menu.robotmod.action_type_break_block", "Break Block");
-		Util.add(b, "menu.robotmod.action_type_drop", "Drop");
-		Util.add(b, "menu.robotmod.action_type_say", "Say");
-		Util.add(b, "menu.robotmod.action_type_hit_nearest_entity", "Hit Nearest Entity");
+
+		Util.add(b, ModRegistries.WALK, "Walk");
+		Util.add(b, ModRegistries.WALK_AROUND, "Walk Around");
+		Util.add(b, ModRegistries.HARVEST, "Harvest");
+		Util.add(b, ModRegistries.WAIT, "Wait");
+		Util.add(b, ModRegistries.HOME, "Home");
+		Util.add(b, ModRegistries.SWITCH_TO_SLOT, "Switch Slot");
+		Util.add(b, ModRegistries.SET_YAW, "Set Yaw");
+		Util.add(b, ModRegistries.SET_PITCH, "Set Pitch");
+		Util.add(b, ModRegistries.SET_HOME, "Set Home");
+		Util.add(b, ModRegistries.BREAK_BLOCK, "Break Block");
+		Util.add(b, ModRegistries.DROP, "Drop");
+		Util.add(b, ModRegistries.SAY, "Say");
+		Util.add(b, ModRegistries.HIT_NEAREST_ENTITY, "Hit Nearest Entity");
 
 
 		Util.add(b, "menu.robotmod.action_param_walk_around", "around ");

@@ -27,28 +27,28 @@ public enum ActionType {
 			BY_ID.put(type.id, type);
 			switch (type.id) {
 				case 0:
-					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_walk_around"), ActionParamType.Int)));
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Util.t("menu.robotmod.action_param_walk_around"), ActionParamType.Int)));
 					break;
 				case 2:
-					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_wait_sec"), ActionParamType.Float)));
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Util.t("menu.robotmod.action_param_wait_sec"), ActionParamType.Float)));
 					break;
 				case 5:
-					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_switch_slot"), ActionParamType.Int)));
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Util.t("menu.robotmod.action_param_switch_slot"), ActionParamType.Int)));
 					break;
 				case 6:
-					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_walk_to"), ActionParamType.Dir), new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_walk_blocks"), ActionParamType.Int)));
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Util.t("menu.robotmod.action_param_walk_to"), ActionParamType.Dir), new ActionParamDescriptor(Util.t("menu.robotmod.action_param_walk_blocks"), ActionParamType.Int)));
 					break;
 				case 8:
-					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_say"), ActionParamType.String)));
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Util.t("menu.robotmod.action_param_say"), ActionParamType.String)));
 					break;
 				case 10:
-					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_yaw"), ActionParamType.Float)));
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Util.t("menu.robotmod.action_param_yaw"), ActionParamType.Float)));
 					break;
 				case 11:
-					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_pitch"), ActionParamType.Float)));
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Util.t("menu.robotmod.action_param_pitch"), ActionParamType.Float)));
 					break;
 				case 12:
-					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_break_fluid"), ActionParamType.Bool)));
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Util.t("menu.robotmod.action_param_break_fluid"), ActionParamType.Bool)));
 					break;
 				default:
 					ID2PARAMS.put(type.id, List.of());

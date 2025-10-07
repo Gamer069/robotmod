@@ -17,7 +17,7 @@ public class ChooseTeleportScreen extends Screen {
 	public TeleportPointAttachedData points;
 
 	public ChooseTeleportScreen(TeleportPointAttachedData points) {
-		super(Text.translatable("menu.robotmod.tp"));
+		super(Util.t("menu.robotmod.tp"));
 		this.points = points;
 	}
 

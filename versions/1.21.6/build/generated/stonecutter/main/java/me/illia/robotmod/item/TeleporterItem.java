@@ -30,7 +30,7 @@ public class TeleporterItem extends Item {
 				sentPacket = true;
 			} else if (TeleportPointAttachedData.DATA != null && sentPacket) {
 				if (TeleportPointAttachedData.DATA.points().isEmpty()) {
-					user.sendMessage(Text.translatable("menu.robotmod.no_points").styled(s -> s.withColor(TextColor.fromRgb(0xFF0000))), true);
+					user.sendMessage(Util.t("menu.robotmod.no_points").styled(s -> s.withColor(TextColor.fromRgb(0xFF0000))), true);
 				} else {
 					MinecraftClient.getInstance().setScreen(new ChooseTeleportScreen(TeleportPointAttachedData.DATA));
 				}

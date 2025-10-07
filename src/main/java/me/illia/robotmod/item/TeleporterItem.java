@@ -1,6 +1,6 @@
 package me.illia.robotmod.item;
 
-import me.illia.robotmod.attachment.ModAttachmentTypes;
+import me.illia.robotmod.Util;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.networking.GetTeleportPointsC2SPayload;
 import me.illia.robotmod.screen.ChooseTeleportScreen;
@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -30,7 +29,7 @@ public class TeleporterItem extends Item {
 				sentPacket = true;
 			} else if (TeleportPointAttachedData.DATA != null && sentPacket) {
 				if (TeleportPointAttachedData.DATA.points().isEmpty()) {
-					user.sendMessage(Text.translatable("menu.robotmod.no_points").styled(s -> s.withColor(TextColor.fromRgb(0xFF0000))), true);
+					user.sendMessage(Util.t("menu.robotmod.no_points").styled(s -> s.withColor(TextColor.fromRgb(0xFF0000))), true);
 				} else {
 					MinecraftClient.getInstance().setScreen(new ChooseTeleportScreen(TeleportPointAttachedData.DATA));
 				}

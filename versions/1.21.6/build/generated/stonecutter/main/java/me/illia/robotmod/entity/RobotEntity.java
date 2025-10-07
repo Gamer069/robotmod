@@ -142,7 +142,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 				@Override
 				public Text getDisplayName() {
-					return Text.translatable("menu.robotmod.robot");
+					return Util.t("menu.robotmod.robot");
 				}
 
 				@Override

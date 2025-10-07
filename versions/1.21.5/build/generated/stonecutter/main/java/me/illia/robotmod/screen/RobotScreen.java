@@ -52,7 +52,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 		actionTypeBtn = CyclingButtonWidget.<ActionType>builder(Util::str)
 			.values(ACTION_TYPES)
-			.build(x + 25, y + 20, 100, 20, Text.translatable("menu.robotmod.action_type"));
+			.build(x + 25, y + 20, 100, 20, Util.t("menu.robotmod.action_type"));
 		this.addDrawableChild(actionTypeBtn);
 
 		RobotEntity robot = getRobot();
@@ -60,7 +60,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		actionsWidget = new ActionsWidget(x, y + 50, 180, 50, robot.actions);
 		this.addDrawableChild(actionsWidget);
 
-		this.addDrawableChild(ButtonWidget.builder(Text.translatable("menu.robotmod.add"), button -> {
+		this.addDrawableChild(ButtonWidget.builder(Util.t("menu.robotmod.add"), button -> {
 			HashMap<String, Action.ParamValue> args = new HashMap<>();
 			robot.actions.add(new Action(actionTypeBtn.getValue(), args));
 

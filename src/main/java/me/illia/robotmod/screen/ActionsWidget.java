@@ -1,9 +1,8 @@
 package me.illia.robotmod.screen;
 
 import me.illia.robotmod.Util;
-import me.illia.robotmod.actions.Action;
-import me.illia.robotmod.actions.ActionParamDescriptor;
-import me.illia.robotmod.actions.Direction;
+import me.illia.robotmod.actions.*;
+import me.illia.robotmod.registry.ModRegistries;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -24,7 +23,7 @@ public class ActionsWidget extends ClickableWidget {
 	private final List<ParamWidgetDescriptor> paramWidgets = new ArrayList<>();
 
 	public ActionsWidget(int x, int y, int w, int h, ArrayList<Action> actions) {
-		super(x, y, w, h, Text.translatable("menu.robotmod.actions"));
+		super(x, y, w, h, Util.t("menu.robotmod.actions"));
 		this.actions = actions;
 		initParamWidgets();
 	}
@@ -135,7 +134,8 @@ public class ActionsWidget extends ClickableWidget {
 			int y = getY() + (renderer.fontHeight + 10) * actionI;
 
 			int i = 0;
-			for (ActionParamDescriptor desc : action.actionType.getParams()) {
+			CustomAction customAction = ModRegistries.ACTION_TYPE.get(action.actionType);
+			for (ActionParamDescriptor desc : customAction.paramDescriptors()) {
 				i++;
 				int widgetX = getX() + actionTxtW + 60 * (i - 1);
 				int paramLabelX = getX() + actionTxtW + 60 * i;
@@ -204,7 +204,7 @@ public class ActionsWidget extends ClickableWidget {
 						paramWidgets.add(new ParamWidgetDescriptor(boolWidget, desc, actionI, paramLabelX));
 					}
 					case Dir -> {
-						CyclingButtonWidget<Direction> dirWidget = CyclingButtonWidget.<Direction>builder((d) -> Text.translatable(d.asString()))
+						CyclingButtonWidget<Direction> dirWidget = CyclingButtonWidget.<Direction>builder((d) -> Util.t(d.asString()))
 							.values(Direction.values())
 							.initially(Direction.North)
 							.omitKeyText()
@@ -271,7 +271,8 @@ public class ActionsWidget extends ClickableWidget {
 	protected void appendClickableNarrations(NarrationMessageBuilder builder) {
 		for (Action action : this.actions) {
 			builder.put(NarrationPart.TITLE, Util.str(action).getString());
-			for (ActionParamDescriptor desc : action.actionType.getParams()) {
+			CustomAction customAction = ModRegistries.ACTION_TYPE.get(action.actionType);
+			for (ActionParamDescriptor desc : customAction.paramDescriptors()) {
 				builder.put(NarrationPart.HINT, desc.name().getString());
 				Action.ParamValue value = action.getParams().get(((TranslatableTextContent)desc.name().getContent()).getKey());
 				builder.put(NarrationPart.HINT, Action.ParamValue.val(value));

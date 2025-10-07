@@ -33,7 +33,7 @@ import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.Util.tTextContent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
@@ -227,43 +227,43 @@ public class Util {
 	public static Text str(ActionType actionType) {
 		switch (actionType) {
 			case WalkAround -> {
-				return Text.translatable("menu.robotmod.action_type_walk_around");
+				return Util.t("menu.robotmod.action_type_walk_around");
 			}
 			case Harvest -> {
-				return Text.translatable("menu.robotmod.action_type_harvest");
+				return Util.t("menu.robotmod.action_type_harvest");
 			}
 			case Wait -> {
-				return Text.translatable("menu.robotmod.action_type_wait");
+				return Util.t("menu.robotmod.action_type_wait");
 			}
 			case Home -> {
-				return Text.translatable("menu.robotmod.action_type_home");
+				return Util.t("menu.robotmod.action_type_home");
 			}
 			case SetHome -> {
-				return Text.translatable("menu.robotmod.action_type_set_home");
+				return Util.t("menu.robotmod.action_type_set_home");
 			}
 			case SwitchToSlot -> {
-				return Text.translatable("menu.robotmod.action_type_switch_slot");
+				return Util.t("menu.robotmod.action_type_switch_slot");
 			}
 			case Walk -> {
-				return Text.translatable("menu.robotmod.action_type_walk");
+				return Util.t("menu.robotmod.action_type_walk");
 			}
 			case Drop -> {
-				return Text.translatable("menu.robotmod.action_type_drop");
+				return Util.t("menu.robotmod.action_type_drop");
 			}
 			case Say -> {
-				return Text.translatable("menu.robotmod.action_type_say");
+				return Util.t("menu.robotmod.action_type_say");
 			}
 			case HitNearestEntity -> {
-				return Text.translatable("menu.robotmod.action_type_hit_nearest_entity");
+				return Util.t("menu.robotmod.action_type_hit_nearest_entity");
 			}
 			case SetYaw -> {
-				return Text.translatable("menu.robotmod.action_type_set_yaw");
+				return Util.t("menu.robotmod.action_type_set_yaw");
 			}
 			case SetPitch -> {
-				return Text.translatable("menu.robotmod.action_type_set_pitch");
+				return Util.t("menu.robotmod.action_type_set_pitch");
 			}
 			case BreakBlock -> {
-				return Text.translatable("menu.robotmod.action_type_break_block");
+				return Util.t("menu.robotmod.action_type_break_block");
 			}
 		}
 
@@ -300,7 +300,7 @@ public class Util {
 
 	public static ItemGroup itemGroup(Identifier id, String translationKey, ItemStack icon, Item... items) {
 		RegistryKey<ItemGroup> groupKey = RegistryKey.of(RegistryKeys.ITEM_GROUP, id);
-		ItemGroup group = Registry.register(Registries.ITEM_GROUP, groupKey, FabricItemGroup.builder().icon(() -> icon).displayName(Text.translatable(translationKey)).build());
+		ItemGroup group = Registry.register(Registries.ITEM_GROUP, groupKey, FabricItemGroup.builder().icon(() -> icon).displayName(Util.t(translationKey)).build());
 
 		ItemGroupEvents.modifyEntriesEvent(groupKey).register(fabricItemGroupEntries -> {
 			fabricItemGroupEntries.addAll(Arrays.stream(items).map(ItemStack::new).collect(Collectors.toSet()));

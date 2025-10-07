@@ -84,7 +84,7 @@ public class Action {
 					return Float.toString(value);
 				}
 				case BoolParam(boolean value) -> {
-					return Text.translatable("bool.robotmod." + value).getString();
+					return Util.t("bool.robotmod." + value).getString();
 				}
 				case StringParam(String value) -> {
 					return value;

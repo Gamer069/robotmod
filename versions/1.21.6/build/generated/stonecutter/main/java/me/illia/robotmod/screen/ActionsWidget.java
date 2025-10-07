@@ -24,7 +24,7 @@ public class ActionsWidget extends ClickableWidget {
 	private final List<ParamWidgetDescriptor> paramWidgets = new ArrayList<>();
 
 	public ActionsWidget(int x, int y, int w, int h, ArrayList<Action> actions) {
-		super(x, y, w, h, Text.translatable("menu.robotmod.actions"));
+		super(x, y, w, h, Util.t("menu.robotmod.actions"));
 		this.actions = actions;
 		initParamWidgets();
 	}
@@ -204,7 +204,7 @@ public class ActionsWidget extends ClickableWidget {
 						paramWidgets.add(new ParamWidgetDescriptor(boolWidget, desc, actionI, paramLabelX));
 					}
 					case Dir -> {
-						CyclingButtonWidget<Direction> dirWidget = CyclingButtonWidget.<Direction>builder((d) -> Text.translatable(d.asString()))
+						CyclingButtonWidget<Direction> dirWidget = CyclingButtonWidget.<Direction>builder((d) -> Util.t(d.asString()))
 							.values(Direction.values())
 							.initially(Direction.North)
 							.omitKeyText()
