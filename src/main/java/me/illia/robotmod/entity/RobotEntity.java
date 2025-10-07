@@ -19,10 +19,12 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-//? if = 1.21.8 {
+//? if >= 1.21.6 {
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
-//?}
+//?} else {
+/*import net.minecraft.nbt.NbtCompound;
+*///?}
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
@@ -56,7 +58,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		this.home = getBlockPos();
 	}
 
-	//? if = 1.21.8 {
+	//? if >= 1.21.6 {
 	@Override
 	protected void readCustomData(ReadView view) {
 		this.actions = new ArrayList<>(view.read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
@@ -97,7 +99,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	/*@Override
 	public void readNbt(NbtCompound nbt) {
-		super.readNbt(nbt);
+		super.read(nbt);
 
 		if (nbt.contains("actions", NbtElement.LIST_TYPE)) {
 			this.actions = new ArrayList<>(

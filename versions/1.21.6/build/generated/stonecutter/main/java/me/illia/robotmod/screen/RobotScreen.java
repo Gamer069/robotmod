@@ -3,13 +3,14 @@ package me.illia.robotmod.screen;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionType;
-//? if = 1.21.8 {
-/*import me.illia.robotmod.entity.RobotEntity;
+//? if >= 1.21.6 {
+import me.illia.robotmod.entity.RobotEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
-*///?} else {
+//?} else {
+/*import me.illia.robotmod.entity.RobotEntity;
 import net.minecraft.client.render.RenderLayer;
-//?}
+*///?}
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -28,6 +29,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 	public RobotScreen(RobotScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
+		this.backgroundWidth = 226;
 	}
 
 	public RobotEntity getRobot() {
@@ -53,15 +55,17 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 		RobotEntity robot = getRobot();
 
-		actionsWidget = new ActionsWidget(x, y + 50, 140, 50, robot.actions);
+		actionsWidget = new ActionsWidget(x, y + 50, 180, 50, robot.actions);
 		this.addDrawableChild(actionsWidget);
 
 		this.addDrawableChild(ButtonWidget.builder(Text.translatable("menu.robotmod.add"), button -> {
 			HashMap<String, Action.ParamValue> args = new HashMap<>();
 			robot.actions.add(new Action(actionTypeBtn.getValue(), args));
 
+			int prevWidth = actionsWidget.getWidth();
+			int prevHeight = actionsWidget.getHeight();
 			this.remove(actionsWidget);
-			actionsWidget = new ActionsWidget(x, y + 50, 90, 50, robot.actions);
+			actionsWidget = new ActionsWidget(x, y + 50, prevWidth, prevHeight, robot.actions);
 			this.addDrawableChild(actionsWidget);
 		}).dimensions(x, y + 20, 20, 20).build());
 
@@ -70,7 +74,6 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 	@Override
 	public void close() {
-		// WHAT DO I DO WITH THIS
 		getRobot().save(actionsWidget.save());
 		super.close();
 	}
@@ -80,11 +83,11 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		int x = (width - backgroundWidth) / 2;
 		int y = (height - backgroundHeight) / 2;
 
-		//? if = 1.21.8 {
-		/*context.drawTexture(RenderPipelines.GUI, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
-		*///?} else {
-		context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
-		//?}
+		//? if >= 1.21.6 {
+		context.drawTexture(RenderPipelines.GUI_TEXTURED, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		//?} else {
+		/*context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		*///?}
 	}
 
 	@Override

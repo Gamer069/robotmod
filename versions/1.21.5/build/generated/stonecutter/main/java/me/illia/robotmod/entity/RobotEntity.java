@@ -3,6 +3,7 @@ package me.illia.robotmod.entity;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
+import me.illia.robotmod.actions.ActionRunner;
 import me.illia.robotmod.networking.RobotActionsSyncC2SPayload;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -18,10 +19,12 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-//? if = 1.21.8 {
+//? if >= 1.21.6 {
 /*import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
-*///?}
+*///?} else {
+import net.minecraft.nbt.NbtCompound;
+//?}
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
@@ -55,7 +58,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		this.home = getBlockPos();
 	}
 
-	//? if = 1.21.8 {
+	//? if >= 1.21.6 {
 	/*@Override
 	protected void readCustomData(ReadView view) {
 		this.actions = new ArrayList<>(view.read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
@@ -94,11 +97,9 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	*///?} else {
 
-	 TODO: properly write home, inventory AND held slot for odler versions!
-
 	@Override
 	public void readNbt(NbtCompound nbt) {
-		super.readNbt(nbt);
+		super.read(nbt);
 
 		if (nbt.contains("actions", NbtElement.LIST_TYPE)) {
 			this.actions = new ArrayList<>(
@@ -162,7 +163,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		if (Util.night(world)) {
 			if (!ranActions) {
 				for (Action action : actions) {
-					action.run(this);
+					ActionRunner.run(action, this);
 				}
 				ranActions = true;
 			}
@@ -217,11 +218,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public void save(ArrayList<Action> actions) {
 		this.actions = actions;
 		ClientPlayNetworking.send(new RobotActionsSyncC2SPayload(getId(), actions.stream().toList(), getWorld().getRegistryKey()));
-	}
-
-	@Override
-	public boolean canPickupItem(ItemStack stack) {
-		return true;
 	}
 
 	@Override

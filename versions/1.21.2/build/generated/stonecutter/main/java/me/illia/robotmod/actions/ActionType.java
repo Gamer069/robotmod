@@ -12,7 +12,12 @@ public enum ActionType {
 	SetHome(4),
 	SwitchToSlot(5),
 	Walk(6),
-	Drop(7);
+	Drop(7),
+	Say(8),
+	HitNearestEntity(9),
+	SetYaw(10),
+	SetPitch(11),
+	BreakBlock(12);
 
 	private static final Map<Integer, ActionType> BY_ID = new HashMap<>();
 	public static final Map<Integer, List<ActionParamDescriptor>> ID2PARAMS = new HashMap<>();
@@ -32,6 +37,18 @@ public enum ActionType {
 					break;
 				case 6:
 					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_walk_to"), ActionParamType.Dir), new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_walk_blocks"), ActionParamType.Int)));
+					break;
+				case 8:
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_say"), ActionParamType.String)));
+					break;
+				case 10:
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_yaw"), ActionParamType.Float)));
+					break;
+				case 11:
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_pitch"), ActionParamType.Float)));
+					break;
+				case 12:
+					ID2PARAMS.put(type.id, List.of(new ActionParamDescriptor(Text.translatable("menu.robotmod.action_param_break_fluid"), ActionParamType.Bool)));
 					break;
 				default:
 					ID2PARAMS.put(type.id, List.of());

@@ -4,4 +4,6 @@ public enum ActionParamType {
 	Int,
 	Float,
 	Bool,
+	Dir,
+	String
 }

@@ -14,7 +14,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-//? if >= 1.21.8 {
+//? if >= 1.21.6 {
 import net.minecraft.client.data.*;
 import net.minecraft.client.model.ModelTransform;
 //?} else {
@@ -339,7 +339,7 @@ public class Util {
 			infiniburn,
 			effectsLocation,
 			ambientLight,
-			//? if >= 1.21.8 {
+			//? if >= 1.21.6 {
 			cloudHeight,
 			//?}
 			monsterSettings
@@ -351,7 +351,7 @@ public class Util {
 	}
 
 	public static ModelTransform pivot(float x, float y, float z) {
-		//? if >= 1.21.8 {
+		//? if >= 1.21.6 {
 		return ModelTransform.origin(x, y, z);
 		//?} else {
 		/*return ModelTransform.pivot(x, y, z);

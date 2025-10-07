@@ -4,7 +4,6 @@ import me.illia.robotmod.Util;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.ModelWithArms;
-import net.minecraft.client.render.entity.state.ArmedEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.math.RotationAxis;
@@ -12,7 +11,7 @@ import net.minecraft.util.math.RotationAxis;
 // Made with Blockbench 4.12.6
 // Exported for Minecraft version 1.17+ for Yarn
 // Paste this class into your mod and generate all required imports
-public class RobotEntityModel extends EntityModel<ArmedEntityRenderState> implements ModelWithArms {
+public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implements ModelWithArms {
 	private final ModelPart head;
 	private final ModelPart legs;
 	private final ModelPart left;
@@ -58,7 +57,7 @@ public class RobotEntityModel extends EntityModel<ArmedEntityRenderState> implem
 	}
 
 	@Override
-	public void setAngles(ArmedEntityRenderState state) {
+	public void setAngles(RobotEntityRenderState state) {
 		super.setAngles(state);
 	}
 

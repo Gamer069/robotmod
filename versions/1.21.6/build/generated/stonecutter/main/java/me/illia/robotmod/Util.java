@@ -8,17 +8,18 @@ import me.illia.robotmod.actions.ActionType;
 import me.illia.robotmod.attachment.TeleportPoint;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.world.dimension.Dimension;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-//? if >= 1.21.8 {
-/*import net.minecraft.client.data.*;
+//? if >= 1.21.6 {
+import net.minecraft.client.data.*;
 import net.minecraft.client.model.ModelTransform;
-*///?} else {
-import net.minecraft.data.client.*;
-//?}
+//?} else {
+/*import net.minecraft.data.client.*;
+*///?}
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
@@ -243,6 +244,27 @@ public class Util {
 			case SwitchToSlot -> {
 				return Text.translatable("menu.robotmod.action_type_switch_slot");
 			}
+			case Walk -> {
+				return Text.translatable("menu.robotmod.action_type_walk");
+			}
+			case Drop -> {
+				return Text.translatable("menu.robotmod.action_type_drop");
+			}
+			case Say -> {
+				return Text.translatable("menu.robotmod.action_type_say");
+			}
+			case HitNearestEntity -> {
+				return Text.translatable("menu.robotmod.action_type_hit_nearest_entity");
+			}
+			case SetYaw -> {
+				return Text.translatable("menu.robotmod.action_type_set_yaw");
+			}
+			case SetPitch -> {
+				return Text.translatable("menu.robotmod.action_type_set_pitch");
+			}
+			case BreakBlock -> {
+				return Text.translatable("menu.robotmod.action_type_break_block");
+			}
 		}
 
 		return Text.empty();
@@ -317,9 +339,9 @@ public class Util {
 			infiniburn,
 			effectsLocation,
 			ambientLight,
-			//? if >= 1.21.8 {
-			/*cloudHeight,
-			*///?}
+			//? if >= 1.21.6 {
+			cloudHeight,
+			//?}
 			monsterSettings
 		));
 	}
@@ -329,11 +351,11 @@ public class Util {
 	}
 
 	public static ModelTransform pivot(float x, float y, float z) {
-		//? if >= 1.21.8 {
-		/*return ModelTransform.origin(x, y, z);
-		*///?} else {
-		return ModelTransform.pivot(x, y, z);
-		//?}
+		//? if >= 1.21.6 {
+		return ModelTransform.origin(x, y, z);
+		//?} else {
+		/*return ModelTransform.pivot(x, y, z);
+		*///?}
 	}
 
 	public static boolean night(World world) {
@@ -346,5 +368,21 @@ public class Util {
 			return ttc.getKey();
 		}
 		return null;
+	}
+
+	public static void add(FabricLanguageProvider.TranslationBuilder builder, String key, String string) {
+		builder.add(key, string);
+	}
+
+	public static void add(FabricLanguageProvider.TranslationBuilder builder, Item key, String string) {
+		builder.add(key, string);
+	}
+
+	public static void add(FabricLanguageProvider.TranslationBuilder builder, Block key, String string) {
+		builder.add(key, string);
+	}
+
+	public static void add(FabricLanguageProvider.TranslationBuilder builder, EntityType<?> key, String string) {
+		builder.add(key, string);
 	}
 }
