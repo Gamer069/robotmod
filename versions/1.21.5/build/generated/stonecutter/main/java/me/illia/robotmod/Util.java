@@ -7,6 +7,8 @@ import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionType;
 import me.illia.robotmod.attachment.TeleportPoint;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
+import me.illia.robotmod.block.LunarPanelBlock;
+import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.world.dimension.Dimension;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -17,7 +19,8 @@ import net.minecraft.block.Block;
 //? if >= 1.21.5 {
 import net.minecraft.client.data.*;
 //?} else {
-/*import net.minecraft.data.client.*;
+/*import net.minecraft.block.BlockState;
+import net.minecraft.data.client.*;
 *///?}
 import net.minecraft.entity.Entity;
 import net.minecraft.client.model.ModelTransform;
@@ -384,5 +387,23 @@ public class Util {
 
 	public static void add(FabricLanguageProvider.TranslationBuilder builder, EntityType<?> key, String string) {
 		builder.add(key, string);
+	}
+
+	public static boolean nearest(Entity entity, int r, Function<BlockState, Boolean> func) {
+		return circleFilled(entity.getBlockPos(), r).stream().map(cPos -> entity.getWorld().getBlockState(cPos)).anyMatch(func::apply);
+	}
+
+	public static List<BlockPos> circleFilled(BlockPos center, int radius) {
+		List<BlockPos> list = new ArrayList<>();
+		int cx = center.getX(), cz = center.getZ(), cy = center.getY();
+		int r2 = radius * radius;
+		for (int dx = -radius; dx <= radius; dx++) {
+			for (int dz = -radius; dz <= radius; dz++) {
+				if (dx*dx + dz*dz <= r2) {
+					list.add(new BlockPos(cx + dx, cy, cz + dz));
+				}
+			}
+		}
+		return list;
 	}
 }

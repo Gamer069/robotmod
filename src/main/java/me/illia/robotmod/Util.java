@@ -19,7 +19,6 @@ import net.minecraft.block.Block;
 //? if >= 1.21.5 {
 /*import net.minecraft.client.data.*;
 *///?} else {
-import net.minecraft.block.BlockState;
 import net.minecraft.data.client.*;
 //?}
 import net.minecraft.entity.Entity;
@@ -44,6 +43,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 import org.apache.commons.io.function.IOQuadFunction;
+import net.minecraft.block.BlockState;
 
 import java.io.IOException;
 import java.util.*;
