@@ -5,10 +5,13 @@ import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-//? if >= 1.21.6 {
+//? if >= 1.21.5 {
 import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.data.recipe.RecipeGenerator;
-//?}
+//?} else {
+/*import net.minecraft.data.server.recipe.RecipeExporter;
+import net.minecraft.data.server.recipe.RecipeGenerator;
+*///?}
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;

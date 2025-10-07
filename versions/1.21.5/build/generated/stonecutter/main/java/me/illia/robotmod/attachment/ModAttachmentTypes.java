@@ -3,7 +3,7 @@ package me.illia.robotmod.attachment;
 import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
-//? if > 1.21.2 {
+//? if > 1.21.3 {
 import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate;
 //?}
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import java.util.ArrayList;
 
 public class ModAttachmentTypes {
-	//? if > 1.21.2 {
+	//? if > 1.21.3 {
 	@SuppressWarnings("UnstableApiUsage")
 	public static final AttachmentType<TeleportPointAttachedData> TELEPORT_POINTS = AttachmentRegistry.create(
 		Util.id("teleport_points"),

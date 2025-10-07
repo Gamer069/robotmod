@@ -65,7 +65,7 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 	public void setArmAngle(Arm arm, MatrixStack matrices) {
 		ModelPart armPart = arm == Arm.RIGHT ? right : left;
 
-		//? if >1.21.5 {
+		//? if >= 1.21.5 {
 		matrices.translate(armPart.originX / 16.0F, armPart.originY / 16.0F, armPart.originZ / 16.0F);
 		//?} else {
 		/*matrices.translate(armPart.pivotX / 16.0F, armPart.pivotY / 16.0F, armPart.pivotZ / 16.0F);

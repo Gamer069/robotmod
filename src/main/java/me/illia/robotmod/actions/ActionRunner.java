@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
@@ -20,6 +21,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -132,7 +134,13 @@ public class ActionRunner {
 				robot.getNavigation().startMovingTo(pos.getX(), pos.getY(), pos.getZ(), 1.0f);
 			}
 			case Drop -> {
-				robot.dropItem(robot.inv.getStack(robot.slot), false, false);
+				//? if > 1.21.3 {
+				/*robot.dropItem(robot.inv.getStack(robot.slot), false, false);
+				*///?} else {
+				RegistryKey<World> world = robot.getWorld().getRegistryKey();
+				ServerWorld serverWorld = robot.getServer().getWorld(world);
+				robot.dropStack(serverWorld, robot.inv.getStack(robot.slot), 2);
+				//?}
 				robot.inv.setStack(robot.slot, ItemStack.EMPTY);
 			}
 			case Say -> {

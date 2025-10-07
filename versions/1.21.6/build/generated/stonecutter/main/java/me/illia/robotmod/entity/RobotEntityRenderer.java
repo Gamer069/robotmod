@@ -11,7 +11,11 @@ public class RobotEntityRenderer extends MobEntityRenderer<RobotEntity, RobotEnt
 	public RobotEntityRenderer(EntityRendererFactory.Context context) {
 		super(context, new RobotEntityModel(context.getPart(RobotmodClient.MODEL_ROBOT_LAYER)), 0.5f);
 
+		//? if != 1.21.3 {
 		this.addFeature(new HeldItemFeatureRenderer<>(this));
+		//?} else {
+		/*this.addFeature(new HeldItemFeatureRenderer<>(this, context.getItemRenderer()));
+		*///?}
 	}
 
 	@Override

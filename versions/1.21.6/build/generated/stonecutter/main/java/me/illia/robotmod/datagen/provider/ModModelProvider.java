@@ -7,11 +7,12 @@ import me.illia.robotmod.block.TeleporterBlock;
 import me.illia.robotmod.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.util.Identifier;
-//? if >= 1.21.6 {
+//? if >= 1.21.5 {
 import net.minecraft.client.data.*;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 //?} else {
-/*import net.fabricmc.fabric.api.provider.FabricModelProvider;
+/*import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import net.minecraft.data.client.*;
 *///?}
 public class ModModelProvider extends FabricModelProvider {
 
@@ -25,13 +26,13 @@ public class ModModelProvider extends FabricModelProvider {
 		Identifier unchargedTeleporterModelId = Util.id("block/teleporter");
 
 		blockStateModelGenerator.blockStateCollector.accept(
-			//? if >= 1.21.6 {
+			//? if >= 1.21.5 {
 			VariantsBlockModelDefinitionCreator.of(ModBlocks.TELEPORTER_BLOCK)
 				.with(BlockStateVariantMap.models(TeleporterBlock.CHARGED)
 					.register(true, BlockStateModelGenerator.createWeightedVariant(chargedTeleporterModelId))
 					.register(false, BlockStateModelGenerator.createWeightedVariant(unchargedTeleporterModelId)))
 			//?} else {
-			/*VariantBlockStateSupplier.create(ModBlocks.TELEPORTER_BLOCK)
+			/*VariantsBlockStateSupplier.create(ModBlocks.TELEPORTER_BLOCK)
 				.coordinate(
 					BlockStateVariantMap.create(TeleporterBlock.CHARGED)
 						.register(true, BlockStateVariant.create().put(VariantSettings.MODEL, chargedTeleporterModelId))
@@ -44,7 +45,7 @@ public class ModModelProvider extends FabricModelProvider {
 		Identifier unactivatedLunarPanelModelId = Util.id("block/lunar_panel");
 
 		blockStateModelGenerator.blockStateCollector.accept(
-			//? if >= 1.21.6 {
+			//? if >= 1.21.5 {
 			VariantsBlockModelDefinitionCreator.of(ModBlocks.LUNAR_PANEL_BLOCK)
 				.with(BlockStateVariantMap.models(LunarPanelBlock.ACTIVE)
 					.register(true, BlockStateModelGenerator.createWeightedVariant(activatedLunarPanelModelId))

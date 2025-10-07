@@ -27,7 +27,6 @@ import net.minecraft.world.World;
 public class TeleporterBlock extends SlabBlock {
 	public static final BooleanProperty CHARGED = BooleanProperty.of("charged");
 	public static final VoxelShape SHAPE = VoxelShapes.cuboid(0, 0, 0, 1, 0.4, 1);
-
 	public TeleporterBlock(Settings settings) {
 		super(settings);
 
@@ -36,20 +35,19 @@ public class TeleporterBlock extends SlabBlock {
 
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
-	protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (stack.getItem() == ModItems.PACKED_ENDER_PEARL) {
-			TeleportPointAttachedData data = world.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
-			if (data.findPointByPos(pos).isPresent()) return ActionResult.CONSUME;
+	public ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+		if (stack.getItem() == ModItems.PACKED_ENDER_PEARL && !world.isClient && world instanceof ServerWorld serverWorld) {
+			if (TeleportPointAttachedData.DATA.findPointByPos(pos).isPresent()) return ActionResult.CONSUME;
 
-			world.setBlockState(pos, state.with(CHARGED, true));
-			world.playSound(player, pos, SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, 1.0f, 0.3f);
+			serverWorld.setBlockState(pos, state.with(CHARGED, true));
+			serverWorld.playSound(player, pos, SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, 1.0f, 0.3f);
 
 			ItemStack stack2 = stack.copy();
 			stack2.decrementUnlessCreative(1, player);
 
 			player.setStackInHand(hand, stack2);
 
-			world.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.addPoint(new TeleportPoint("" + (data.points().size() + 1), pos, world.getRegistryKey())));
+			serverWorld.setAttached(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DATA.addPoint(new TeleportPoint("" + (TeleportPointAttachedData.DATA.points().size() + 1), pos, world.getRegistryKey())));
 
 			return ActionResult.CONSUME;
 		}
@@ -58,7 +56,7 @@ public class TeleporterBlock extends SlabBlock {
 
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
-	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
 		if (player.getStackInHand(player.getActiveHand()).isEmpty() && world.getBlockState(pos).get(CHARGED)) {
 			player.giveItemStack(new ItemStack(ModItems.PACKED_ENDER_PEARL));
 			world.setBlockState(pos, state.with(CHARGED, false));
@@ -84,10 +82,10 @@ public class TeleporterBlock extends SlabBlock {
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-//		ServerWorld serverWorld = (ServerWorld)world;
-		TeleportPointAttachedData data = world.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
-		world.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.removePointByPos(pos));
-
+		if (!world.isClient && world instanceof ServerWorld serverWorld) {
+			TeleportPointAttachedData data = serverWorld.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
+			serverWorld.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.removePointByPos(pos));
+		}
 		return super.onBreak(world, pos, state, player);
 	}
 

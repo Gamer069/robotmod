@@ -5,6 +5,7 @@
     },
     "me/illia/robotmod/mixin/ScreenInventoryTextMixin": {
       "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V": "Lnet/minecraft/class_465;method_2388(Lnet/minecraft/class_332;II)V",
+      "render": "Lnet/minecraft/class_465;method_25394(Lnet/minecraft/class_332;IIF)V",
       "titleX": "field_25267:I",
       "titleY": "field_25268:I"
     }
@@ -16,6 +17,7 @@
       },
       "me/illia/robotmod/mixin/ScreenInventoryTextMixin": {
         "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V": "Lnet/minecraft/class_465;method_2388(Lnet/minecraft/class_332;II)V",
+        "render": "Lnet/minecraft/class_465;method_25394(Lnet/minecraft/class_332;IIF)V",
         "titleX": "field_25267:I",
         "titleY": "field_25268:I"
       }

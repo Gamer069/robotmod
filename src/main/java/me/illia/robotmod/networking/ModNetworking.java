@@ -1,19 +1,25 @@
 package me.illia.robotmod.networking;
 
+import me.illia.robotmod.attachment.ModAttachmentTypes;
+import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.block.TeleporterBlock;
 import me.illia.robotmod.entity.RobotEntity;
+import me.illia.robotmod.item.TeleporterItem;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.Set;
 
 public class ModNetworking {
+	@SuppressWarnings("UnstableApiUsage")
 	public static void init() {
 		ServerPlayNetworking.registerGlobalReceiver(RequestTeleportC2SPayload.ID, (requestTeleportC2SPayload, context) -> {
 			BlockState state = context.player().getWorld().getBlockState(requestTeleportC2SPayload.pos());
@@ -36,5 +42,16 @@ public class ModNetworking {
 				robot.save(new ArrayList<>(robotActionsSyncC2SPayload.actions()));
 			}
 		}));
+
+		ServerPlayNetworking.registerGlobalReceiver(GetTeleportPointsC2SPayload.ID, ((getTeleportPointsC2SPayload, context) -> {
+			MinecraftServer server = context.server();
+			ServerWorld world = server.getWorld(getTeleportPointsC2SPayload.world());
+			TeleportPointAttachedData data = world.getAttachedOrElse(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DEFAULT);
+			context.responseSender().sendPacket(new GetTeleportPointsS2CPayload(data));
+		}));
+
+		ClientPlayNetworking.registerGlobalReceiver(GetTeleportPointsS2CPayload.ID, (((getTeleportPointsS2CPayload, context) -> {
+			TeleportPointAttachedData.DATA = getTeleportPointsS2CPayload.data();
+		})));
 	}
 }

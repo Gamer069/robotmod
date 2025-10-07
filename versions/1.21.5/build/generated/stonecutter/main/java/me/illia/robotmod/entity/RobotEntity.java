@@ -1,6 +1,7 @@
 package me.illia.robotmod.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionRunner;
@@ -17,6 +18,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if >= 1.21.6 {
@@ -99,13 +102,13 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	@Override
 	public void readNbt(NbtCompound nbt) {
-		super.read(nbt);
+		super.readNbt(nbt);
 
-		if (nbt.contains("actions", NbtElement.LIST_TYPE)) {
+		if (nbt.contains("actions")) {
 			this.actions = new ArrayList<>(
 				Action.CODEC.codec().listOf()
 					.parse(NbtOps.INSTANCE, nbt.get("actions"))
-					.resultOrPartial(error -> LOGGER.error("Failed to read actions: {}", error))
+					.resultOrPartial(error -> Robotmod.LOGGER.error("Failed to read actions: {}", error))
 					.orElse(List.of())
 			);
 		} else {
@@ -119,7 +122,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 		Action.CODEC.codec().listOf()
 			.encodeStart(NbtOps.INSTANCE, this.actions)
-			.resultOrPartial(error -> LOGGER.error("Failed to write actions: {}", error))
+			.resultOrPartial(error -> Robotmod.LOGGER.error("Failed to write actions: {}", error))
 			.ifPresent(nbtElement -> nbt.put("actions", nbtElement));
 
 		return nbt;

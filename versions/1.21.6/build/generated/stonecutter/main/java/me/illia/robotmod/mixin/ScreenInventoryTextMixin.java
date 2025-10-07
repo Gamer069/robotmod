@@ -18,7 +18,7 @@ public abstract class ScreenInventoryTextMixin {
 	@Accessor("titleY")
 	abstract int robotmod$getTitleY();
 
-	//? if > 1.21.2 {
+	//? if > 1.21.5 {
 	@WrapOperation(
 		method = "renderMain",
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")

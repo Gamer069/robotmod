@@ -4,13 +4,15 @@ import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionType;
 //? if >= 1.21.6 {
-/*import me.illia.robotmod.entity.RobotEntity;
-import net.minecraft.client.MinecraftClient;
+/*
 import net.minecraft.client.gl.RenderPipelines;
 *///?} else {
-import me.illia.robotmod.entity.RobotEntity;
 import net.minecraft.client.render.RenderLayer;
 //?}
+
+import me.illia.robotmod.entity.RobotEntity;
+
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;

@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public record TeleportPointAttachedData(List<TeleportPoint> points) {
 	public static TeleportPointAttachedData DEFAULT = new TeleportPointAttachedData(List.of());
+	public static TeleportPointAttachedData DATA;
 
 	public TeleportPointAttachedData addPoint(TeleportPoint point) {
 		ArrayList<TeleportPoint> points2 = new ArrayList<>(points);

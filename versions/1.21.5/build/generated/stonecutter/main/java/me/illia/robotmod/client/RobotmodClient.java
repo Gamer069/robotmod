@@ -1,21 +1,15 @@
 package me.illia.robotmod.client;
 
 import me.illia.robotmod.Util;
-import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.entity.ModEntities;
 import me.illia.robotmod.entity.RobotEntityModel;
 import me.illia.robotmod.entity.RobotEntityRenderer;
 import me.illia.robotmod.screen.ModScreenHandlers;
 import me.illia.robotmod.screen.RobotScreen;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
-import net.minecraft.client.render.BlockRenderLayer;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 
 public class RobotmodClient implements ClientModInitializer {
