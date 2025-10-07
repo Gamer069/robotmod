@@ -2,6 +2,8 @@ package me.illia.robotmod.actions;
 
 import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
+import me.illia.robotmod.block.LunarPanelBlock;
+import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.entity.RobotEntity;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.BlockState;
@@ -28,8 +30,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static me.illia.robotmod.actions.ActionType.*;
 
 public class ActionRunner {
 	public static final int HIT_RADIUS = 8;
@@ -68,13 +68,13 @@ public class ActionRunner {
 				AtomicInteger index = new AtomicInteger(0);
 
 				ServerTickEvents.START_SERVER_TICK.register((minecraftServer -> {
-					if (index.get() < path.size() && Util.night(robot.getWorld())) {
+					if (Util.nearest(robot, 35, state -> state.isOf(ModBlocks.LUNAR_PANEL_BLOCK) && state.get(LunarPanelBlock.ACTIVE)) && index.get() < path.size()) {
 						Vec3d target = path.get(index.get());
 						if (!nav.isFollowingPath()) {
 							nav.startMovingTo(target.x, target.y, target.z, speed);
 							index.incrementAndGet(); // next point
 						}
-					}
+					};
 				}));
 			}
 			case Harvest -> {
@@ -230,7 +230,7 @@ public class ActionRunner {
 				HitResult res = robot.raycast(5, 1.0F, breakFluid);
 				if (res instanceof BlockHitResult blockHit) {
 					BlockPos pos = blockHit.getBlockPos();
-					BlockState state = robot.getWorld().getBlockState(pos);
+//					BlockState state = robot.getWorld().getBlockState(pos);
 //					float ticksToBreak = (state.getHardness(robot.getWorld(), pos) * 20) / robot.inv.getStack(robot.slot).getMiningSpeedMultiplier(state);
 
 					// TODO: implement block breaking progress using setBlockBreakingInfo
