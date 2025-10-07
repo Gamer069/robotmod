@@ -344,7 +344,7 @@ public class Util {
 	}
 
 	public static void add(FabricLanguageProvider.TranslationBuilder builder, Identifier type, String string) {
-		builder.add(((TranslatableTextContent)str(type)).getKey(), string);
+		builder.add(((TranslatableTextContent)str(type).getContent()).getKey(), string);
 	}
 
 	public static void add(FabricLanguageProvider.TranslationBuilder builder, Item key, String string) {
@@ -383,5 +383,16 @@ public class Util {
 
 	public static void actionType(Identifier key, CustomAction action) {
 		Registry.register(ModRegistries.ACTION_TYPE, key, action);
+	}
+
+	public static void actionTypes(Object... idsAndActions) {
+		if (idsAndActions.length % 2 != 0)
+			throw new IllegalArgumentException("You must provide pairs of Identifier and CustomAction");
+
+		for (int i = 0; i < idsAndActions.length; i += 2) {
+			Identifier id = (Identifier) idsAndActions[i];
+			CustomAction action = (CustomAction) idsAndActions[i + 1];
+			Registry.register(ModRegistries.ACTION_TYPE, id, action);
+		}
 	}
 }

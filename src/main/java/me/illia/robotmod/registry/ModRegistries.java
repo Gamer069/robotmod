@@ -26,18 +26,20 @@ public class ModRegistries {
 	public static final Identifier BREAK_BLOCK = Util.id("break_block");
 
 	public static void init() {
-		Util.actionType(WALK_AROUND, new WalkAroundAction());
-		Util.actionType(HARVEST, new HarvestAction());
-		Util.actionType(WAIT, new WaitAction());
-		Util.actionType(HOME, new HomeAction());
-		Util.actionType(SET_HOME, new SetHomeAction());
-		Util.actionType(SWITCH_TO_SLOT, new SwitchToSlotAction());
-		Util.actionType(WALK, new WalkAction());
-		Util.actionType(DROP, new DropAction());
-		Util.actionType(SAY, new SayAction());
-		Util.actionType(HIT_NEAREST_ENTITY, new HitNearestEntityAction());
-		Util.actionType(SET_YAW, new SetYawAction());
-		Util.actionType(SET_PITCH, new SetPitchAction());
-		Util.actionType(BREAK_BLOCK, new BreakBlockAction());
+		Util.actionTypes(
+			WALK_AROUND, new WalkAroundAction(),
+			HARVEST, new HarvestAction(),
+			WAIT, new WaitAction(),
+			HOME, new HomeAction(),
+			SET_HOME, new SetHomeAction(),
+			SWITCH_TO_SLOT, new SwitchToSlotAction(),
+			WALK, new WalkAction(),
+			DROP, new DropAction(),
+			SAY, new SayAction(),
+			HIT_NEAREST_ENTITY, new HitNearestEntityAction(),
+			SET_YAW, new SetYawAction(),
+			SET_PITCH, new SetPitchAction(),
+			BREAK_BLOCK, new BreakBlockAction()
+		);
 	}
 }

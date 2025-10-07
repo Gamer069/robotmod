@@ -32,6 +32,6 @@ public class SwitchToSlotAction extends CustomAction {
 
 	@Override
 	public String translation() {
-		return "menu.robotmod.action_type_switch_to_slot";
+		return "menu.robotmod.action_type_switch_slot";
 	}
 }
