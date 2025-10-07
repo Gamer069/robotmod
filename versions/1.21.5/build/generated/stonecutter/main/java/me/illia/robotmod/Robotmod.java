@@ -7,11 +7,11 @@ import me.illia.robotmod.entity.RobotEntity;
 import me.illia.robotmod.item.ModItems;
 import me.illia.robotmod.itemgroup.ModItemGroups;
 import me.illia.robotmod.networking.*;
+import me.illia.robotmod.registry.ModRegistries;
 import me.illia.robotmod.screen.ModScreenHandlers;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
 import net.kyrptonaught.customportalapi.portal.PortalIgnitionSource;
 import net.minecraft.SharedConstants;
@@ -42,6 +42,7 @@ public class Robotmod implements ModInitializer {
 		ModItemGroups.init();
 		ModEntities.init();
 		ModNetworking.init();
+		ModRegistries.init();
 		FabricDefaultAttributeRegistry.register(ModEntities.ROBOT, RobotEntity.createMobAttributes().add(EntityAttributes.ARMOR_TOUGHNESS, 5).add(EntityAttributes.MAX_HEALTH, 8).add(EntityAttributes.ATTACK_DAMAGE, 2).add(EntityAttributes.ATTACK_KNOCKBACK, 1).build());
 
 

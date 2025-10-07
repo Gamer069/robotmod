@@ -5,6 +5,8 @@ import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionRunner;
+import me.illia.robotmod.block.LunarPanelBlock;
+import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.networking.RobotActionsSyncC2SPayload;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -163,7 +165,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	protected void mobTick(ServerWorld world) {
 		tickBrain(this);
 
-		if (Util.night(world)) {
+		if (Util.nearest(this, 35, state -> state.isOf(ModBlocks.LUNAR_PANEL_BLOCK) && state.get(LunarPanelBlock.ACTIVE))) {
 			if (!ranActions) {
 				for (Action action : actions) {
 					ActionRunner.run(action, this);

@@ -1,6 +1,6 @@
 package me.illia.robotmod.item;
 
-import me.illia.robotmod.attachment.ModAttachmentTypes;
+import me.illia.robotmod.Util;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.networking.GetTeleportPointsC2SPayload;
 import me.illia.robotmod.screen.ChooseTeleportScreen;
@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;

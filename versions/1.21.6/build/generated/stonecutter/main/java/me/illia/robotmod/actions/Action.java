@@ -2,7 +2,9 @@ package me.illia.robotmod.actions;
 
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import me.illia.robotmod.Util;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.function.Function;
@@ -15,32 +17,29 @@ public class Action {
 		);
 
 	public static final MapCodec<Action> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-		Codec.INT.fieldOf("actionType").forGetter((Action inst) -> inst.getActionType().getId()),
+		Identifier.CODEC.fieldOf("actionType").forGetter(Action::getActionType),
 		PARAMS_CODEC.fieldOf("params").forGetter(Action::getParams)
-	).apply(instance, (id, params) -> new Action(ActionType.from(id), params)));
+	).apply(instance, Action::new));
 
 
-	public Action(ActionType actionType, HashMap<String, ParamValue> params) {
+	public Action(Identifier actionType, HashMap<String, ParamValue> params) {
 		this.actionType = actionType;
 		this.params = params;
 	}
 
-	public Action(ActionType actionType) {
+	public Action(Identifier actionType) {
 		this.actionType = actionType;
 		this.params = new HashMap<>();
 	}
 
-	public ActionType actionType;
+	public Identifier actionType;
 	public HashMap<String, ParamValue> params;
-	public ActionType getActionType() {
+
+	public Identifier getActionType() {
 		return actionType;
 	}
 
-	public int getActionTypeId() {
-		return actionType.getId();
-	}
-
-	public void setActionType(ActionType actionType) {
+	public void setActionType(Identifier actionType) {
 		this.actionType = actionType;
 	}
 
@@ -72,27 +71,15 @@ public class Action {
 		}
 
 		public static String val(ParamValue val) {
-			if (val == null) {
-				return "";
-			}
+			if (val == null) return "";
 
-			switch (val) {
-				case IntParam(int value) -> {
-					return Integer.toString(value);
-				}
-				case FloatParam(float value) -> {
-					return Float.toString(value);
-				}
-				case BoolParam(boolean value) -> {
-					return Util.t("bool.robotmod." + value).getString();
-				}
-				case StringParam(String value) -> {
-					return value;
-				}
-				case DirParam(Direction dir) -> {
-					return dir.asString();
-				}
-			}
+			return switch (val) {
+				case IntParam(int value) -> Integer.toString(value);
+				case FloatParam(float value) -> Float.toString(value);
+				case BoolParam(boolean value) -> Util.t("bool.robotmod." + value).getString();
+				case StringParam(String value) -> value;
+				case DirParam(Direction dir) -> dir.asString();
+			};
 		}
 
 		int typeTag();

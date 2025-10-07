@@ -25,11 +25,11 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if >= 1.21.6 {
-/*import net.minecraft.storage.ReadView;
+import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
-*///?} else {
-import net.minecraft.nbt.NbtCompound;
-//?}
+//?} else {
+/*import net.minecraft.nbt.NbtCompound;
+*///?}
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
@@ -64,7 +64,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	}
 
 	//? if >= 1.21.6 {
-	/*@Override
+	@Override
 	protected void readCustomData(ReadView view) {
 		this.actions = new ArrayList<>(view.read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
 		this.home = view.read("home", BlockPos.CODEC).orElse(BlockPos.ORIGIN);
@@ -100,9 +100,9 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		super.dropLoot(world, damageSource, causedByPlayer);
 	}
 
-	*///?} else {
+	//?} else {
 
-	@Override
+	/*@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 
@@ -129,7 +129,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 		return nbt;
 	}
-	//?}
+	*///?}
 
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {

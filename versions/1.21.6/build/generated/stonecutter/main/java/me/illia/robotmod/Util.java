@@ -4,9 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import me.illia.robotmod.actions.Action;
-import me.illia.robotmod.actions.ActionType;
+import me.illia.robotmod.actions.CustomAction;
 import me.illia.robotmod.attachment.TeleportPoint;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
+import me.illia.robotmod.registry.ModRegistries;
 import me.illia.robotmod.world.dimension.Dimension;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -32,8 +33,9 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.Util.tTextContent;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
@@ -41,6 +43,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 import org.apache.commons.io.function.IOQuadFunction;
+import net.minecraft.block.BlockState;
 
 import java.io.IOException;
 import java.util.*;
@@ -67,7 +70,7 @@ public class Util {
 			buf.writeVarInt(actions.size());
 			for (Action action : actions) {
 				// Write action_type (int ID)
-				buf.writeVarInt(action.getActionType().getId());
+				buf.writeIdentifier(action.getActionType());
 
 				// Write params
 				HashMap<String, Action.ParamValue> params = action.getParams();
@@ -105,8 +108,7 @@ public class Util {
 			ArrayList<Action> actions = new ArrayList<>(size);
 
 			for (int i = 0; i < size; i++) {
-				int typeId = buf.readVarInt();
-				ActionType type = ActionType.from(typeId);
+				Identifier typeId = buf.readIdentifier();
 
 				int paramCount = buf.readVarInt();
 				HashMap<String, Action.ParamValue> params = new HashMap<>(paramCount);
@@ -125,7 +127,7 @@ public class Util {
 					params.put(key, value);
 				}
 
-				actions.add(new Action(type, params));
+				actions.add(new Action(typeId, params));
 			}
 
 			return actions;
@@ -146,6 +148,10 @@ public class Util {
 
 	public static Identifier id(String name) {
 		return Identifier.of(Robotmod.MODID, name);
+	}
+
+	public static<T> RegistryKey<Registry<T>> key(String id) {
+		return RegistryKey.ofRegistry(id(id));
 	}
 
 	public static <T extends Entity> EntityType<T> entity(Identifier id, EntityType.Builder<T> type) {
@@ -224,50 +230,13 @@ public class Util {
 		return str(action.actionType);
 	}
 
-	public static Text str(ActionType actionType) {
-		switch (actionType) {
-			case WalkAround -> {
-				return Util.t("menu.robotmod.action_type_walk_around");
-			}
-			case Harvest -> {
-				return Util.t("menu.robotmod.action_type_harvest");
-			}
-			case Wait -> {
-				return Util.t("menu.robotmod.action_type_wait");
-			}
-			case Home -> {
-				return Util.t("menu.robotmod.action_type_home");
-			}
-			case SetHome -> {
-				return Util.t("menu.robotmod.action_type_set_home");
-			}
-			case SwitchToSlot -> {
-				return Util.t("menu.robotmod.action_type_switch_slot");
-			}
-			case Walk -> {
-				return Util.t("menu.robotmod.action_type_walk");
-			}
-			case Drop -> {
-				return Util.t("menu.robotmod.action_type_drop");
-			}
-			case Say -> {
-				return Util.t("menu.robotmod.action_type_say");
-			}
-			case HitNearestEntity -> {
-				return Util.t("menu.robotmod.action_type_hit_nearest_entity");
-			}
-			case SetYaw -> {
-				return Util.t("menu.robotmod.action_type_set_yaw");
-			}
-			case SetPitch -> {
-				return Util.t("menu.robotmod.action_type_set_pitch");
-			}
-			case BreakBlock -> {
-				return Util.t("menu.robotmod.action_type_break_block");
-			}
-		}
+	public static Text str(Identifier actionType) {
+		CustomAction action = ModRegistries.ACTION_TYPE.get(actionType);
+		return Util.t(action.translation());
+	}
 
-		return Text.empty();
+	public static MutableText t(String key) {
+		return Text.translatable(key);
 	}
 
 	public static Block block(Identifier id, Function<AbstractBlock.Settings, Block> blockFactory, AbstractBlock.Settings settings) {
@@ -374,6 +343,10 @@ public class Util {
 		builder.add(key, string);
 	}
 
+	public static void add(FabricLanguageProvider.TranslationBuilder builder, Identifier type, String string) {
+		builder.add(((TranslatableTextContent)str(type).getContent()).getKey(), string);
+	}
+
 	public static void add(FabricLanguageProvider.TranslationBuilder builder, Item key, String string) {
 		builder.add(key, string);
 	}
@@ -384,5 +357,42 @@ public class Util {
 
 	public static void add(FabricLanguageProvider.TranslationBuilder builder, EntityType<?> key, String string) {
 		builder.add(key, string);
+	}
+
+	public static boolean nearest(Entity entity, int r, Function<BlockState, Boolean> func) {
+		return circleFilled(entity.getBlockPos(), r).stream().map(cPos -> entity.getWorld().getBlockState(cPos)).anyMatch(func::apply);
+	}
+
+	public static List<BlockPos> circleFilled(BlockPos center, int radius) {
+		List<BlockPos> list = new ArrayList<>();
+		int cx = center.getX(), cz = center.getZ(), cy = center.getY();
+		int r2 = radius * radius;
+		for (int dx = -radius; dx <= radius; dx++) {
+			for (int dz = -radius; dz <= radius; dz++) {
+				if (dx*dx + dz*dz <= r2) {
+					list.add(new BlockPos(cx + dx, cy, cz + dz));
+				}
+			}
+		}
+		return list;
+	}
+
+	public static void actionType(String key, CustomAction action) {
+		Registry.register(ModRegistries.ACTION_TYPE, id(key), action);
+	}
+
+	public static void actionType(Identifier key, CustomAction action) {
+		Registry.register(ModRegistries.ACTION_TYPE, key, action);
+	}
+
+	public static void actionTypes(Object... idsAndActions) {
+		if (idsAndActions.length % 2 != 0)
+			throw new IllegalArgumentException("You must provide pairs of Identifier and CustomAction");
+
+		for (int i = 0; i < idsAndActions.length; i += 2) {
+			Identifier id = (Identifier) idsAndActions[i];
+			CustomAction action = (CustomAction) idsAndActions[i + 1];
+			Registry.register(ModRegistries.ACTION_TYPE, id, action);
+		}
 	}
 }

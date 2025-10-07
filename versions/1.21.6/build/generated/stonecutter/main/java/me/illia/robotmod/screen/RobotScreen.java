@@ -2,9 +2,9 @@ package me.illia.robotmod.screen;
 
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
-import me.illia.robotmod.actions.ActionType;
-//? if >= 1.21.6 {
+import me.illia.robotmod.registry.ModRegistries;
 
+//? if >= 1.21.6 {
 import net.minecraft.client.gl.RenderPipelines;
 //?} else {
 /*import net.minecraft.client.render.RenderLayer;
@@ -20,14 +20,13 @@ import net.minecraft.client.gui.widget.CyclingButtonWidget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 
 public class RobotScreen extends HandledScreen<RobotScreenHandler> {
-	private CyclingButtonWidget<ActionType> actionTypeBtn;
+	private CyclingButtonWidget<Identifier> actionTypeBtn;
 	private ActionsWidget actionsWidget;
-
-	public static final ActionType[] ACTION_TYPES = ActionType.values();
 
 	public RobotScreen(RobotScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
@@ -50,8 +49,8 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		int x = (width - backgroundWidth) / 2 + titleX;
 		int y = (height - backgroundHeight) / 2 + titleY;
 
-		actionTypeBtn = CyclingButtonWidget.<ActionType>builder(Util::str)
-			.values(ACTION_TYPES)
+		actionTypeBtn = CyclingButtonWidget.<Identifier>builder(Util::str)
+			.values(ModRegistries.ACTION_TYPE.getIds())
 			.build(x + 25, y + 20, 100, 20, Util.t("menu.robotmod.action_type"));
 		this.addDrawableChild(actionTypeBtn);
 

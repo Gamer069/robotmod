@@ -2,13 +2,13 @@ package me.illia.robotmod.screen;
 
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
-//? if >= 1.21.6 {
-/*
-import net.minecraft.client.gl.RenderPipelines;
-*///?} else {
 import me.illia.robotmod.registry.ModRegistries;
-import net.minecraft.client.render.RenderLayer;
-//?}
+
+//? if >= 1.21.6 {
+import net.minecraft.client.gl.RenderPipelines;
+//?} else {
+/*import net.minecraft.client.render.RenderLayer;
+*///?}
 
 import me.illia.robotmod.entity.RobotEntity;
 
@@ -85,10 +85,10 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		int y = (height - backgroundHeight) / 2;
 
 		//? if >= 1.21.6 {
-		/*context.drawTexture(RenderPipelines.GUI_TEXTURED, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
-		*///?} else {
-		context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
-		//?}
+		context.drawTexture(RenderPipelines.GUI_TEXTURED, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		//?} else {
+		/*context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		*///?}
 	}
 
 	@Override
