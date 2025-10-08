@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.CustomAction;
+import me.illia.robotmod.actions.Direction;
 import me.illia.robotmod.attachment.TeleportPoint;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.registry.ModRegistries;
@@ -93,6 +94,10 @@ public class Util {
 							buf.writeByte(2); // tag for bool
 							buf.writeBoolean(boolParam.value());
 						}
+						case Action.ParamValue.DirParam dirParam -> {
+							buf.writeByte(3);
+							buf.writeVarInt(dirParam.dir().ordinal());
+						}
 						default -> throw new IllegalArgumentException("Unsupported ParamValue type: " + value.getClass().getName());
 					}
 				}
@@ -118,6 +123,7 @@ public class Util {
 						case 0 -> new Action.ParamValue.IntParam(buf.readVarInt());
 						case 1 -> new Action.ParamValue.FloatParam(buf.readFloat());
 						case 2 -> new Action.ParamValue.BoolParam(buf.readBoolean());
+						case 3 -> new Action.ParamValue.DirParam(Direction.values()[buf.readVarInt()]);
 						default -> throw new IllegalArgumentException("Unknown param tag: " + tag);
 					};
 

@@ -6,6 +6,7 @@ import me.illia.robotmod.Util;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
 
@@ -51,7 +52,7 @@ public class Action {
 		this.params = params;
 	}
 
-	public sealed interface ParamValue permits ParamValue.BoolParam, ParamValue.DirParam, ParamValue.FloatParam, ParamValue.IntParam, ParamValue.StringParam {
+	public sealed interface ParamValue permits ParamValue.IntParam, ParamValue.BoolParam, ParamValue.FloatParam, ParamValue.StringParam, ParamValue.DirParam {
 		Codec<ParamValue> CODEC = Codec.INT.<ParamValue>dispatch(
 			ParamValue::typeTag,
 			ParamValue::codecSelector
