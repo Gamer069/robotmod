@@ -12,10 +12,9 @@ import me.illia.robotmod.screen.ModScreenHandlers;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.Items;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +24,9 @@ public class Robotmod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		SharedConstants.isDevelopment = true;
+		if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			SharedConstants.isDevelopment = true;
+		}
 
 		PayloadTypeRegistry.playC2S().register(RequestTeleportC2SPayload.ID, RequestTeleportC2SPayload.REQUEST_TELEPORT_CODEC);
 		PayloadTypeRegistry.playC2S().register(RobotActionsSyncC2SPayload.ID, RobotActionsSyncC2SPayload.ROBOT_ACTIONS_SYNC_CODEC);
@@ -42,6 +43,5 @@ public class Robotmod implements ModInitializer {
 		ModNetworking.init();
 		ModRegistries.init();
 		FabricDefaultAttributeRegistry.register(ModEntities.ROBOT, RobotEntity.createMobAttributes().add(EntityAttributes.ARMOR_TOUGHNESS, 5).add(EntityAttributes.MAX_HEALTH, 8).add(EntityAttributes.ATTACK_DAMAGE, 2).add(EntityAttributes.ATTACK_KNOCKBACK, 1).build());
-
 	}
 }
