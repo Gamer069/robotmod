@@ -1,6 +1,5 @@
 package me.illia.robotmod.registry;
 
-import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.CustomAction;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;

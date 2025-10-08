@@ -1,5 +1,6 @@
 package me.illia.robotmod;
 
+import me.illia.robotmod.actions.ModActionTypes;
 import me.illia.robotmod.attachment.ModAttachmentTypes;
 import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.entity.ModEntities;
@@ -41,7 +42,7 @@ public class Robotmod implements ModInitializer {
 		ModItemGroups.init();
 		ModEntities.init();
 		ModNetworking.init();
-		ModRegistries.init();
+		ModActionTypes.init();
 		FabricDefaultAttributeRegistry.register(ModEntities.ROBOT, RobotEntity.createMobAttributes().add(EntityAttributes.ARMOR_TOUGHNESS, 5).add(EntityAttributes.MAX_HEALTH, 8).add(EntityAttributes.ATTACK_DAMAGE, 2).add(EntityAttributes.ATTACK_KNOCKBACK, 1).build());
 	}
 }
