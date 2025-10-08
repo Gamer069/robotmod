@@ -5,6 +5,8 @@ import me.illia.robotmod.actions.*;
 import me.illia.robotmod.entity.RobotEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 
 import java.util.List;
 
@@ -22,11 +24,11 @@ public class WalkAction extends CustomAction {
 
 		ActionParamDescriptor blocksParamDesc = paramDescriptors().get(1);
 		Action.ParamValue blocksVal = params.get(Util.key(blocksParamDesc.name()));
-		int blocks;
-		if (blocksVal instanceof Action.ParamValue.IntParam(int blocksValue)) {
+		float blocks;
+		if (blocksVal instanceof Action.ParamValue.FloatParam(float blocksValue)) {
 			blocks = blocksValue;
 		} else {
-			throw new RuntimeException("block amount isn't int for some reason, instead it's " + blocksVal.type());
+			throw new RuntimeException("block amount isn't float for some reason, instead it's " + blocksVal.type());
 		}
 
 		net.minecraft.util.math.Direction mcDir = switch (dir) {
@@ -36,7 +38,7 @@ public class WalkAction extends CustomAction {
 			case West -> net.minecraft.util.math.Direction.WEST;
 		};
 
-		BlockPos pos = robot.getBlockPos().offset(mcDir, blocks);
+		Vec3d pos = robot.getBlockPos().toCenterPos().offset(mcDir, blocks);
 		robot.getNavigation().startMovingTo(pos.getX(), pos.getY(), pos.getZ(), 1.0f);
 	}
 

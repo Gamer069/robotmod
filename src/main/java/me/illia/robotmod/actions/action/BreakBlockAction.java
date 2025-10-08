@@ -1,4 +1,4 @@
-package me.illia.robotmod.registry;
+package me.illia.robotmod.actions.action;
 
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
