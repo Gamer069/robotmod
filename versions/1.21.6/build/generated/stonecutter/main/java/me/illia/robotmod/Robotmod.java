@@ -12,8 +12,6 @@ import me.illia.robotmod.screen.ModScreenHandlers;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
-import net.kyrptonaught.customportalapi.portal.PortalIgnitionSource;
 import net.minecraft.SharedConstants;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -45,13 +43,5 @@ public class Robotmod implements ModInitializer {
 		ModRegistries.init();
 		FabricDefaultAttributeRegistry.register(ModEntities.ROBOT, RobotEntity.createMobAttributes().add(EntityAttributes.ARMOR_TOUGHNESS, 5).add(EntityAttributes.MAX_HEALTH, 8).add(EntityAttributes.ATTACK_DAMAGE, 2).add(EntityAttributes.ATTACK_KNOCKBACK, 1).build());
 
-
-		CustomPortalBuilder.beginPortal()
-			.frameBlock(Blocks.WHITE_CONCRETE)
-			.lightWithItem(Items.FLINT_AND_STEEL)
-			.destDimID(Util.id("the_future"))
-			.tintColor(184, 203, 194)
-			.customIgnitionSource(PortalIgnitionSource.FIRE)
-			.registerPortal();
 	}
 }

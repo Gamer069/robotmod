@@ -8,7 +8,6 @@ import me.illia.robotmod.actions.CustomAction;
 import me.illia.robotmod.attachment.TeleportPoint;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.registry.ModRegistries;
-import me.illia.robotmod.world.dimension.Dimension;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -40,8 +39,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionOptions;
-import net.minecraft.world.dimension.DimensionType;
 import org.apache.commons.io.function.IOQuadFunction;
 import net.minecraft.block.BlockState;
 
@@ -282,37 +279,6 @@ public class Util {
 		for (Item item : items) {
 			gen.register(item, new Model(Optional.of(Util.mc("item/generated")), Optional.of("inventory"), TextureKey.LAYER0));
 		}
-	}
-
-	public static Dimension dimKeys(Identifier id) {
-		RegistryKey<DimensionOptions> options = RegistryKey.of(RegistryKeys.DIMENSION, id);
-		RegistryKey<World> world = RegistryKey.of(RegistryKeys.WORLD, id);
-		RegistryKey<DimensionType> type = RegistryKey.of(RegistryKeys.DIMENSION_TYPE, id.withSuffixedPath("_type"));
-
-		return new Dimension(options, world, type);
-	}
-
-	public static void dim(Registerable<DimensionType> ctx, RegistryKey<DimensionType> type, Long fixedTime, boolean hasSkylight, boolean hasCeiling, boolean ultrawarm, boolean natural, int coordinateScale, boolean bedWorks, boolean piglinSafe, int minY, int height, int logicalHeight, TagKey<Block> infiniburn, Identifier effectsLocation, float ambientLight, Optional<Integer> cloudHeight, DimensionType.MonsterSettings monsterSettings) {
-		ctx.register(type, new DimensionType(
-			fixedTime == null ? OptionalLong.empty() : OptionalLong.of(fixedTime),
-			hasSkylight,
-			hasCeiling,
-			ultrawarm,
-			natural,
-			coordinateScale,
-			bedWorks,
-			piglinSafe,
-			minY,
-			height,
-			logicalHeight,
-			infiniburn,
-			effectsLocation,
-			ambientLight,
-			//? if >= 1.21.6 {
-			/*cloudHeight,
-			*///?}
-			monsterSettings
-		));
 	}
 
 	public static Identifier mc(String val) {

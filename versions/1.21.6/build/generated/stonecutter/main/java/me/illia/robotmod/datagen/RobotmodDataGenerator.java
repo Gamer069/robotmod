@@ -4,7 +4,6 @@ import me.illia.robotmod.datagen.provider.ModEnUsProvider;
 import me.illia.robotmod.datagen.provider.ModModelProvider;
 import me.illia.robotmod.datagen.provider.ModRecipeProvider;
 import me.illia.robotmod.datagen.provider.ModWorldProvider;
-import me.illia.robotmod.world.dimension.ModDimensions;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.registry.RegistryBuilder;
@@ -22,7 +21,6 @@ public class RobotmodDataGenerator implements DataGeneratorEntrypoint {
 
 	@Override
 	public void buildRegistry(RegistryBuilder registryBuilder) {
-		registryBuilder.addRegistry(RegistryKeys.DIMENSION_TYPE, ModDimensions::init);
 		DataGeneratorEntrypoint.super.buildRegistry(registryBuilder);
 	}
 }
