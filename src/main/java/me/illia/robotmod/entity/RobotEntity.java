@@ -18,6 +18,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
@@ -25,15 +26,16 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if >= 1.21.6 {
-import net.minecraft.storage.ReadView;
+/*import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
-//?} else {
-/*import net.minecraft.nbt.NbtCompound;
-*///?}
+*///?} else {
+import net.minecraft.nbt.NbtCompound;
+//?}
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
@@ -64,7 +66,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	}
 
 	//? if >= 1.21.6 {
-	@Override
+	/*@Override
 	protected void readCustomData(ReadView view) {
 		this.actions = new ArrayList<>(view.read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
 		this.home = view.read("home", BlockPos.CODEC).orElse(BlockPos.ORIGIN);
@@ -100,9 +102,9 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		super.dropLoot(world, damageSource, causedByPlayer);
 	}
 
-	//?} else {
+	*///?} else {
 
-	/*@Override
+	@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 
@@ -116,6 +118,9 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		} else {
 			this.actions = new ArrayList<>();
 		}
+
+		inv = new SimpleInventory(16);
+		Inventories.readNbt(nbt, inv.heldStacks, getWorld().getRegistryManager());
 	}
 
 	@Override
@@ -127,9 +132,11 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			.resultOrPartial(error -> Robotmod.LOGGER.error("Failed to write actions: {}", error))
 			.ifPresent(nbtElement -> nbt.put("actions", nbtElement));
 
+		Inventories.writeNbt(nbt, inv.heldStacks, getWorld().getRegistryManager());
+
 		return nbt;
 	}
-	*///?}
+	//?}
 
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {
@@ -206,13 +213,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	public boolean hurtByWater() {
 		return true;
-	}
-
-	@Override
-	public void tick() {
-		if (!this.getWorld().isClient)
-			tickBrain(this);
-		super.tick();
 	}
 
 	@Override

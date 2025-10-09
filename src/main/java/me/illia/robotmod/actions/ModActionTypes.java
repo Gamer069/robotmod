@@ -14,6 +14,8 @@ public class ModActionTypes {
 	public static final Identifier WALK = Util.id("walk");
 	public static final Identifier DROP = Util.id("drop");
 	public static final Identifier SAY = Util.id("say");
+	public static final Identifier USE = Util.id("use");
+	public static final Identifier JUMP = Util.id("jump");
 	public static final Identifier HIT_NEAREST_ENTITY = Util.id("hit_nearest_entity");
 	public static final Identifier SET_YAW = Util.id("set_yaw");
 	public static final Identifier SET_PITCH = Util.id("set_pitch");
@@ -33,7 +35,9 @@ public class ModActionTypes {
 			HIT_NEAREST_ENTITY, new HitNearestEntityAction(),
 			SET_YAW, new SetYawAction(),
 			SET_PITCH, new SetPitchAction(),
-			BREAK_BLOCK, new BreakBlockAction()
+			BREAK_BLOCK, new BreakBlockAction(),
+			USE, new UseAction(),
+			JUMP, new JumpAction()
 		);
 	}
 }

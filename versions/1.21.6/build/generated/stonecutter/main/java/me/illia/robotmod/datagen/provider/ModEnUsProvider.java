@@ -1,6 +1,7 @@
 package me.illia.robotmod.datagen.provider;
 
 import me.illia.robotmod.Util;
+import me.illia.robotmod.actions.ModActionTypes;
 import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.entity.ModEntities;
 import me.illia.robotmod.item.ModItems;
@@ -24,19 +25,19 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 
 		Util.add(b, "menu.robotmod.action_type", "Type");
 
-		Util.add(b, ModRegistries.WALK, "Walk");
-		Util.add(b, ModRegistries.WALK_AROUND, "Walk Around");
-		Util.add(b, ModRegistries.HARVEST, "Harvest");
-		Util.add(b, ModRegistries.WAIT, "Wait");
-		Util.add(b, ModRegistries.HOME, "Home");
-		Util.add(b, ModRegistries.SWITCH_TO_SLOT, "Switch Slot");
-		Util.add(b, ModRegistries.SET_YAW, "Set Yaw");
-		Util.add(b, ModRegistries.SET_PITCH, "Set Pitch");
-		Util.add(b, ModRegistries.SET_HOME, "Set Home");
-		Util.add(b, ModRegistries.BREAK_BLOCK, "Break Block");
-		Util.add(b, ModRegistries.DROP, "Drop");
-		Util.add(b, ModRegistries.SAY, "Say");
-		Util.add(b, ModRegistries.HIT_NEAREST_ENTITY, "Hit Nearest Entity");
+		Util.add(b, ModActionTypes.WALK, "Walk");
+		Util.add(b, ModActionTypes.WALK_AROUND, "Walk Around");
+		Util.add(b, ModActionTypes.HARVEST, "Harvest");
+		Util.add(b, ModActionTypes.WAIT, "Wait");
+		Util.add(b, ModActionTypes.HOME, "Home");
+		Util.add(b, ModActionTypes.SWITCH_TO_SLOT, "Switch Slot");
+		Util.add(b, ModActionTypes.SET_YAW, "Set Yaw");
+		Util.add(b, ModActionTypes.SET_PITCH, "Set Pitch");
+		Util.add(b, ModActionTypes.SET_HOME, "Set Home");
+		Util.add(b, ModActionTypes.BREAK_BLOCK, "Break Block");
+		Util.add(b, ModActionTypes.DROP, "Drop");
+		Util.add(b, ModActionTypes.SAY, "Say");
+		Util.add(b, ModActionTypes.HIT_NEAREST_ENTITY, "Hit Nearest Entity");
 
 
 		Util.add(b, "menu.robotmod.action_param_walk_around", "around ");

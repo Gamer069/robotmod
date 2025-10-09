@@ -29,6 +29,9 @@ public class PackedEnderPearlItem extends Item {
 
 		user.incrementStat(Stats.USED.getOrCreateStat(this));
 		itemStack.decrementUnlessCreative(1, user);
+
+		user.getItemCooldownManager().set(itemStack, 15);
+
 		return ActionResult.SUCCESS;
 	}
 }
