@@ -50,18 +50,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Util {
-	public static final PacketCodec<? super RegistryByteBuf, Integer> INT_PC = new PacketCodec<>() {
-		@Override
-		public void encode(RegistryByteBuf buf, Integer value) {
-			buf.writeInt(value);
-		}
-
-		@Override
-		public Integer decode(RegistryByteBuf buf) {
-			return buf.readInt();
-		}
-	};
-
 	public static final PacketCodec<RegistryByteBuf, ArrayList<Action>> ACTIONS_PC = new PacketCodec<>() {
 		@Override
 		public void encode(RegistryByteBuf buf, ArrayList<Action> actions) {

@@ -72,7 +72,7 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 		*///?}
 
 		matrices.scale(0.6f, 0.6f, 0.6f);
-		matrices.translate(-2.0F / 16.0F, -18.0F / 16.0F, -3.0F / 16.0F);
+		matrices.translate(-8.0F / 16.0F, -24.0F / 16.0F, -3.0F / 16.0F);
 
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(armPart.pitch));
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(armPart.yaw));

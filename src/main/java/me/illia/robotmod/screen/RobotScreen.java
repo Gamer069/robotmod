@@ -51,12 +51,13 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 		actionTypeBtn = CyclingButtonWidget.<Identifier>builder(Util::str)
 			.values(ModRegistries.ACTION_TYPE.getIds())
-			.build(x + 25, y + 20, 100, 20, Util.t("menu.robotmod.action_type"));
+			.build(x + 25, y + 10, 100, 20, Util.t("menu.robotmod.action_type"));
+
 		this.addDrawableChild(actionTypeBtn);
 
 		RobotEntity robot = getRobot();
 
-		actionsWidget = new ActionsWidget(x, y + 50, 180, 50, robot.actions);
+		actionsWidget = new ActionsWidget(x, y + 35, 180, 80, robot.actions);
 		this.addDrawableChild(actionsWidget);
 
 		this.addDrawableChild(ButtonWidget.builder(Util.t("menu.robotmod.add"), button -> {
@@ -68,7 +69,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 			this.remove(actionsWidget);
 			actionsWidget = new ActionsWidget(x, y + 50, prevWidth, prevHeight, robot.actions);
 			this.addDrawableChild(actionsWidget);
-		}).dimensions(x, y + 20, 20, 20).build());
+		}).dimensions(x, y + 10, 20, 20).build());
 
 		super.init();
 	}
@@ -93,6 +94,7 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+		drawSlots(context);
 		super.render(context, mouseX, mouseY, deltaTicks);
 	}
 }

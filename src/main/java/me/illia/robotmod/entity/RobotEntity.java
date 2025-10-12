@@ -8,6 +8,7 @@ import me.illia.robotmod.block.LunarPanelBlock;
 import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.networking.RobotActionsSyncC2SPayload;
 import me.illia.robotmod.screen.RobotScreenHandler;
+import me.illia.robotmod.screen.RobotScreenHandlerData;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -132,12 +133,13 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {
 		if (!this.getWorld().isClient && !player.isSneaking() && !Util.night(this.getWorld())) {
-			player.openHandledScreen(new ExtendedScreenHandlerFactory<Integer>() {
+			player.openHandledScreen(new ExtendedScreenHandlerFactory<RobotScreenHandlerData>() {
 				private final int id = RobotEntity.this.getId();
+				private final RobotScreenHandlerData robotScreenHandlerData = new RobotScreenHandlerData(id, RobotEntity.this.inv.heldStacks);
 
 				@Override
-				public Integer getScreenOpeningData(ServerPlayerEntity player) {
-					return id;
+				public RobotScreenHandlerData getScreenOpeningData(ServerPlayerEntity player) {
+					return robotScreenHandlerData;
 				}
 
 				@Override
@@ -147,7 +149,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 				@Override
 				public RobotScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-					return new RobotScreenHandler(syncId, id);
+					return new RobotScreenHandler(syncId, playerInventory, robotScreenHandlerData);
 				}
 			});
 		}
