@@ -7,9 +7,12 @@
         "minVersion": "0.5.0"
     },
     "mixins": [
+        "CarvedPumpkinBlockMixin",
         "FillCommandMixin"
     ],
     "client": [
+        "DebugMixin",
+        "DebugRendererMixin",
         "ScreenInventoryTextMixin"
     ],
     "injectors": {

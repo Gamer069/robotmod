@@ -38,6 +38,8 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		Util.add(b, ModActionTypes.DROP, "Drop");
 		Util.add(b, ModActionTypes.SAY, "Say");
 		Util.add(b, ModActionTypes.HIT_NEAREST_ENTITY, "Hit Nearest Entity");
+		Util.add(b, ModActionTypes.JUMP, "Jump");
+		Util.add(b, ModActionTypes.USE, "Use");
 
 
 		Util.add(b, "menu.robotmod.action_param_walk_around", "around ");

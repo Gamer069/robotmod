@@ -340,9 +340,11 @@ public class Util {
 		int cx = center.getX(), cz = center.getZ(), cy = center.getY();
 		int r2 = radius * radius;
 		for (int dx = -radius; dx <= radius; dx++) {
-			for (int dz = -radius; dz <= radius; dz++) {
-				if (dx*dx + dz*dz <= r2) {
-					list.add(new BlockPos(cx + dx, cy, cz + dz));
+			for (int dy = -radius; dy <= radius; dy++) {
+				for (int dz = -radius; dz <= radius; dz++) {
+					if (dx*dx + dz*dz <= r2) {
+						list.add(new BlockPos(cx + dx, cy + dy, cz + dz));
+					}
 				}
 			}
 		}

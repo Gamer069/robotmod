@@ -1,7 +1,6 @@
 package me.illia.robotmod.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionRunner;
@@ -10,6 +9,7 @@ import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.networking.RobotActionsSyncC2SPayload;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -20,8 +20,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if >= 1.21.6 {
@@ -29,6 +27,9 @@ import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 //?} else {
 /*import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.inventory.Inventories;
+import me.illia.robotmod.Robotmod;
 *///?}
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -55,6 +56,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public boolean ranActions;
 	public SimpleInventory inv;
 	public int slot;
+	public int actionI = -1;
 
 	public RobotEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
 		super(entityType, world);
@@ -91,15 +93,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public ItemStack getMainHandStack() {
 		return inv.getStack(slot);
 	}
-
-	@Override
-	protected void dropLoot(ServerWorld world, DamageSource damageSource, boolean causedByPlayer) {
-		for (ItemStack stack : inv.heldStacks) {
-			dropStack(world, stack);
-		}
-		super.dropLoot(world, damageSource, causedByPlayer);
-	}
-
 	//?} else {
 
 	/*@Override
@@ -116,6 +109,9 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		} else {
 			this.actions = new ArrayList<>();
 		}
+
+		inv = new SimpleInventory(16);
+		Inventories.readNbt(nbt, inv.heldStacks, getWorld().getRegistryManager());
 	}
 
 	@Override
@@ -126,6 +122,8 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			.encodeStart(NbtOps.INSTANCE, this.actions)
 			.resultOrPartial(error -> Robotmod.LOGGER.error("Failed to write actions: {}", error))
 			.ifPresent(nbtElement -> nbt.put("actions", nbtElement));
+
+		Inventories.writeNbt(nbt, inv.heldStacks, getWorld().getRegistryManager());
 
 		return nbt;
 	}
@@ -167,13 +165,28 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 		if (Util.nearest(this, 35, state -> state.isOf(ModBlocks.LUNAR_PANEL_BLOCK) && state.get(LunarPanelBlock.ACTIVE))) {
 			if (!ranActions) {
+				int i = 0;
 				for (Action action : actions) {
-					ActionRunner.run(action, this);
+					ActionRunner.run(action, this, i);
+					actionI = i;
+
+					List<ServerPlayerEntity> serverPlayers = world.getPlayers();
+					for (ServerPlayerEntity serverPlayer : serverPlayers) {
+						ServerPlayNetworking.send(serverPlayer, new UpdateActionDebugS2CPayload(actionI, getId()));
+					}
+
+					i++;
 				}
 				ranActions = true;
 			}
 		} else {
 			ranActions = false;
+			actionI = -1;
+
+			List<ServerPlayerEntity> serverPlayers = world.getPlayers();
+			for (ServerPlayerEntity serverPlayer : serverPlayers) {
+				ServerPlayNetworking.send(serverPlayer, new UpdateActionDebugS2CPayload(actionI, getId()));
+			}
 		}
 
 		super.mobTick(world);
@@ -209,13 +222,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	}
 
 	@Override
-	public void tick() {
-		if (!this.getWorld().isClient)
-			tickBrain(this);
-		super.tick();
-	}
-
-	@Override
 	public Arm getMainArm() {
 		return Arm.RIGHT;
 	}
@@ -240,5 +246,18 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			stack.setCount(leftover.getCount()); // leave remaining
 		}
 		super.loot(world, itemEntity);
+	}
+
+	@Override
+	protected void dropLoot(ServerWorld world, DamageSource damageSource, boolean causedByPlayer) {
+		int invI = 0;
+		for (ItemStack stack : inv.heldStacks) {
+			if (invI != slot) {
+				dropStack(world, stack);
+			}
+
+			invI++;
+		}
+		super.dropLoot(world, damageSource, causedByPlayer);
 	}
 }

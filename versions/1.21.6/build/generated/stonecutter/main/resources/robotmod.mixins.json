@@ -11,6 +11,8 @@
         "FillCommandMixin"
     ],
     "client": [
+        "DebugMixin",
+        "DebugRendererMixin",
         "ScreenInventoryTextMixin"
     ],
     "injectors": {

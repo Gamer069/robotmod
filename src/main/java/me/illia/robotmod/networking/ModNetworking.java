@@ -1,19 +1,27 @@
 package me.illia.robotmod.networking;
 
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.attachment.ModAttachmentTypes;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.block.TeleporterBlock;
+import me.illia.robotmod.debug.ActionDebugRenderer;
+import me.illia.robotmod.debug.DebugRenderers;
 import me.illia.robotmod.entity.RobotEntity;
+import me.illia.robotmod.entity.UpdateActionDebugS2CPayload;
 import me.illia.robotmod.item.TeleporterItem;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -53,5 +61,10 @@ public class ModNetworking {
 		ClientPlayNetworking.registerGlobalReceiver(GetTeleportPointsS2CPayload.ID, (((getTeleportPointsS2CPayload, context) -> {
 			TeleportPointAttachedData.DATA = getTeleportPointsS2CPayload.data();
 		})));
+
+		ClientPlayNetworking.registerGlobalReceiver(UpdateActionDebugS2CPayload.ID, ((((updateActionDebugS2CPayload, context) -> {
+			MinecraftClient client = context.client();
+			((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.stream().filter(e -> e.getId() == updateActionDebugS2CPayload.eid()).findFirst().ifPresent(robot -> robot.actionI = updateActionDebugS2CPayload.actionI());
+		}))));
 	}
 }

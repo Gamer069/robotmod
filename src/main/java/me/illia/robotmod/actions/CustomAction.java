@@ -16,6 +16,10 @@ public abstract class CustomAction {
 		this.params = new HashMap<>();
 	}
 
+	public CustomAction(CustomAction customAction) {
+		this.params = customAction.params;
+	}
+
 	public abstract void run(RobotEntity robot);
 	public abstract List<ActionParamDescriptor> paramDescriptors();
 	public abstract String translation();

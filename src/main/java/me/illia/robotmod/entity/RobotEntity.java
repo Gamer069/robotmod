@@ -1,7 +1,6 @@
 package me.illia.robotmod.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionRunner;
@@ -10,6 +9,7 @@ import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.networking.RobotActionsSyncC2SPayload;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -18,11 +18,8 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if >= 1.21.6 {
@@ -30,12 +27,14 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.storage.WriteView;
 *///?} else {
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.inventory.Inventories;
+import me.illia.robotmod.Robotmod;
 //?}
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
@@ -57,6 +56,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public boolean ranActions;
 	public SimpleInventory inv;
 	public int slot;
+	public int actionI = -1;
 
 	public RobotEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
 		super(entityType, world);
@@ -93,15 +93,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public ItemStack getMainHandStack() {
 		return inv.getStack(slot);
 	}
-
-	@Override
-	protected void dropLoot(ServerWorld world, DamageSource damageSource, boolean causedByPlayer) {
-		for (ItemStack stack : inv.heldStacks) {
-			dropStack(world, stack);
-		}
-		super.dropLoot(world, damageSource, causedByPlayer);
-	}
-
 	*///?} else {
 
 	@Override
@@ -174,13 +165,28 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 		if (Util.nearest(this, 35, state -> state.isOf(ModBlocks.LUNAR_PANEL_BLOCK) && state.get(LunarPanelBlock.ACTIVE))) {
 			if (!ranActions) {
+				int i = 0;
 				for (Action action : actions) {
-					ActionRunner.run(action, this);
+					ActionRunner.run(action, this, i);
+					actionI = i;
+
+					List<ServerPlayerEntity> serverPlayers = world.getPlayers();
+					for (ServerPlayerEntity serverPlayer : serverPlayers) {
+						ServerPlayNetworking.send(serverPlayer, new UpdateActionDebugS2CPayload(actionI, getId()));
+					}
+
+					i++;
 				}
 				ranActions = true;
 			}
 		} else {
 			ranActions = false;
+			actionI = -1;
+
+			List<ServerPlayerEntity> serverPlayers = world.getPlayers();
+			for (ServerPlayerEntity serverPlayer : serverPlayers) {
+				ServerPlayNetworking.send(serverPlayer, new UpdateActionDebugS2CPayload(actionI, getId()));
+			}
 		}
 
 		super.mobTick(world);
@@ -240,5 +246,18 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			stack.setCount(leftover.getCount()); // leave remaining
 		}
 		super.loot(world, itemEntity);
+	}
+
+	@Override
+	protected void dropLoot(ServerWorld world, DamageSource damageSource, boolean causedByPlayer) {
+		int invI = 0;
+		for (ItemStack stack : inv.heldStacks) {
+			if (invI != slot) {
+				dropStack(world, stack);
+			}
+
+			invI++;
+		}
+		super.dropLoot(world, damageSource, causedByPlayer);
 	}
 }
