@@ -7,15 +7,17 @@ import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.block.TeleporterBlock;
 import me.illia.robotmod.debug.ActionDebugRenderer;
 import me.illia.robotmod.debug.DebugRenderers;
-import me.illia.robotmod.entity.RobotEntity;
-import me.illia.robotmod.entity.UpdateActionDebugS2CPayload;
+import me.illia.robotmod.entity.*;
 import me.illia.robotmod.item.TeleporterItem;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -66,5 +68,15 @@ public class ModNetworking {
 			MinecraftClient client = context.client();
 			((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.stream().filter(e -> e.getId() == updateActionDebugS2CPayload.eid()).findFirst().ifPresent(robot -> robot.actionI = updateActionDebugS2CPayload.actionI());
 		}))));
+
+		ClientPlayNetworking.registerGlobalReceiver(UpdateHeldItemS2CPayload.ID, ((updateHeldItemS2CPayload, context) -> {
+			MinecraftClient client = context.client();
+			Entity entity = client.world.getEntityById(updateHeldItemS2CPayload.eid());
+			EntityRenderer<?, ?> renderer = client.getEntityRenderDispatcher().getRenderer(entity);
+			if (renderer instanceof RobotEntityRenderer robotEntityRenderer && entity instanceof RobotEntity robotEntity) {
+				RobotEntityRenderState state = robotEntityRenderer.getAndUpdateRenderState(robotEntity, 0);
+				robotEntityRenderer.updateRenderState(robotEntity, state, 0);
+			}
+		}));
 	}
 }

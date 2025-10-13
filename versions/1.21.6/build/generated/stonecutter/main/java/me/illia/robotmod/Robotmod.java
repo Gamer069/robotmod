@@ -7,6 +7,7 @@ import me.illia.robotmod.debug.DebugRenderers;
 import me.illia.robotmod.entity.ModEntities;
 import me.illia.robotmod.entity.RobotEntity;
 import me.illia.robotmod.entity.UpdateActionDebugS2CPayload;
+import me.illia.robotmod.entity.UpdateHeldItemS2CPayload;
 import me.illia.robotmod.item.ModItems;
 import me.illia.robotmod.itemgroup.ModItemGroups;
 import me.illia.robotmod.networking.*;
@@ -43,6 +44,7 @@ public class Robotmod implements ModInitializer {
 
 		PayloadTypeRegistry.playS2C().register(GetTeleportPointsS2CPayload.ID, GetTeleportPointsS2CPayload.GET_TP_POINTS_CODEC);
 		PayloadTypeRegistry.playS2C().register(UpdateActionDebugS2CPayload.ID, UpdateActionDebugS2CPayload.UPDATE_ACTION_DEBUG_CODEC);
+		PayloadTypeRegistry.playS2C().register(UpdateHeldItemS2CPayload.ID, UpdateHeldItemS2CPayload.UPDATE_HELD_ITEM_CODEC);
 
 		ModAttachmentTypes.init();
 		ModScreenHandlers.init();

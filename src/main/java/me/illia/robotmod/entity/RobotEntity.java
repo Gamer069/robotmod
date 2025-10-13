@@ -20,6 +20,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -64,6 +65,8 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		super(entityType, world);
 		this.actions = new ArrayList<>();
 		this.inv = new SimpleInventory(16);
+		addListener();
+
 		this.home = getBlockPos();
 	}
 
@@ -105,6 +108,8 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 
+		nbt.putInt("slot", this.slot);
+
 		if (nbt.contains("actions")) {
 			this.actions = new ArrayList<>(
 				Action.CODEC.codec().listOf()
@@ -117,12 +122,33 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		}
 
 		inv = new SimpleInventory(16);
+		addListener();
 		Inventories.readNbt(nbt, inv.heldStacks, getWorld().getRegistryManager());
+	}
+
+	public void addListener() {
+		inv.addListener((inv) -> {
+			if (!getWorld().isClient) {
+				ItemStack stack = inv.getStack(0);
+				UpdateHeldItemS2CPayload payload = new UpdateHeldItemS2CPayload(getId(), stack);
+				for (PlayerEntity player : getWorld().getPlayers()) {
+					if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+						ServerPlayNetworking.send(serverPlayerEntity, payload);
+					}
+				}
+			}
+		});
 	}
 
 	@Override
 	public NbtCompound writeNbt(NbtCompound nbt) {
 		super.writeNbt(nbt);
+
+		//? if >1.21.3 {
+		this.slot = nbt.getInt("slot", 0);
+		//?} else {
+		/*this.slot = nbt.getInt("slot");
+		*///?}
 
 		Action.CODEC.codec().listOf()
 			.encodeStart(NbtOps.INSTANCE, this.actions)

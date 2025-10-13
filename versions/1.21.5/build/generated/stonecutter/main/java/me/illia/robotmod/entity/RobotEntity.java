@@ -20,9 +20,9 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if >= 1.21.6 {
@@ -49,7 +49,6 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTar
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.HurtBySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +65,18 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		super(entityType, world);
 		this.actions = new ArrayList<>();
 		this.inv = new SimpleInventory(16);
+		addListener();
+
 		this.home = getBlockPos();
+	}
+
+	@Override
+	public ItemStack getStackInArm(Arm arm) {
+		if (arm == Arm.RIGHT) {
+			return inv.getStack(slot);
+		}
+
+		return super.getStackInArm(arm);
 	}
 
 	//? if >= 1.21.6 {
@@ -93,15 +103,12 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		super.writeCustomData(view);
 	}
 
-	@Override
-	public ItemStack getMainHandStack() {
-		return inv.getStack(slot);
-	}
 	*///?} else {
-
 	@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
+
+		nbt.putInt("slot", this.slot);
 
 		if (nbt.contains("actions")) {
 			this.actions = new ArrayList<>(
@@ -115,12 +122,33 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		}
 
 		inv = new SimpleInventory(16);
+		addListener();
 		Inventories.readNbt(nbt, inv.heldStacks, getWorld().getRegistryManager());
+	}
+
+	public void addListener() {
+		inv.addListener((inv) -> {
+			if (!getWorld().isClient) {
+				ItemStack stack = inv.getStack(0);
+				UpdateHeldItemS2CPayload payload = new UpdateHeldItemS2CPayload(getId(), stack);
+				for (PlayerEntity player : getWorld().getPlayers()) {
+					if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+						ServerPlayNetworking.send(serverPlayerEntity, payload);
+					}
+				}
+			}
+		});
 	}
 
 	@Override
 	public NbtCompound writeNbt(NbtCompound nbt) {
 		super.writeNbt(nbt);
+
+		//? if >1.21.3 {
+		this.slot = nbt.getInt("slot", 0);
+		//?} else {
+		/*this.slot = nbt.getInt("slot");
+		*///?}
 
 		Action.CODEC.codec().listOf()
 			.encodeStart(NbtOps.INSTANCE, this.actions)
@@ -132,6 +160,11 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		return nbt;
 	}
 	//?}
+
+	@Override
+	public ItemStack getMainHandStack() {
+		return inv.getStack(slot);
+	}
 
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {

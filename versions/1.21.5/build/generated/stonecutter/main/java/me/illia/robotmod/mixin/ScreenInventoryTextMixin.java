@@ -38,12 +38,10 @@ public abstract class ScreenInventoryTextMixin {
 	)
 	public void removeInventoryText(HandledScreen<?> instance, DrawContext context, int mouseX, int mouseY, Operation<Void> original) {
 		if (!(instance instanceof RobotScreen screen)) {
-			original.call(instance, context, mouseX, mouseY);
-		} else {
-			context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), -12566464, false);
-		}
-
-		if (!(instance instanceof RobotInventoryScreen screen)) {
+			if (instance instanceof RobotInventoryScreen screen) {
+				context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), -12566464, false);
+				return;
+			}
 			original.call(instance, context, mouseX, mouseY);
 		} else {
 			context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), -12566464, false);

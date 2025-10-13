@@ -9,5 +9,4 @@ import net.minecraft.client.render.entity.state.ArmedEntityRenderState;
 
 public class RobotEntityRenderState extends ArmedEntityRenderState {
 //?}
-	// ...
 }

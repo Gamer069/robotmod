@@ -59,12 +59,12 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 
 	@Override
 	public void setAngles(RobotEntityRenderState state) {
-		Robotmod.LOGGER.info("SET ANGLES");
 		super.setAngles(state);
 	}
 
 	@Override
 	public void setArmAngle(Arm arm, MatrixStack matrices) {
+		Robotmod.LOGGER.info("SET ARM ANGLES");
 		ModelPart armPart = arm == Arm.RIGHT ? right : left;
 
 		//? if >= 1.21.5 {
