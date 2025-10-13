@@ -1,5 +1,6 @@
 package me.illia.robotmod.entity;
 
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
@@ -58,6 +59,7 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 
 	@Override
 	public void setAngles(RobotEntityRenderState state) {
+		Robotmod.LOGGER.info("SET ANGLES");
 		super.setAngles(state);
 	}
 

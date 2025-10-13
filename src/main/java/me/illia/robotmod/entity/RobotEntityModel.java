@@ -1,5 +1,6 @@
 package me.illia.robotmod.entity;
 
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
@@ -63,13 +64,14 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 
 	@Override
 	public void setArmAngle(Arm arm, MatrixStack matrices) {
+		Robotmod.LOGGER.info("SET ARM ANGLES");
 		ModelPart armPart = arm == Arm.RIGHT ? right : left;
 
 		//? if >= 1.21.5 {
-		/*matrices.translate(armPart.originX / 16.0F, armPart.originY / 16.0F, armPart.originZ / 16.0F);
-		*///?} else {
-		matrices.translate(armPart.pivotX / 16.0F, armPart.pivotY / 16.0F, armPart.pivotZ / 16.0F);
-		//?}
+		matrices.translate(armPart.originX / 16.0F, armPart.originY / 16.0F, armPart.originZ / 16.0F);
+		//?} else {
+		/*matrices.translate(armPart.pivotX / 16.0F, armPart.pivotY / 16.0F, armPart.pivotZ / 16.0F);
+		*///?}
 
 		matrices.scale(0.6f, 0.6f, 0.6f);
 		matrices.translate(-8.0F / 16.0F, -24.0F / 16.0F, -3.0F / 16.0F);

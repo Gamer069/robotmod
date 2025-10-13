@@ -2,6 +2,7 @@ package me.illia.robotmod.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import me.illia.robotmod.screen.RobotInventoryScreen;
 import me.illia.robotmod.screen.RobotScreen;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -37,6 +38,10 @@ public abstract class ScreenInventoryTextMixin {
 	)
 	public void removeInventoryText(HandledScreen<?> instance, DrawContext context, int mouseX, int mouseY, Operation<Void> original) {
 		if (!(instance instanceof RobotScreen screen)) {
+			if (instance instanceof RobotInventoryScreen screen) {
+				context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), -12566464, false);
+				return;
+			}
 			original.call(instance, context, mouseX, mouseY);
 		} else {
 			context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), -12566464, false);

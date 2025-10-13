@@ -30,7 +30,11 @@ public class RobotEntityRenderer extends MobEntityRenderer<RobotEntity, RobotEnt
 
 	@Override
 	public void updateRenderState(RobotEntity livingEntity, RobotEntityRenderState livingEntityRenderState, float f) {
-		livingEntityRenderState.heldStack = livingEntity.inv.getStack(livingEntity.slot);
+		//? if >1.21.3 {
+		livingEntityRenderState.hand = livingEntity.inv.getStack(livingEntity.slot);
+		//?} else {
+		/*livingEntityRenderState.rightHandStack = livingEntity.inv.getStack(livingEntity.slot);
+		*///?}
 		super.updateRenderState(livingEntity, livingEntityRenderState, f);
 	}
 }

@@ -7,6 +7,7 @@ import me.illia.robotmod.actions.ActionRunner;
 import me.illia.robotmod.block.LunarPanelBlock;
 import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.networking.RobotActionsSyncC2SPayload;
+import me.illia.robotmod.screen.RobotInventoryScreenHandler;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import me.illia.robotmod.screen.RobotScreenHandlerData;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -21,6 +22,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if >= 1.21.6 {
@@ -47,6 +49,7 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTar
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.HurtBySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,7 +135,8 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-		if (!this.getWorld().isClient && !player.isSneaking() && !Util.night(this.getWorld())) {
+		if (this.getWorld().isClient) return ActionResult.SUCCESS;
+		if (!player.isSneaking() && !Util.night(this.getWorld())) {
 			player.openHandledScreen(new ExtendedScreenHandlerFactory<RobotScreenHandlerData>() {
 				private final int id = RobotEntity.this.getId();
 				private final RobotScreenHandlerData robotScreenHandlerData = new RobotScreenHandlerData(id, RobotEntity.this.inv.heldStacks);
@@ -149,11 +153,32 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 				@Override
 				public RobotScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-					return new RobotScreenHandler(syncId, playerInventory, robotScreenHandlerData);
+					return new RobotScreenHandler(syncId, robotScreenHandlerData);
+				}
+			});
+			return ActionResult.SUCCESS_SERVER;
+		} else if (player.isSneaking() && player.getMainHandStack().isEmpty()) {
+			player.openHandledScreen(new ExtendedScreenHandlerFactory<RobotScreenHandlerData>() {
+				private final int id = RobotEntity.this.getId();
+				private final RobotScreenHandlerData robotScreenHandlerData = new RobotScreenHandlerData(id, RobotEntity.this.inv.heldStacks);
+
+				@Override
+				public RobotScreenHandlerData getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
+					return robotScreenHandlerData;
+				}
+
+				@Override
+				public Text getDisplayName() {
+					return Util.t("menu.robotmod.robot_inv");
+				}
+
+				@Override
+				public RobotInventoryScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+					return new RobotInventoryScreenHandler(syncId, playerInventory, robotScreenHandlerData);
 				}
 			});
 		}
-		return ActionResult.SUCCESS;
+		return ActionResult.PASS;
 	}
 
 	@Override

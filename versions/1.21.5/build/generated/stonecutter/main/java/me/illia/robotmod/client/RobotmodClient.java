@@ -5,6 +5,7 @@ import me.illia.robotmod.entity.ModEntities;
 import me.illia.robotmod.entity.RobotEntityModel;
 import me.illia.robotmod.entity.RobotEntityRenderer;
 import me.illia.robotmod.screen.ModScreenHandlers;
+import me.illia.robotmod.screen.RobotInventoryScreen;
 import me.illia.robotmod.screen.RobotScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -19,6 +20,8 @@ public class RobotmodClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		HandledScreens.register(ModScreenHandlers.ROBOT_SCREEN_HANDLER, RobotScreen::new);
+		HandledScreens.register(ModScreenHandlers.ROBOT_INVENTORY_SCREEN_HANDLER, RobotInventoryScreen::new);
+
 		EntityRendererRegistry.register(ModEntities.ROBOT, RobotEntityRenderer::new);
 		EntityModelLayerRegistry.registerModelLayer(MODEL_ROBOT_LAYER, RobotEntityModel::getTexturedModelData);
 	}

@@ -7,6 +7,7 @@ import me.illia.robotmod.actions.ActionRunner;
 import me.illia.robotmod.block.LunarPanelBlock;
 import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.networking.RobotActionsSyncC2SPayload;
+import me.illia.robotmod.screen.RobotInventoryScreenHandler;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import me.illia.robotmod.screen.RobotScreenHandlerData;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -66,6 +67,15 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		this.home = getBlockPos();
 	}
 
+	@Override
+	public ItemStack getStackInArm(Arm arm) {
+		if (arm == Arm.RIGHT) {
+			return inv.getStack(slot);
+		}
+
+		return super.getStackInArm(arm);
+	}
+
 	//? if >= 1.21.6 {
 	/*@Override
 	protected void readCustomData(ReadView view) {
@@ -90,12 +100,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		super.writeCustomData(view);
 	}
 
-	@Override
-	public ItemStack getMainHandStack() {
-		return inv.getStack(slot);
-	}
 	*///?} else {
-
 	@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
@@ -131,8 +136,14 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	//?}
 
 	@Override
+	public ItemStack getMainHandStack() {
+		return inv.getStack(slot);
+	}
+
+	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-		if (!this.getWorld().isClient && !player.isSneaking() && !Util.night(this.getWorld())) {
+		if (this.getWorld().isClient) return ActionResult.SUCCESS;
+		if (!player.isSneaking() && !Util.night(this.getWorld())) {
 			player.openHandledScreen(new ExtendedScreenHandlerFactory<RobotScreenHandlerData>() {
 				private final int id = RobotEntity.this.getId();
 				private final RobotScreenHandlerData robotScreenHandlerData = new RobotScreenHandlerData(id, RobotEntity.this.inv.heldStacks);
@@ -149,11 +160,32 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 				@Override
 				public RobotScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-					return new RobotScreenHandler(syncId, playerInventory, robotScreenHandlerData);
+					return new RobotScreenHandler(syncId, robotScreenHandlerData);
+				}
+			});
+			return ActionResult.SUCCESS_SERVER;
+		} else if (player.isSneaking() && player.getMainHandStack().isEmpty()) {
+			player.openHandledScreen(new ExtendedScreenHandlerFactory<RobotScreenHandlerData>() {
+				private final int id = RobotEntity.this.getId();
+				private final RobotScreenHandlerData robotScreenHandlerData = new RobotScreenHandlerData(id, RobotEntity.this.inv.heldStacks);
+
+				@Override
+				public RobotScreenHandlerData getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
+					return robotScreenHandlerData;
+				}
+
+				@Override
+				public Text getDisplayName() {
+					return Util.t("menu.robotmod.robot_inv");
+				}
+
+				@Override
+				public RobotInventoryScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+					return new RobotInventoryScreenHandler(syncId, playerInventory, robotScreenHandlerData);
 				}
 			});
 		}
-		return ActionResult.SUCCESS;
+		return ActionResult.PASS;
 	}
 
 	@Override

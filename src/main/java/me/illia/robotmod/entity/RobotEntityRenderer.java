@@ -12,10 +12,10 @@ public class RobotEntityRenderer extends MobEntityRenderer<RobotEntity, RobotEnt
 		super(context, new RobotEntityModel(context.getPart(RobotmodClient.MODEL_ROBOT_LAYER)), 0.5f);
 
 		//? if != 1.21.3 {
-		/*this.addFeature(new HeldItemFeatureRenderer<>(this));
-		*///?} else {
-		this.addFeature(new HeldItemFeatureRenderer<>(this, context.getItemRenderer()));
-		//?}
+		this.addFeature(new HeldItemFeatureRenderer<>(this));
+		//?} else {
+		/*this.addFeature(new HeldItemFeatureRenderer<>(this, context.getItemRenderer()));
+		*///?}
 	}
 
 	@Override
@@ -30,7 +30,9 @@ public class RobotEntityRenderer extends MobEntityRenderer<RobotEntity, RobotEnt
 
 	@Override
 	public void updateRenderState(RobotEntity livingEntity, RobotEntityRenderState livingEntityRenderState, float f) {
-		livingEntityRenderState.heldStack = livingEntity.inv.getStack(livingEntity.slot);
+		//? if 1.21.3 {
+		/*livingEntityRenderState.rightHandStack = livingEntity.inv.getStack(livingEntity.slot);
+		*///?}
 		super.updateRenderState(livingEntity, livingEntityRenderState, f);
 	}
 }
