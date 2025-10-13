@@ -8,6 +8,9 @@ I
 I
 ```
 
+where P is carved pumpkin,
+and I is iron block.
+
 ### Creating addons for this mod
 Just create a regular mod which depends on this mod, and use the `ModRegistries.ACTION_TYPE` registry to register your own CustomAction like so:
 ```java
