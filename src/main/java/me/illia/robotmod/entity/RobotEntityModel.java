@@ -64,20 +64,17 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 
 	@Override
 	public void setArmAngle(Arm arm, MatrixStack matrices) {
-		Robotmod.LOGGER.info("SET ARM ANGLES");
-		ModelPart armPart = arm == Arm.RIGHT ? right : left;
+		ModelPart armPart = (arm == Arm.RIGHT) ? this.right : this.left;
 
-		//? if >= 1.21.5 {
-		matrices.translate(armPart.originX / 16.0F, armPart.originY / 16.0F, armPart.originZ / 16.0F);
-		//?} else {
-		/*matrices.translate(armPart.pivotX / 16.0F, armPart.pivotY / 16.0F, armPart.pivotZ / 16.0F);
-		*///?}
+		float shoulderX = (arm == Arm.RIGHT) ? -5.0f : 5.0f;
+		float shoulderY = 14.0f;
 
-		matrices.scale(0.6f, 0.6f, 0.6f);
-		matrices.translate(-8.0F / 16.0F, -24.0F / 16.0F, -3.0F / 16.0F);
+		matrices.translate(shoulderX / 16.0F, shoulderY / 16.0F, 0.0F);
 
-		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(armPart.pitch));
-		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(armPart.yaw));
-		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(armPart.roll));
+		matrices.multiply(RotationAxis.POSITIVE_Z.rotation(armPart.roll));
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotation(armPart.yaw));
+		matrices.multiply(RotationAxis.POSITIVE_X.rotation(armPart.pitch));
+
+		matrices.scale(0.7f, 0.7f, 0.7f);
 	}
 }
