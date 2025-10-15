@@ -4,14 +4,13 @@ import me.illia.robotmod.Util;
 import me.illia.robotmod.client.RobotmodClient;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
 //? if >1.21.3 {
 import net.minecraft.client.render.entity.state.ArmedEntityRenderState;
 import net.minecraft.client.item.ItemModelManager;
-//?}
 import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.item.ItemDisplayContext;
+//?}
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
@@ -20,11 +19,9 @@ public class RobotEntityRenderer extends MobEntityRenderer<RobotEntity, RobotEnt
 	//? if >1.21.3 {
 	public ItemModelManager itemModelManager;
 	//?}
-	public RobotEntity entity;
 
 	public RobotEntityRenderer(EntityRendererFactory.Context context) {
 		super(context, new RobotEntityModel(context.getPart(RobotmodClient.MODEL_ROBOT_LAYER)), 0.5f);
-		this.entity = null;
 
 		//? if >1.21.3 {
 		this.addFeature(new HeldItemFeatureRenderer<>(this));
@@ -49,7 +46,7 @@ public class RobotEntityRenderer extends MobEntityRenderer<RobotEntity, RobotEnt
 		super.updateRenderState(livingEntity, livingEntityRenderState, f);
 
 		//? if >1.21.3 {
-		itemModelManager.updateForLivingEntity(livingEntityRenderState.rightHandItemState, entity == null ? livingEntity.inv.getStack(livingEntity.slot) : entity.inv.getStack(entity.slot), ItemDisplayContext.FIXED, livingEntity);
+		itemModelManager.updateForLivingEntity(livingEntityRenderState.rightHandItemState, livingEntity.inv.getStack(livingEntity.slot), ItemDisplayContext.FIXED, livingEntity);
 		//?} else {
 		/*livingEntityRenderState.rightHandStack = livingEntity.inv.getStack(livingEntity.slot);
 		*///?}

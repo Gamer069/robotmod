@@ -1,5 +1,6 @@
 package me.illia.robotmod.actions.action;
 
+import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.ActionParamDescriptor;
 import me.illia.robotmod.actions.CustomAction;
 import me.illia.robotmod.entity.RobotEntity;
@@ -15,6 +16,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -22,11 +24,12 @@ public class UseAction extends CustomAction {
 	@Override
 	public void run(RobotEntity robot) {
 		ItemStack stack = robot.inv.getStack(robot.slot);
-		FakePlayer entity = FakePlayer.get((ServerWorld) robot.getWorld());
+		World world = Util.entityWorld(robot);
+		FakePlayer entity = FakePlayer.get((ServerWorld)world);
 		entity.setCurrentHand(Hand.MAIN_HAND);
 		entity.setStackInHand(Hand.MAIN_HAND, stack);
 
-		Vec3d robotPos = robot.getPos();
+		Vec3d robotPos = Util.entityPos(robot);
 		entity.setPos(robotPos.x, robotPos.y, robotPos.z);
 		entity.setYaw(robot.getYaw());
 		entity.setPitch(robot.getPitch());
@@ -35,7 +38,7 @@ public class UseAction extends CustomAction {
 		HitResult entityHitResult = robot.raycast(entity.getAttributeValue(EntityAttributes.BLOCK_INTERACTION_RANGE), 0, false);
 
 		if (blockHitResult instanceof BlockHitResult result) {
-			ActionResult actionResult = stack.useOnBlock(new ItemUsageContext(robot.getWorld(), entity, Hand.MAIN_HAND, stack, result));
+			ActionResult actionResult = stack.useOnBlock(new ItemUsageContext(world, entity, Hand.MAIN_HAND, stack, result));
 
 			if (actionResult != ActionResult.PASS) {
 				return;
@@ -50,7 +53,7 @@ public class UseAction extends CustomAction {
 			}
 		}
 
-		stack.use(robot.getWorld(), entity, Hand.MAIN_HAND);
+		stack.use(world, entity, Hand.MAIN_HAND);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package me.illia.robotmod.screen;
 
+import me.illia.robotmod.Util;
 import me.illia.robotmod.entity.RobotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -25,8 +26,8 @@ public class RobotInventoryScreenHandler extends ScreenHandler {
 		this.inv = new SimpleInventory(stacks.toArray(new ItemStack[]{})) {
 			@Override
 			public void markDirty() {
-				World world = playerInv.player.getWorld();
-				if (!world.isClient) {
+				World world = Util.entityWorld(playerInv.player);
+				if (!world.isClient()) {
 					RobotEntity entity = (RobotEntity)world.getEntityById(eid);
 					for (int i = 0; i < heldStacks.size(); i++) {
 						ItemStack stack = heldStacks.get(i);

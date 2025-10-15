@@ -23,7 +23,7 @@ public class TeleporterItem extends Item {
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public ActionResult use(World world, PlayerEntity user, Hand hand) {
-		if (world.isClient) {
+		if (world.isClient()) {
 			if (TeleportPointAttachedData.DATA == null && !sentPacket) {
 				ClientPlayNetworking.send(new GetTeleportPointsC2SPayload(world.getRegistryKey()));
 				sentPacket = true;

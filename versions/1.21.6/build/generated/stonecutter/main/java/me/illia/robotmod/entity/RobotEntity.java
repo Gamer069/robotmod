@@ -79,6 +79,29 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		return super.getStackInArm(arm);
 	}
 
+	public void addListener() {
+		inv.addListener((inv) -> send(inv, null));
+	}
+
+	public void send(Inventory inv, ServerPlayerEntity entity) {
+		World world = Util.entityWorld(this);
+		if (!world.isClient()) {
+			ItemStack stack = inv.getStack(slot);
+			UpdateHeldItemS2CPayload payload = new UpdateHeldItemS2CPayload(getId(), stack);
+
+			if (entity == null) {
+				for (PlayerEntity player : world.getPlayers()) {
+					if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+						ServerPlayNetworking.send(serverPlayerEntity, payload);
+					}
+				}
+			} else {
+				ServerPlayNetworking.send(entity, payload);
+			}
+		}
+	}
+
+
 	//? if >= 1.21.6 {
 	@Override
 	protected void readCustomData(ReadView view) {
@@ -88,7 +111,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		inv.readDataList(invListView);
 		this.slot = view.getInt("slot", 0);
 
-		send(this.inv);
+		send(this.inv, null);
 
 		super.readCustomData(view);
 	}
@@ -135,31 +158,10 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		send(inv, null);
 	}
 
-	public void addListener() {
-		inv.addListener((inv) -> send(inv, null));
-	}
-
 	@Override
 	public void onStartedTrackingBy(ServerPlayerEntity player) {
 		send(inv, player);
 		super.onStartedTrackingBy(player);
-	}
-
-	public void send(Inventory inv, ServerPlayerEntity entity) {
-		if (!getWorld().isClient) {
-			ItemStack stack = inv.getStack(slot);
-			UpdateHeldItemS2CPayload payload = new UpdateHeldItemS2CPayload(getId(), stack);
-
-			if (entity == null) {
-				for (PlayerEntity player : getWorld().getPlayers()) {
-					if (player instanceof ServerPlayerEntity serverPlayerEntity) {
-						ServerPlayNetworking.send(serverPlayerEntity, payload);
-					}
-				}
-			} else {
-				ServerPlayNetworking.send(entity, payload);
-			}
-		}
 	}
 
 	@Override
@@ -186,8 +188,9 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	@Override
 	protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-		if (this.getWorld().isClient) return ActionResult.SUCCESS;
-		if (!player.isSneaking() && !Util.night(this.getWorld())) {
+		World world = Util.entityWorld(this);
+		if (world.isClient()) return ActionResult.SUCCESS;
+		if (!player.isSneaking() && !Util.night(world)) {
 			player.openHandledScreen(new ExtendedScreenHandlerFactory<RobotScreenHandlerData>() {
 				private final int id = RobotEntity.this.getId();
 				private final RobotScreenHandlerData robotScreenHandlerData = new RobotScreenHandlerData(id, RobotEntity.this.inv.heldStacks);
@@ -241,7 +244,8 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	protected void mobTick(ServerWorld world) {
 		tickBrain(this);
 
-		if (Util.nearest(this, 35, state -> state.isOf(ModBlocks.LUNAR_PANEL_BLOCK) && state.get(LunarPanelBlock.ACTIVE))) {
+		boolean nearest = Util.nearest(this, 35, state -> state.isOf(ModBlocks.LUNAR_PANEL_BLOCK) && state.get(LunarPanelBlock.ACTIVE)) && Util.night(world);
+		if (nearest) {
 			if (!ranActions) {
 				int i = 0;
 				for (Action action : actions) {
@@ -305,7 +309,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	public void save(ArrayList<Action> actions) {
 		this.actions = actions;
-		ClientPlayNetworking.send(new RobotActionsSyncC2SPayload(getId(), actions.stream().toList(), getWorld().getRegistryKey()));
+		ClientPlayNetworking.send(new RobotActionsSyncC2SPayload(getId(), actions.stream().toList(), Util.entityWorld(this).getRegistryKey()));
 	}
 
 	@Override

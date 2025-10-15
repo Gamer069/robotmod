@@ -39,6 +39,7 @@ import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.apache.commons.io.function.IOQuadFunction;
 import net.minecraft.block.BlockState;
@@ -192,6 +193,7 @@ public class Util {
 		);
 	}
 
+	//? if <1.21.10 {
 	public static SpawnEggItem spawnEgg(Identifier id, BiFunction<EntityType<? extends MobEntity>, Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
@@ -201,6 +203,17 @@ public class Util {
 			func.apply(entity, settings.registryKey(key))
 		);
 	}
+	//?} else {
+	/*public static SpawnEggItem spawnEgg(Identifier id, Function<Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
+		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
+
+		return (SpawnEggItem) Registry.register(
+			Registries.ITEM,
+			key,
+			func.apply(settings.registryKey(key).spawnEgg(entity))
+		);
+	}
+	*///?}
 
 	public static SpawnEggItem spawnEgg(Identifier id, IOQuadFunction<EntityType<? extends MobEntity>, Integer, Integer, Item.Settings, SpawnEggItem> func, EntityType<? extends MobEntity> entity, int primaryColor, int secondaryColor, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
@@ -320,7 +333,7 @@ public class Util {
 	}
 
 	public static boolean nearest(Entity entity, int r, Function<BlockState, Boolean> func) {
-		return circleFilled(entity.getBlockPos(), r).stream().map(cPos -> entity.getWorld().getBlockState(cPos)).anyMatch(func::apply);
+		return circleFilled(entity.getBlockPos(), r).stream().map(cPos -> entityWorld(entity).getBlockState(cPos)).anyMatch(func::apply);
 	}
 
 	public static List<BlockPos> circleFilled(BlockPos center, int radius) {
@@ -356,5 +369,21 @@ public class Util {
 			CustomAction action = (CustomAction) idsAndActions[i + 1];
 			Registry.register(ModRegistries.ACTION_TYPE, id, action);
 		}
+	}
+
+	public static World entityWorld(Entity entity) {
+		//? if <1.21.10 {
+		return entity.getWorld();
+		//?} else {
+		/*return entity.getEntityWorld();
+		*///?}
+	}
+
+	public static Vec3d entityPos(Entity entity) {
+		//? if <1.21.10 {
+		return entity.getPos();
+		//?} else {
+		/*return entity.getEntityPos();
+		 *///?}
 	}
 }

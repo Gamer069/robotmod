@@ -12,6 +12,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -33,10 +34,11 @@ public class BreakBlockAction extends CustomAction {
 
 			// TODO: implement block breaking progress using setBlockBreakingInfo
 
-			if (robot.getWorld().getBlockState(blockHit.getBlockPos()).getBlock() instanceof FluidBlock && breakFluid) {
-				robot.getWorld().setBlockState(pos, Blocks.AIR.getDefaultState());
+			World world = Util.entityWorld(robot);
+			if (world.getBlockState(blockHit.getBlockPos()).getBlock() instanceof FluidBlock && breakFluid) {
+				world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			} else {
-				robot.getWorld().breakBlock(pos, true);
+				world.breakBlock(pos, true);
 			}
 		}
 	}

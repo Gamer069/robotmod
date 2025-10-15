@@ -5,6 +5,7 @@ import me.illia.robotmod.Util;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.ModelWithArms;
+import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.math.RotationAxis;
@@ -63,7 +64,11 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 	}
 
 	@Override
+	//? if <1.21.10 {
 	public void setArmAngle(Arm arm, MatrixStack matrices) {
+	//?} else {
+	/*public void setArmAngle(EntityRenderState state, Arm arm, MatrixStack matrices) {
+	*///?}
 		ModelPart armPart = (arm == Arm.RIGHT) ? this.right : this.left;
 
 		float shoulderX = (arm == Arm.RIGHT) ? -5.0f : 5.0f;

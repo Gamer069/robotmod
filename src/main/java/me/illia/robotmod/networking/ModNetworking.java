@@ -1,6 +1,7 @@
 package me.illia.robotmod.networking;
 
 import me.illia.robotmod.Robotmod;
+import me.illia.robotmod.Util;
 import me.illia.robotmod.attachment.ModAttachmentTypes;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.block.ModBlocks;
@@ -32,7 +33,7 @@ public class ModNetworking {
 	@SuppressWarnings("UnstableApiUsage")
 	public static void init() {
 		ServerPlayNetworking.registerGlobalReceiver(RequestTeleportC2SPayload.ID, (requestTeleportC2SPayload, context) -> {
-			BlockState state = context.player().getWorld().getBlockState(requestTeleportC2SPayload.pos());
+			BlockState state = Util.entityWorld(context.player()).getBlockState(requestTeleportC2SPayload.pos());
 			if (state.getBlock() == ModBlocks.TELEPORTER_BLOCK && state.get(TeleporterBlock.CHARGED) && context.player() instanceof ServerPlayerEntity) {
 				context.server().execute(() -> {
 					context.player().teleport(context.server().getWorld(requestTeleportC2SPayload.world()), requestTeleportC2SPayload.pos().getX() + 0.5, requestTeleportC2SPayload.pos().getY() + 0.4, requestTeleportC2SPayload.pos().getZ() + 0.5, Set.of(), 0, 0, true);
@@ -66,7 +67,11 @@ public class ModNetworking {
 
 		ClientPlayNetworking.registerGlobalReceiver(UpdateActionDebugS2CPayload.ID, ((((updateActionDebugS2CPayload, context) -> {
 			MinecraftClient client = context.client();
-			((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.stream().filter(e -> e.getId() == updateActionDebugS2CPayload.eid()).findFirst().ifPresent(robot -> robot.actionI = updateActionDebugS2CPayload.actionI());
+			//? if <1.21.10 {
+			/*((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.stream().filter(e -> e.getId() == updateActionDebugS2CPayload.eid()).findFirst().ifPresent(robot -> robot.actionI = updateActionDebugS2CPayload.actionI());
+			*///?} else {
+			((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.stream().filter(e -> e.getId() == updateActionDebugS2CPayload.eid()).findFirst().ifPresent(robot -> robot.actionI = updateActionDebugS2CPayload.actionI());
+			//?}
 		}))));
 
 		ClientPlayNetworking.registerGlobalReceiver(UpdateHeldItemS2CPayload.ID, ((updateHeldItemS2CPayload, context) -> {

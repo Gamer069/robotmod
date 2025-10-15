@@ -4,12 +4,16 @@ import me.illia.robotmod.actions.CustomAction;
 import me.illia.robotmod.entity.RobotEntity;
 import me.illia.robotmod.registry.ModRegistries;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.Frustum;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+//? if >=1.21.10 {
+import net.minecraft.world.debug.DebugDataStore;
+//?}
 
 import java.util.ArrayList;
 
@@ -24,8 +28,13 @@ public class ActionDebugRenderer implements DebugRenderer.Renderer {
 		client = MinecraftClient.getInstance();
 	}
 
-	@Override
+	//? if <1.21.10 {
+	/*@Override
 	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, double cameraX, double cameraY, double cameraZ) {
+	*///?} else {
+	@Override
+	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, double cameraX, double cameraY, double cameraZ, DebugDataStore store, Frustum frustum) {
+	//?}
 		if (enabled) {
 			double line = client.textRenderer.fontHeight * 0.03;
 

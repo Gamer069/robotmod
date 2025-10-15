@@ -8,6 +8,7 @@ import me.illia.robotmod.actions.CustomAction;
 import me.illia.robotmod.entity.RobotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -25,7 +26,8 @@ public class SayAction extends CustomAction {
 
 		Text text = robot.getName().copy().append(" > ").append(msg);
 
-		for (PlayerEntity player : robot.getWorld().getPlayers()) {
+		World world = Util.entityWorld(robot);
+		for (PlayerEntity player : world.getPlayers()) {
 			player.sendMessage(text, false);
 		}
 	}

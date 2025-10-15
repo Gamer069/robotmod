@@ -9,10 +9,14 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+//? if >=1.21.10 {
+import net.minecraft.client.input.KeyInput;
+//?}
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ChooseTeleportScreen extends Screen {
 	public TeleportPointAttachedData points;
@@ -34,7 +38,9 @@ public class ChooseTeleportScreen extends Screen {
 
 				player.getStackInHand(player.getActiveHand()).damage(1, player);
 
-				ClientPlayNetworking.send(new RequestTeleportC2SPayload(pos, player.getWorld().getRegistryKey()));
+				World world = Util.entityWorld(player);
+
+				ClientPlayNetworking.send(new RequestTeleportC2SPayload(pos, world.getRegistryKey()));
 				player.closeScreen();
 			}).dimensions(100, 20 + 30 * i, 100, 20).build());
 			i++;
@@ -43,7 +49,8 @@ public class ChooseTeleportScreen extends Screen {
 		super.init();
 	}
 
-	@Override
+	//? if <1.21.10 {
+	/*@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (client.options.inventoryKey.matchesKey(keyCode, scanCode)) {
 			close();
@@ -51,4 +58,18 @@ public class ChooseTeleportScreen extends Screen {
 		}
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
+	*///?} else {
+
+	@Override
+	public boolean keyPressed(KeyInput input) {
+		// failsafe for something that will never happen
+		if (client == null) client = MinecraftClient.getInstance();
+
+		if (client.options.inventoryKey.matchesKey(input)) {
+			close();
+			return true;
+		}
+		return super.keyPressed(input);
+	}
+	//?}
 }

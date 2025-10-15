@@ -1,9 +1,9 @@
 package me.illia.robotmod.screen;
 
 import me.illia.robotmod.Util;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 
@@ -18,10 +18,10 @@ public class RobotInventoryScreen extends HandledScreen<RobotInventoryScreenHand
 		int y = (height - backgroundHeight) / 2;
 
 		//? if >= 1.21.6 {
-		/*context.drawTexture(RenderPipelines.GUI_TEXTURED, Util.id("textures/gui/robot_inv.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
-		 *///?} else {
-		context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot_inv.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
-		//?}
+		context.drawTexture(RenderPipelines.GUI_TEXTURED, Util.id("textures/gui/robot_inv.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		 //?} else {
+		/*context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot_inv.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		*///?}
 	}
 
 	@Override

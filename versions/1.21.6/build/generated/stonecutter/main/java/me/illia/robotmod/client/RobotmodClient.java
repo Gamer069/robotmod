@@ -17,12 +17,15 @@ public class RobotmodClient implements ClientModInitializer {
 
 	public static final EntityModelLayer MODEL_ROBOT_LAYER = new EntityModelLayer(Util.id("robot"), "main");
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onInitializeClient() {
 		HandledScreens.register(ModScreenHandlers.ROBOT_SCREEN_HANDLER, RobotScreen::new);
 		HandledScreens.register(ModScreenHandlers.ROBOT_INVENTORY_SCREEN_HANDLER, RobotInventoryScreen::new);
 
+		// DEPRECATED, but i really dont wanna switch to vanilla's alternative
 		EntityRendererRegistry.register(ModEntities.ROBOT, RobotEntityRenderer::new);
+
 		EntityModelLayerRegistry.registerModelLayer(MODEL_ROBOT_LAYER, RobotEntityModel::getTexturedModelData);
 	}
 }

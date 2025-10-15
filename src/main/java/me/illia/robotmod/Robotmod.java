@@ -59,12 +59,22 @@ public class Robotmod implements ModInitializer {
 
 		ClientEntityEvents.ENTITY_LOAD.register(((entity, clientWorld) -> {
 			if (!(entity instanceof RobotEntity robot)) return;
-			((DebugRenderers)MinecraftClient.getInstance().debugRenderer).robotmod$getActionDebugRenderer().entities.add(robot);
+			MinecraftClient client = MinecraftClient.getInstance();
+			//? if <1.21.10 {
+			/*((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.add(robot);
+			*///?} else {
+			((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
+			//?}
 		}));
 
 		ClientEntityEvents.ENTITY_UNLOAD.register((((entity, clientWorld) -> {
 			if (!(entity instanceof RobotEntity robot)) return;
-			((DebugRenderers)MinecraftClient.getInstance().debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
+			MinecraftClient client = MinecraftClient.getInstance();
+			//? if <1.21.10 {
+			/*((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
+			*///?} else {
+			((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
+			//?}
 		})));
 	}
 }

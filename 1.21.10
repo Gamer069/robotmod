@@ -1,0 +1,3 @@
+./gradlew stonecutterSwitchTo1.21.10
+./gradlew 1.21.10:runDatagen
+./gradlew 1.21.10:runClient

@@ -36,7 +36,7 @@ public class TeleporterBlock extends SlabBlock {
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (stack.getItem() == ModItems.PACKED_ENDER_PEARL && !world.isClient && world instanceof ServerWorld serverWorld) {
+		if (stack.getItem() == ModItems.PACKED_ENDER_PEARL && !world.isClient() && world instanceof ServerWorld serverWorld) {
 			if (TeleportPointAttachedData.DATA.findPointByPos(pos).isPresent()) return ActionResult.CONSUME;
 
 			serverWorld.setBlockState(pos, state.with(CHARGED, true));
@@ -82,7 +82,7 @@ public class TeleporterBlock extends SlabBlock {
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		if (!world.isClient && world instanceof ServerWorld serverWorld) {
+		if (!world.isClient() && world instanceof ServerWorld serverWorld) {
 			TeleportPointAttachedData data = serverWorld.getAttachedOrCreate(ModAttachmentTypes.TELEPORT_POINTS);
 			serverWorld.setAttached(ModAttachmentTypes.TELEPORT_POINTS, data.removePointByPos(pos));
 		}
