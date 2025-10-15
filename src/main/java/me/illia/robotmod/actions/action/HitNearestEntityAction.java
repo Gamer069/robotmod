@@ -29,24 +29,8 @@ public class HitNearestEntityAction extends CustomAction {
 			.orElse(null);
 
 		if (nearest != null) {
-			double baseDamage = robot.getAttributeValue(EntityAttributes.ATTACK_DAMAGE);
-			double baseKnockback = robot.getAttributeValue(EntityAttributes.ATTACK_KNOCKBACK);
-
-			nearest.damage((ServerWorld) robot.getWorld(),
-				robot.getWorld().getDamageSources().mobAttackNoAggro(robot),
-				(float) baseDamage);
-
-			double dx = nearest.getX() - robot.getX();
-			double dz = nearest.getZ() - robot.getZ();
-			double distance = Math.sqrt(dx * dx + dz * dz);
-			if (distance == 0) distance = 0.01;
-
-			nearest.setVelocity(
-				dx / distance * baseKnockback,
-				0.2, // small vertical knockback
-				dz / distance * baseKnockback
-			);
-			nearest.velocityModified = true;
+			// casting to server world is acceptable because actions only get ran on server
+			robot.tryAttack((ServerWorld) robot.getWorld(), nearest);
 		}
 	}
 

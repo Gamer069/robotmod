@@ -74,6 +74,7 @@ public class ModNetworking {
 			Entity entity = client.world.getEntityById(updateHeldItemS2CPayload.eid());
 			EntityRenderer<?, ?> renderer = client.getEntityRenderDispatcher().getRenderer(entity);
 			if (renderer instanceof RobotEntityRenderer robotEntityRenderer && entity instanceof RobotEntity robotEntity) {
+				robotEntity.inv.setStack(robotEntity.slot, updateHeldItemS2CPayload.heldItem());
 				RobotEntityRenderState state = robotEntityRenderer.getAndUpdateRenderState(robotEntity, 0);
 				robotEntityRenderer.updateRenderState(robotEntity, state, 0);
 			}

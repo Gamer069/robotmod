@@ -88,6 +88,8 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		inv.readDataList(invListView);
 		this.slot = view.getInt("slot", 0);
 
+		send(this.inv);
+
 		super.readCustomData(view);
 	}
 
@@ -108,7 +110,11 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 
-		nbt.putInt("slot", this.slot);
+		//? if >1.21.3 {
+		this.slot = nbt.getInt("slot", 0);
+		//?} else {
+		/^this.slot = nbt.getInt("slot");
+		^///?}
 
 		if (nbt.contains("actions")) {
 			this.actions = new ArrayList<>(
@@ -123,32 +129,44 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 		inv = new SimpleInventory(16);
 		addListener();
+
 		Inventories.readNbt(nbt, inv.heldStacks, getWorld().getRegistryManager());
+
+		send(inv, null);
 	}
 
 	public void addListener() {
-		inv.addListener((inv) -> {
-			if (!getWorld().isClient) {
-				ItemStack stack = inv.getStack(0);
-				UpdateHeldItemS2CPayload payload = new UpdateHeldItemS2CPayload(getId(), stack);
+		inv.addListener((inv) -> send(inv, null));
+	}
+
+	@Override
+	public void onStartedTrackingBy(ServerPlayerEntity player) {
+		send(inv, player);
+		super.onStartedTrackingBy(player);
+	}
+
+	public void send(Inventory inv, ServerPlayerEntity entity) {
+		if (!getWorld().isClient) {
+			ItemStack stack = inv.getStack(slot);
+			UpdateHeldItemS2CPayload payload = new UpdateHeldItemS2CPayload(getId(), stack);
+
+			if (entity == null) {
 				for (PlayerEntity player : getWorld().getPlayers()) {
 					if (player instanceof ServerPlayerEntity serverPlayerEntity) {
 						ServerPlayNetworking.send(serverPlayerEntity, payload);
 					}
 				}
+			} else {
+				ServerPlayNetworking.send(entity, payload);
 			}
-		});
+		}
 	}
 
 	@Override
 	public NbtCompound writeNbt(NbtCompound nbt) {
 		super.writeNbt(nbt);
 
-		//? if >1.21.3 {
-		this.slot = nbt.getInt("slot", 0);
-		//?} else {
-		/^this.slot = nbt.getInt("slot");
-		^///?}
+		nbt.putInt("slot", this.slot);
 
 		Action.CODEC.codec().listOf()
 			.encodeStart(NbtOps.INSTANCE, this.actions)
@@ -264,8 +282,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public BrainActivityGroup<RobotEntity> getCoreTasks() {
 		return BrainActivityGroup.coreTasks(
 			new LookAtTarget<>(),
-			new MoveToWalkTarget<>(),
-			new ExecuteTask<>()
+			new MoveToWalkTarget<>()
 		);
 	}
 

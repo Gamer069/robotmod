@@ -1,12 +1,12 @@
 package me.illia.robotmod.entity;
 
 //? if 1.21.3 {
-/*import net.minecraft.client.render.entity.state.LivingEntityRenderState;
+import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 
 public class RobotEntityRenderState extends LivingEntityRenderState {
-*///?} else {
-import net.minecraft.client.render.entity.state.ArmedEntityRenderState;
+//?} else {
+/*import net.minecraft.client.render.entity.state.ArmedEntityRenderState;
 
 public class RobotEntityRenderState extends ArmedEntityRenderState {
-//?}
+*///?}
 }

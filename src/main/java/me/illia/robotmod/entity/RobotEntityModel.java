@@ -67,7 +67,7 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 		ModelPart armPart = (arm == Arm.RIGHT) ? this.right : this.left;
 
 		float shoulderX = (arm == Arm.RIGHT) ? -5.0f : 5.0f;
-		float shoulderY = 14.0f;
+		float shoulderY = 7.0f;
 
 		matrices.translate(shoulderX / 16.0F, shoulderY / 16.0F, 0.0F);
 

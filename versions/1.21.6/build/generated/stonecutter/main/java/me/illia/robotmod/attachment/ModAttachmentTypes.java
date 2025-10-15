@@ -32,6 +32,6 @@ public class ModAttachmentTypes {
 	*///?}
 
 	public static void init() {
-		Robotmod.LOGGER.info("initializing attachment types for " + Robotmod.MODID);
+		Robotmod.LOGGER.info("Initializing data attachments for " + Robotmod.MODID);
 	}
 }
