@@ -33,7 +33,6 @@ public class RobotInventoryScreen extends HandledScreen<RobotInventoryScreenHand
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-		drawSlots(context);
 		super.render(context, mouseX, mouseY, delta);
 	}
 }
