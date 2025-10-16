@@ -6,7 +6,17 @@
     },
     "root": "/home/illia/proj/mc/robotmod",
     "parameters": {
+        "constants": {},
+        "swaps": {},
         "dependencies": {
+            "loader_version": {
+                "type": "dev.kikugie.semver.data.SemanticVersion",
+                "components": [
+                    0,
+                    17,
+                    2
+                ]
+            },
             "": {
                 "type": "dev.kikugie.semver.data.SemanticVersion",
                 "components": [
@@ -15,14 +25,15 @@
                     5
                 ]
             },
-            "loader_version": {
+            "minecraft": {
                 "type": "dev.kikugie.semver.data.SemanticVersion",
                 "components": [
-                    0,
-                    17,
-                    2
+                    1,
+                    21,
+                    5
                 ]
             }
-        }
+        },
+        "replacements": []
     }
 }

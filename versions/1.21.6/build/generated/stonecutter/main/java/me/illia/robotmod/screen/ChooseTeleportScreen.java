@@ -59,8 +59,8 @@ public class ChooseTeleportScreen extends Screen {
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 	//?} else {
-
-	/*@Override
+/*
+	@Override
 	public boolean keyPressed(KeyInput input) {
 		// failsafe for something that will never happen
 		if (client == null) client = MinecraftClient.getInstance();

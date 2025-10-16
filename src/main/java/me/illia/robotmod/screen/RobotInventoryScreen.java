@@ -1,15 +1,22 @@
 package me.illia.robotmod.screen;
 
 import me.illia.robotmod.Util;
+//? if >=1.21.5 {
 import net.minecraft.client.gl.RenderPipelines;
+//? }
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 
+import net.minecraft.client.render.RenderLayer;
+
 public class RobotInventoryScreen extends HandledScreen<RobotInventoryScreenHandler> {
 	public RobotInventoryScreen(RobotInventoryScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
+
+		backgroundWidth = 175;
+		backgroundHeight = 138;
 	}
 
 	@Override

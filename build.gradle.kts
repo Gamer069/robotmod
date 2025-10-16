@@ -13,7 +13,7 @@ val sbl_version: String by project
 plugins {
     id("fabric-loom") version "1.11-SNAPSHOT"
     id("maven-publish")
-    id("dev.kikugie.stonecutter") version "0.7.10"
+    id("dev.kikugie.stonecutter") version "0.8-alpha.6"
 }
 
 stonecutter {

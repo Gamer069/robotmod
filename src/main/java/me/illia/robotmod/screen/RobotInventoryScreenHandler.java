@@ -38,21 +38,46 @@ public class RobotInventoryScreenHandler extends ScreenHandler {
 			}
 		};
 
-		int half = (int) Math.ceil(stacks.size() / 2.0);
+		int half = 9;
 		for (int i = 0; i < stacks.size(); i++) {
-			int x = 9 + 18 * (i % half);
-			int y = (i < half) ? 123 : 141; // top row 110, bottom row 230
-			addSlot(new Slot(inv, i, x, y));
+			int x = 8 + 18 * (i % half);
+			int y = (i < half) ? 18 : 36; // top row 110, bottom row 230
+			int finalI = i;
+			addSlot(new Slot(inv, finalI, x, y) {
+				@Override
+				public void markDirty() {
+					RobotEntity robot = (RobotEntity)Util.entityWorld(playerInv.player).getEntityById(eid);
+					robot.inv.setStack(finalI, this.getStack());
+					super.markDirty();
+				}
+			});
+		}
+
+		addPlayerInv(playerInv);
+		addPlayerHotbar(playerInv);
+	}
+
+	public void addPlayerInv(PlayerInventory inv) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 9; j++) {
+				this.addSlot(new Slot(inv, j + (i + 1) * 9, 8 + j * 18, 56 + i * 18));
+			}
+		}
+	}
+
+	public void addPlayerHotbar(PlayerInventory inv) {
+		for (int i = 0; i < 9; i++) {
+			this.addSlot(new Slot(inv, i, 8 + i * 18, 114));
 		}
 	}
 
 	@Override
 	public ItemStack quickMove(PlayerEntity player, int slot) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
-		return false;
+		return true;
 	}
 }

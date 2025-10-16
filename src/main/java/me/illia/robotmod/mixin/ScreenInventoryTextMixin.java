@@ -25,27 +25,39 @@ public abstract class ScreenInventoryTextMixin {
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")
 	)
 	public void removeInventoryText(HandledScreen<?> instance, DrawContext context, int mouseX, int mouseY, Operation<Void> original) {
-		if (!(instance instanceof RobotScreen screen)) {
-			original.call(instance, context, mouseX, mouseY);
-		} else {
+		HandledScreen<?> screen = null;
+
+		if (instance instanceof RobotScreen rs) {
+			screen = rs;
+		} else if (instance instanceof RobotInventoryScreen ris) {
+			screen = ris;
+		}
+
+		if (screen != null) {
 			context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), Colors.DARK_GRAY, false);
+		} else {
+			original.call(instance, context, mouseX, mouseY);
 		}
 	}
 	//?} else {
-	/*@WrapOperation(
-		method = "render",
-		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")
-	)
-	public void removeInventoryText(HandledScreen<?> instance, DrawContext context, int mouseX, int mouseY, Operation<Void> original) {
-		if (!(instance instanceof RobotScreen screen)) {
-			if (instance instanceof RobotInventoryScreen screen) {
-				context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), -12566464, false);
-				return;
+		/*@WrapOperation(
+			method = "render",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")
+		)
+		public void removeInventoryText(HandledScreen<?> instance, DrawContext context, int mouseX, int mouseY, Operation<Void> original) {
+			HandledScreen<?> screen = null;
+
+			if (instance instanceof RobotScreen rs) {
+				screen = rs;
+			} else if (instance instanceof RobotInventoryScreen ris) {
+				screen = ris;
 			}
-			original.call(instance, context, mouseX, mouseY);
-		} else {
-			context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), -12566464, false);
+
+			if (screen != null) {
+				context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), -12566464, false);
+			} else {
+				original.call(instance, context, mouseX, mouseY);
+			}
 		}
-	}
 	*///?}
 }
