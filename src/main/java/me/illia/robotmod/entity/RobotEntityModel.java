@@ -34,7 +34,7 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 		ModelPartData modelPartData = modelData.getRoot();
 		ModelPartData head = modelPartData.addChild("head", ModelPartBuilder.create().uv(0, 0).cuboid(-5.0F, -6.0F, -2.0F, 10.0F, 6.0F, 4.0F, new Dilation(0.0F)), Util.pivot(0.0F, 12.0F, 0.0F));
 
-		ModelPartData antenna_r1 = head.addChild("antenna_r1", ModelPartBuilder.create().uv(8, 26).cuboid(-1.0F, -3.0F, -1.0F, 1.0F, 3.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-2.0F, -6.0F, 0.0F, 0.0F, 0.0F, -0.6981F));
+		ModelPartData antenna_r1 = head.addChild("antenna_r1", ModelPartBuilder.create().uv(20, 26).cuboid(-1.0F, -3.0F, -1.0F, 1.0F, 3.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-2.0F, -6.0F, 0.0F, 0.0F, 0.0F, -0.6981F));
 
 		ModelPartData antenna_r2 = head.addChild("antenna_r2", ModelPartBuilder.create().uv(22, 21).cuboid(-2.0F, -3.0F, -1.0F, 3.0F, 3.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-3.75F, -8.5F, 0.0F, 0.0F, 0.0F, -0.6981F));
 
@@ -43,19 +43,18 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 		ModelPartData antenna_r4 = head.addChild("antenna_r4", ModelPartBuilder.create().uv(24, 16).cuboid(-1.0F, -3.0F, -1.0F, 1.0F, 3.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(3.0F, -5.25F, 0.0F, 0.0F, 0.0F, 0.6981F));
 
 		ModelPartData legs = modelPartData.addChild("legs", ModelPartBuilder.create().uv(24, 10).cuboid(1.0F, -4.0F, -1.0F, 2.0F, 4.0F, 2.0F, new Dilation(0.0F))
-		.uv(0, 26).cuboid(-3.0F, -4.0F, -1.0F, 2.0F, 4.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
+			.uv(0, 26).cuboid(-3.0F, -4.0F, -1.0F, 2.0F, 4.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
+
+		ModelPartData arm = modelPartData.addChild("arm", ModelPartBuilder.create().uv(26, 26).cuboid(4.0F, -10.0F, -1.0F, 1.0F, 2.0F, 2.0F, new Dilation(0.0F))
+			.uv(28, 0).cuboid(-5.0F, -10.0F, -1.0F, 1.0F, 2.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
+
+		ModelPartData right = modelPartData.addChild("right", ModelPartBuilder.create().uv(14, 26).cuboid(-6.0F, -10.0F, -1.0F, 1.0F, 6.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
+
+		ModelPartData left = modelPartData.addChild("left", ModelPartBuilder.create().uv(8, 26).cuboid(5.0F, -10.0F, -1.0F, 1.0F, 6.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
 
 		ModelPartData bb_main = modelPartData.addChild("bb_main", ModelPartBuilder.create().uv(0, 10).cuboid(-4.0F, -11.0F, -2.0F, 8.0F, 7.0F, 4.0F, new Dilation(0.0F))
-		.uv(0, 21).cuboid(-1.0F, -12.0F, -2.0F, 2.0F, 1.0F, 4.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
-
-		ModelPartData right = modelPartData.addChild("right", ModelPartBuilder.create().uv(0, 0).cuboid(-6.0F, -10.0F, -1.0F, 1.0F, 6.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
-
-		ModelPartData left = modelPartData.addChild("left", ModelPartBuilder.create().uv(0, 0).cuboid(5.0F, -10.0F, -1.0F, 1.0F, 6.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
-
-		ModelPartData arms = modelPartData.addChild("arms", ModelPartBuilder.create().uv(0, 0).cuboid(4.0F, -10.0F, -1.0F, 1.0F, 2.0F, 2.0F, new Dilation(0.0F))
-			.uv(0, 0).cuboid(-5.0F, -10.0F, -1.0F, 1.0F, 2.0F, 2.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
-
-		return TexturedModelData.of(modelData, 32, 32);
+			.uv(0, 21).cuboid(-1.0F, -12.0F, -2.0F, 2.0F, 1.0F, 4.0F, new Dilation(0.0F)), Util.pivot(0.0F, 24.0F, 0.0F));
+		return TexturedModelData.of(modelData, 64, 64);
 	}
 
 	@Override
