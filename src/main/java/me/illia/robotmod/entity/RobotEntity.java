@@ -151,7 +151,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		super.readNbt(nbt);
 
 		//? if >1.21.5 {
-		this.slot = nbt.getInt("slot");
+		/*this.slot = nbt.getInt("slot");
 
 		this.waiting = nbt.getBoolean("waiting");
 
@@ -159,7 +159,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			this.waitStartTick = nbt.getInt("waitStartTick");
 			this.waitEndTick = nbt.getInt("waitEndTick");
 		}
-		//? } else {
+		*///? } else {
 		this.slot = nbt.getInt("slot", 0);
 
 		this.waiting = nbt.getBoolean("waiting", false);
