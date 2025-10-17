@@ -1,29 +1,44 @@
 package me.illia.robotmod.actions;
 
-import me.illia.robotmod.Robotmod;
+import com.mojang.serialization.MapCodec;
+import me.illia.robotmod.Util;
 import me.illia.robotmod.entity.RobotEntity;
 import me.illia.robotmod.registry.ModRegistries;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.timer.Timer;
+import net.minecraft.world.timer.TimerCallback;
 
 public class ActionRunner {
 	public static void run(Action action, RobotEntity robot, int actionI) {
-		Robotmod.LOGGER.info("running actoin");
+		ServerWorld world = (ServerWorld)Util.entityWorld(robot);
+		MinecraftServer server = world.getServer();
+		long time = world.getTime();
+
+		if (robot.waiting) {
+			server.getSaveProperties().getMainWorldProperties().getScheduledEvents().setEvent("run_action_after_wait_" + actionI, robot.waitEndTick, new ExecuteActionCallback(robot.getId(), actionI, world.getRegistryKey()));
+		}
+
 		CustomAction customAction = ModRegistries.ACTION_TYPE.get(action.getActionType());
-		Robotmod.LOGGER.info("running actoin1");
 
 		if (customAction == null) return;
 
-		Robotmod.LOGGER.info("running actoin2");
-
 		customAction.params = action.getParams();
-
-		Robotmod.LOGGER.info("running actoin3");
 
 		robot.actionI = actionI;
 
-		Robotmod.LOGGER.info("running actoin4");
+		if (robot.waiting && time >= robot.waitStartTick && time < robot.waitEndTick) {
+			robot.waiting = false;
+			return;
+		}
 
 		customAction.run(robot);
+	}
 
-		Robotmod.LOGGER.info("running actoin5");
+	public static void stopFor(RobotEntity robot, int ticks) {
+		long time = Util.entityWorld(robot).getTime();
+		robot.waitStartTick = time;
+		robot.waitEndTick = time + ticks;
+		robot.waiting = true;
 	}
 }

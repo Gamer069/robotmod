@@ -1,5 +1,6 @@
 package me.illia.robotmod;
 
+import me.illia.robotmod.actions.ExecuteActionCallback;
 import me.illia.robotmod.actions.ModActionTypes;
 import me.illia.robotmod.attachment.ModAttachmentTypes;
 import me.illia.robotmod.block.ModBlocks;
@@ -14,20 +15,15 @@ import me.illia.robotmod.networking.*;
 import me.illia.robotmod.screen.ModScreenHandlers;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.timer.TimerCallbackSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public class Robotmod implements ModInitializer {
 	public static final String MODID = "robotmod";
@@ -76,5 +72,7 @@ public class Robotmod implements ModInitializer {
 			((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
 			//?}
 		})));
+
+		TimerCallbackSerializer.INSTANCE.registerSerializer(Util.id("exec_action"), ExecuteActionCallback.CODEC);
 	}
 }

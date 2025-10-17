@@ -61,6 +61,10 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public int slot;
 	public int actionI = -1;
 
+	public long waitStartTick = -1;
+	public long waitEndTick = -1;
+	public boolean waiting = false;
+
 	public RobotEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
 		super(entityType, world);
 		this.actions = new ArrayList<>();
@@ -102,14 +106,21 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	}
 
 
-	//? if >= 1.21.6 {
-	/*@Override
+	//? if >= 1.21.5 {
+	@Override
 	protected void readCustomData(ReadView view) {
 		this.actions = new ArrayList<>(view.read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
 		this.home = view.read("home", BlockPos.CODEC).orElse(BlockPos.ORIGIN);
 		ReadView.TypedListReadView<ItemStack> invListView = view.getTypedListView("inv", ItemStack.CODEC);
 		inv.readDataList(invListView);
 		this.slot = view.getInt("slot", 0);
+
+		this.waiting = view.getBoolean("waiting", false);
+
+		if (waiting) {
+			waitStartTick = view.getLong("waitStartTick", 0);
+			waitStartTick = view.getLong("waitEndTick", 0);
+		}
 
 		send(this.inv, null);
 
@@ -125,19 +136,28 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 		view.putInt("slot", this.slot);
 
+		view.putBoolean("waiting", waiting);
+		if (waiting) {
+			view.putLong("waitStartTick", waitStartTick);
+			view.putLong("waitEndTick", waitEndTick);
+		}
+
 		super.writeCustomData(view);
 	}
 
-	*///?} else {
-	@Override
+	//?} else {
+	/*@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 
-		//? if >1.21.3 {
-		this.slot = nbt.getInt("slot", 0);
-		//?} else {
-		/*this.slot = nbt.getInt("slot");
-		*///?}
+		this.slot = nbt.getInt("slot");
+
+		this.waiting = nbt.getBoolean("slot");
+
+		if (waiting) {
+			this.waitStartTick = nbt.getInt("waitStartTick");
+			this.waitEndTick = nbt.getInt("waitEndTick");
+		}
 
 		if (nbt.contains("actions")) {
 			this.actions = new ArrayList<>(
@@ -159,12 +179,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	}
 
 	@Override
-	public void onStartedTrackingBy(ServerPlayerEntity player) {
-		send(inv, player);
-		super.onStartedTrackingBy(player);
-	}
-
-	@Override
 	public NbtCompound writeNbt(NbtCompound nbt) {
 		super.writeNbt(nbt);
 
@@ -179,7 +193,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 		return nbt;
 	}
-	//?}
+	*///?}
 
 	@Override
 	public ItemStack getMainHandStack() {
@@ -340,5 +354,11 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			invI++;
 		}
 		super.dropLoot(world, damageSource, causedByPlayer);
+	}
+
+	@Override
+	public void onStartedTrackingBy(ServerPlayerEntity player) {
+		send(inv, player);
+		super.onStartedTrackingBy(player);
 	}
 }
