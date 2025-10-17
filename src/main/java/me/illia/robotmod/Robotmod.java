@@ -57,20 +57,20 @@ public class Robotmod implements ModInitializer {
 			if (!(entity instanceof RobotEntity robot)) return;
 			MinecraftClient client = MinecraftClient.getInstance();
 			//? if <1.21.10 {
-			/*((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.add(robot);
-			*///?} else {
-			((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
-			//?}
+			((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.add(robot);
+			//?} else {
+			/*((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
+			*///?}
 		}));
 
 		ClientEntityEvents.ENTITY_UNLOAD.register((((entity, clientWorld) -> {
 			if (!(entity instanceof RobotEntity robot)) return;
 			MinecraftClient client = MinecraftClient.getInstance();
 			//? if <1.21.10 {
-			/*((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
-			*///?} else {
-			((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
-			//?}
+			((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
+			//?} else {
+			/*((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
+			*///?}
 		})));
 
 		TimerCallbackSerializer.INSTANCE.registerSerializer(Util.id("exec_action"), ExecuteActionCallback.CODEC);

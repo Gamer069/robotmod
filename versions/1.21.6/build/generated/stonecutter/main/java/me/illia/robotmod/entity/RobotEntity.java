@@ -106,7 +106,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	}
 
 
-	//? if >= 1.21.5 {
+	//? if >= 1.21.6 {
 	@Override
 	protected void readCustomData(ReadView view) {
 		this.actions = new ArrayList<>(view.read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
@@ -277,11 +277,13 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			}
 		} else {
 			ranActions = false;
-			actionI = -1;
+			if (actionI != -1) {
+				actionI = -1;
 
-			List<ServerPlayerEntity> serverPlayers = world.getPlayers();
-			for (ServerPlayerEntity serverPlayer : serverPlayers) {
-				ServerPlayNetworking.send(serverPlayer, new UpdateActionDebugS2CPayload(actionI, getId()));
+				List<ServerPlayerEntity> serverPlayers = world.getPlayers();
+				for (ServerPlayerEntity serverPlayer : serverPlayers) {
+					ServerPlayNetworking.send(serverPlayer, new UpdateActionDebugS2CPayload(actionI, getId()));
+				}
 			}
 		}
 

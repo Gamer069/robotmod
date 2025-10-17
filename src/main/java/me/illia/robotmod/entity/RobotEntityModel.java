@@ -64,10 +64,10 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 
 	@Override
 	//? if <1.21.10 {
-	/*public void setArmAngle(Arm arm, MatrixStack matrices) {
-	*///?} else {
-	public void setArmAngle(EntityRenderState state, Arm arm, MatrixStack matrices) {
-	//?}
+	public void setArmAngle(Arm arm, MatrixStack matrices) {
+	//?} else {
+	/*public void setArmAngle(EntityRenderState state, Arm arm, MatrixStack matrices) {
+	*///?}
 		ModelPart armPart = (arm == Arm.RIGHT) ? this.right : this.left;
 
 		float shoulderX = (arm == Arm.RIGHT) ? -5.0f : 5.0f;

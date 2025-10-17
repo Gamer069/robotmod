@@ -194,7 +194,7 @@ public class Util {
 	}
 
 	//? if <1.21.10 {
-	/*public static SpawnEggItem spawnEgg(Identifier id, BiFunction<EntityType<? extends MobEntity>, Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
+	public static SpawnEggItem spawnEgg(Identifier id, BiFunction<EntityType<? extends MobEntity>, Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
 		return (SpawnEggItem) Registry.register(
@@ -203,8 +203,8 @@ public class Util {
 			func.apply(entity, settings.registryKey(key))
 		);
 	}
-	*///?} else {
-	public static SpawnEggItem spawnEgg(Identifier id, Function<Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
+	//?} else {
+	/*public static SpawnEggItem spawnEgg(Identifier id, Function<Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
 		return (SpawnEggItem) Registry.register(
@@ -213,7 +213,7 @@ public class Util {
 			func.apply(settings.registryKey(key).spawnEgg(entity))
 		);
 	}
-	//?}
+	*///?}
 
 	public static SpawnEggItem spawnEgg(Identifier id, IOQuadFunction<EntityType<? extends MobEntity>, Integer, Integer, Item.Settings, SpawnEggItem> func, EntityType<? extends MobEntity> entity, int primaryColor, int secondaryColor, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
@@ -373,17 +373,17 @@ public class Util {
 
 	public static World entityWorld(Entity entity) {
 		//? if <1.21.10 {
-		/*return entity.getWorld();
-		*///?} else {
-		return entity.getEntityWorld();
-		//?}
+		return entity.getWorld();
+		//?} else {
+		/*return entity.getEntityWorld();
+		*///?}
 	}
 
 	public static Vec3d entityPos(Entity entity) {
 		//? if <1.21.10 {
-		/*return entity.getPos();
-		*///?} else {
-		return entity.getEntityPos();
-		 //?}
+		return entity.getPos();
+		//?} else {
+		/*return entity.getEntityPos();
+		 *///?}
 	}
 }

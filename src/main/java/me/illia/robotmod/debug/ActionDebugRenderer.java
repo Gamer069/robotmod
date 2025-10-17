@@ -12,8 +12,8 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 //? if >=1.21.10 {
-import net.minecraft.world.debug.DebugDataStore;
-//?}
+/*import net.minecraft.world.debug.DebugDataStore;
+*///?}
 
 import java.util.ArrayList;
 
@@ -29,12 +29,12 @@ public class ActionDebugRenderer implements DebugRenderer.Renderer {
 	}
 
 	//? if <1.21.10 {
-	/*@Override
-	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, double cameraX, double cameraY, double cameraZ) {
-	*///?} else {
 	@Override
+	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, double cameraX, double cameraY, double cameraZ) {
+	//?} else {
+	/*@Override
 	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, double cameraX, double cameraY, double cameraZ, DebugDataStore store, Frustum frustum) {
-	//?}
+	*///?}
 		if (enabled) {
 			double line = client.textRenderer.fontHeight * 0.03;
 

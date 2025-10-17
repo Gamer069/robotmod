@@ -6,8 +6,8 @@ import me.illia.robotmod.debug.DebugRenderers;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 //? if >=1.21.10 {
-import net.minecraft.client.input.KeyInput;
-//?}
+/*import net.minecraft.client.input.KeyInput;
+*///?}
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Debug;
@@ -27,17 +27,17 @@ public abstract class DebugMixin {
 
 	@ModifyReturnValue(method = "processF3", at = @At("TAIL"))
 	//? if <1.21.10 {
-	/*public boolean processF3(boolean original, int key) {
-	*///?} else {
-	public boolean processF3(boolean original, KeyInput input) {
+	public boolean processF3(boolean original, int key) {
+	//?} else {
+	/*public boolean processF3(boolean original, KeyInput input) {
 		int key = input.key();
-	//?}
+	*///?}
 		if (key == InputUtil.GLFW_KEY_R) {
 			//? if <1.21.10 {
-			/*DebugRenderers renderers = (DebugRenderers)(client.debugRenderer);
-			*///?} else {
-			DebugRenderers renderers = (DebugRenderers)(client.worldRenderer.debugRenderer);
-			//?}
+			DebugRenderers renderers = (DebugRenderers)(client.debugRenderer);
+			//?} else {
+			/*DebugRenderers renderers = (DebugRenderers)(client.worldRenderer.debugRenderer);
+			*///?}
 			ActionDebugRenderer actionDebugRenderer = renderers.robotmod$getActionDebugRenderer();
 
 			actionDebugRenderer.enabled = !actionDebugRenderer.enabled;

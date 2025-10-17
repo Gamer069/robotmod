@@ -20,7 +20,7 @@ public abstract class ScreenInventoryTextMixin {
 	abstract int robotmod$getTitleY();
 
 	//? if > 1.21.5 {
-	@WrapOperation(
+	/*@WrapOperation(
 		method = "renderMain",
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")
 	)
@@ -39,8 +39,8 @@ public abstract class ScreenInventoryTextMixin {
 			original.call(instance, context, mouseX, mouseY);
 		}
 	}
-	//?} else {
-		/*@WrapOperation(
+	*///?} else {
+		@WrapOperation(
 			method = "render",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")
 		)
@@ -59,5 +59,5 @@ public abstract class ScreenInventoryTextMixin {
 				original.call(instance, context, mouseX, mouseY);
 			}
 		}
-	*///?}
+	//?}
 }

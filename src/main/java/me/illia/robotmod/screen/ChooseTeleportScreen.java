@@ -10,8 +10,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 //? if >=1.21.10 {
-import net.minecraft.client.input.KeyInput;
-//?}
+/*import net.minecraft.client.input.KeyInput;
+*///?}
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -50,7 +50,7 @@ public class ChooseTeleportScreen extends Screen {
 	}
 
 	//? if <1.21.10 {
-	/*@Override
+	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (client.options.inventoryKey.matchesKey(keyCode, scanCode)) {
 			close();
@@ -58,8 +58,8 @@ public class ChooseTeleportScreen extends Screen {
 		}
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
-	*///?} else {
-
+	//?} else {
+/*
 	@Override
 	public boolean keyPressed(KeyInput input) {
 		// failsafe for something that will never happen
@@ -71,5 +71,5 @@ public class ChooseTeleportScreen extends Screen {
 		}
 		return super.keyPressed(input);
 	}
-	//?}
+	*///?}
 }
