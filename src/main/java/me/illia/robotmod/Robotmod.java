@@ -1,5 +1,9 @@
 package me.illia.robotmod;
 
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.RecordBuilder;
 import me.illia.robotmod.actions.ExecuteActionCallback;
 import me.illia.robotmod.actions.ModActionTypes;
 import me.illia.robotmod.attachment.ModAttachmentTypes;
@@ -21,6 +25,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.timer.TimerCallback;
 import net.minecraft.world.timer.TimerCallbackSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +82,29 @@ public class Robotmod implements ModInitializer {
 			*///?}
 		})));
 
-		TimerCallbackSerializer.INSTANCE.registerSerializer(Util.id("exec_action"), ExecuteActionCallback.CODEC);
+		//? if >1.21.3 {
+		/*TimerCallbackSerializer.INSTANCE.registerSerializer(Util.id("exec_action"), ExecuteActionCallback.CODEC);
+		*///? } else {
+		TimerCallbackSerializer.INSTANCE.registerSerializer(new TimerCallback.Serializer<MinecraftServer, ExecuteActionCallback>(Util.id("exec_action"), ExecuteActionCallback.class) {
+			@Override
+			public void serialize(NbtCompound nbt, ExecuteActionCallback callback) {
+				DataResult<NbtElement> res = ExecuteActionCallback.CODEC.encoder().encode(callback, NbtOps.INSTANCE, NbtOps.INSTANCE.empty());
+				NbtElement encoded = res.getOrThrow();
+
+				if (encoded instanceof NbtCompound compound) {
+					nbt.copyFrom(compound);
+				}
+			}
+
+			@Override
+			public ExecuteActionCallback deserialize(NbtCompound nbt) {
+				DataResult<ExecuteActionCallback> res = ExecuteActionCallback.CODEC.decoder()
+					.decode(NbtOps.INSTANCE, nbt)
+					.map(Pair::getFirst);
+
+				return res.getOrThrow();
+			}
+		});
+		//? }
 	}
 }

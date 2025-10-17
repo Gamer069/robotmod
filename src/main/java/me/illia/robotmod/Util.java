@@ -16,10 +16,10 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 //? if >= 1.21.5 {
-import net.minecraft.client.data.*;
-//?} else {
-/*import net.minecraft.data.client.*;
-*///?}
+/*import net.minecraft.client.data.*;
+*///?} else {
+import net.minecraft.data.client.*;
+//?}
 import net.minecraft.entity.Entity;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.entity.EntityType;
@@ -294,10 +294,10 @@ public class Util {
 
 	public static ModelTransform pivot(float x, float y, float z) {
 		//? if >= 1.21.5 {
-		return ModelTransform.origin(x, y, z);
-		//?} else {
-		/*return ModelTransform.pivot(x, y, z);
-		*///?}
+		/*return ModelTransform.origin(x, y, z);
+		*///?} else {
+		return ModelTransform.pivot(x, y, z);
+		//?}
 	}
 
 	public static boolean night(World world) {

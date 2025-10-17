@@ -26,8 +26,10 @@ public record ExecuteActionCallback(int eid, int actionI, RegistryKey<World> wor
 		}
 	}
 
-	@Override
+	//? if >1.21.3 {
+	/*@Override
 	public MapCodec<? extends ExecuteActionCallback> getCodec() {
 		return CODEC;
 	}
+	*///? }
 }

@@ -150,7 +150,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 
-		//? if >1.21.5 {
+		//? if 1.21.3 {
 		/*this.slot = nbt.getInt("slot");
 
 		this.waiting = nbt.getBoolean("waiting");
