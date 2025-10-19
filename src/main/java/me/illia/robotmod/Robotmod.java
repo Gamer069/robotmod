@@ -1,9 +1,5 @@
 package me.illia.robotmod;
 
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.RecordBuilder;
 import me.illia.robotmod.actions.ExecuteActionCallback;
 import me.illia.robotmod.actions.ModActionTypes;
 import me.illia.robotmod.attachment.ModAttachmentTypes;
@@ -20,16 +16,9 @@ import me.illia.robotmod.screen.ModScreenHandlers;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.timer.TimerCallback;
 import net.minecraft.world.timer.TimerCallbackSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +40,7 @@ public class Robotmod implements ModInitializer {
 		PayloadTypeRegistry.playS2C().register(GetTeleportPointsS2CPayload.ID, GetTeleportPointsS2CPayload.GET_TP_POINTS_CODEC);
 		PayloadTypeRegistry.playS2C().register(UpdateActionDebugS2CPayload.ID, UpdateActionDebugS2CPayload.UPDATE_ACTION_DEBUG_CODEC);
 		PayloadTypeRegistry.playS2C().register(UpdateHeldItemS2CPayload.ID, UpdateHeldItemS2CPayload.UPDATE_HELD_ITEM_CODEC);
+		PayloadTypeRegistry.playS2C().register(RobotEntityUpdateHeadRotationS2CPayload.ID, RobotEntityUpdateHeadRotationS2CPayload.ENTITY_UPDATE_HEAD_ROTATION_PC);
 
 		ModAttachmentTypes.init();
 		ModScreenHandlers.init();

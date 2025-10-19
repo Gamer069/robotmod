@@ -45,6 +45,9 @@ public class RobotEntityRenderer extends MobEntityRenderer<RobotEntity, RobotEnt
 	public void updateRenderState(RobotEntity livingEntity, RobotEntityRenderState livingEntityRenderState, float f) {
 		super.updateRenderState(livingEntity, livingEntityRenderState, f);
 
+		livingEntityRenderState.headPitch = livingEntity.getHeadPitch();
+		livingEntityRenderState.headYaw = livingEntity.getHeadYaw();
+
 		//? if >1.21.3 {
 		itemModelManager.updateForLivingEntity(livingEntityRenderState.rightHandItemState, livingEntity.inv.getStack(livingEntity.slot), ItemDisplayContext.FIXED, livingEntity);
 		//?} else {

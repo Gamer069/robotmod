@@ -73,6 +73,8 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public long waitEndTick = -1;
 	public boolean waiting = false;
 
+	public float headPitch = 0;
+
 	public RobotEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
 		super(entityType, world);
 		if (world.isClient()) {
@@ -95,6 +97,14 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		}
 
 		return super.getStackInArm(arm);
+	}
+
+	public void setHeadPitch(float headPitch) {
+		this.headPitch = headPitch;
+	}
+
+	public float getHeadPitch() {
+		return headPitch;
 	}
 
 	public void addListener() {

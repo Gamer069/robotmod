@@ -80,5 +80,17 @@ public class ModNetworking {
 				robotEntityRenderer.updateRenderState(robotEntity, state, 0);
 			}
 		}));
+
+		ClientPlayNetworking.registerGlobalReceiver(RobotEntityUpdateHeadRotationS2CPayload.ID, ((entityUpdateHeadRotationS2CPayload, context) -> {
+			MinecraftClient client = context.client();
+			Entity entity = client.world.getEntityById(entityUpdateHeadRotationS2CPayload.eid());
+
+			if (entity == null) return;
+
+			RobotEntity robot = (RobotEntity)entity;
+
+			robot.setHeadPitch(entityUpdateHeadRotationS2CPayload.pitch());
+			robot.setHeadYaw(entityUpdateHeadRotationS2CPayload.yaw());
+		}));
 	}
 }

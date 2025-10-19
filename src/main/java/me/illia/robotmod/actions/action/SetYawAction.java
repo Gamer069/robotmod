@@ -6,6 +6,9 @@ import me.illia.robotmod.actions.ActionParamDescriptor;
 import me.illia.robotmod.actions.ActionParamType;
 import me.illia.robotmod.actions.CustomAction;
 import me.illia.robotmod.entity.RobotEntity;
+import me.illia.robotmod.networking.RobotEntityUpdateHeadRotationS2CPayload;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -23,6 +26,9 @@ public class SetYawAction extends CustomAction {
 		}
 
 		robot.setYaw(yaw);
+		((ServerWorld)Util.entityWorld(robot)).getChunkManager().chunkLoadingManager.getPlayersWatchingChunk(robot.getChunkPos()).forEach((serverPlayerEntity -> {
+			ServerPlayNetworking.send(serverPlayerEntity, new RobotEntityUpdateHeadRotationS2CPayload(robot.getId(), yaw, robot.getPitch()));
+		}));
 	}
 
 	@Override
