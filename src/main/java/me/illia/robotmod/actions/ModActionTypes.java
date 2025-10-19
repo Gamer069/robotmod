@@ -20,6 +20,8 @@ public class ModActionTypes {
 	public static final Identifier SET_YAW = Util.id("set_yaw");
 	public static final Identifier SET_PITCH = Util.id("set_pitch");
 	public static final Identifier BREAK_BLOCK = Util.id("break_block");
+	public static final Identifier REPEAT_LAST_ACTION = Util.id("repeat_last_action");
+	public static final Identifier ATTACK = Util.id("attack");
 
 	public static void init() {
 		Util.actionTypes(
@@ -37,7 +39,9 @@ public class ModActionTypes {
 			SET_PITCH, new SetPitchAction(),
 			BREAK_BLOCK, new BreakBlockAction(),
 			USE, new UseAction(),
-			JUMP, new JumpAction()
+			JUMP, new JumpAction(),
+			REPEAT_LAST_ACTION, new RepeatLastAction(),
+			ATTACK, new AttackAction()
 		);
 	}
 }

@@ -40,6 +40,8 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		Util.add(b, ModActionTypes.HIT_NEAREST_ENTITY, "Hit Nearest Entity");
 		Util.add(b, ModActionTypes.JUMP, "Jump");
 		Util.add(b, ModActionTypes.USE, "Use");
+		Util.add(b, ModActionTypes.REPEAT_LAST_ACTION, "Repeat Previous");
+		Util.add(b, ModActionTypes.ATTACK, "Attack");
 
 
 		Util.add(b, "menu.robotmod.action_param_walk_around", "around ");
@@ -57,6 +59,7 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		Util.add(b, "bool.robotmod.false", "False");
 		Util.add(b, "menu.robotmod.actions", "Actions");
 		Util.add(b, "menu.robotmod.tp", "Teleport");
+		Util.add(b, "menu.robotmod.robot_inv", "Robot Inventory");
 		Util.add(b, "direction.robotmod.north", "North");
 		Util.add(b, "direction.robotmod.east", "East");
 		Util.add(b, "direction.robotmod.south", "South");

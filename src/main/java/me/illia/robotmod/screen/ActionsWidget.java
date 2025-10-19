@@ -6,10 +6,10 @@ import me.illia.robotmod.registry.ModRegistries;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 //? if >=1.21.10 {
-/*import net.minecraft.client.gui.Click;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.input.CharInput;
 import net.minecraft.client.input.KeyInput;
-*///?}
+//?}
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.screen.narration.NarrationPart;
@@ -95,7 +95,7 @@ public class ActionsWidget extends ClickableWidget {
 	}
 
 	//? if <1.21.10 {
-	@Override
+	/*@Override
 	public boolean charTyped(char chr, int modifiers) {
 		for (ParamWidgetDescriptor w : paramWidgets) {
 			if (w.widget() instanceof TextFieldWidget tf && tf.isFocused()) tf.setText(tf.getText() + chr);
@@ -128,8 +128,8 @@ public class ActionsWidget extends ClickableWidget {
 		};
 		return handled || super.keyPressed(keyCode, scanCode, modifiers);
 	}
-	//?} else {
-	/*@Override
+	*///?} else {
+	@Override
 	public boolean charTyped(CharInput input) {
 		for (ParamWidgetDescriptor w : paramWidgets) {
 			if (w.widget() instanceof TextFieldWidget tf && tf.isFocused()) tf.setText(tf.getText() + input.asString());
@@ -166,7 +166,7 @@ public class ActionsWidget extends ClickableWidget {
 		return handled || super.keyPressed(input);
 	}
 
-	*///?}
+	//?}
 
 	private void initParamWidgets() {
 		TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
@@ -277,10 +277,10 @@ public class ActionsWidget extends ClickableWidget {
 	@Override
 	public void renderWidget(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
 		//? if <1.21.10 {
-		context.drawBorder(getX(), getY(), this.width, this.height, 0xFFFF0000);
-		//?} else {
-		/*context.drawStrokedRectangle(getX(), getY(), this.width, this.height, 0xFFFF0000);
-		*///?}
+		/*context.drawBorder(getX(), getY(), this.width, this.height, 0xFFFF0000);
+		*///?} else {
+		context.drawStrokedRectangle(getX(), getY(), this.width, this.height, 0xFFFF0000);
+		//?}
 
 		TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
 		int i = 0;

@@ -16,10 +16,10 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 //? if >= 1.21.5 {
-/*import net.minecraft.client.data.*;
-*///?} else {
-import net.minecraft.data.client.*;
-//?}
+import net.minecraft.client.data.*;
+//?} else {
+/*import net.minecraft.data.client.*;
+*///?}
 import net.minecraft.entity.Entity;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.entity.EntityType;
@@ -194,7 +194,7 @@ public class Util {
 	}
 
 	//? if <1.21.10 {
-	public static SpawnEggItem spawnEgg(Identifier id, BiFunction<EntityType<? extends MobEntity>, Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
+	/*public static SpawnEggItem spawnEgg(Identifier id, BiFunction<EntityType<? extends MobEntity>, Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
 		return (SpawnEggItem) Registry.register(
@@ -203,8 +203,8 @@ public class Util {
 			func.apply(entity, settings.registryKey(key))
 		);
 	}
-	//?} else {
-	/*public static SpawnEggItem spawnEgg(Identifier id, Function<Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
+	*///?} else {
+	public static SpawnEggItem spawnEgg(Identifier id, Function<Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
 		return (SpawnEggItem) Registry.register(
@@ -213,7 +213,7 @@ public class Util {
 			func.apply(settings.registryKey(key).spawnEgg(entity))
 		);
 	}
-	*///?}
+	//?}
 
 	public static SpawnEggItem spawnEgg(Identifier id, IOQuadFunction<EntityType<? extends MobEntity>, Integer, Integer, Item.Settings, SpawnEggItem> func, EntityType<? extends MobEntity> entity, int primaryColor, int secondaryColor, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
@@ -294,10 +294,10 @@ public class Util {
 
 	public static ModelTransform pivot(float x, float y, float z) {
 		//? if >= 1.21.5 {
-		/*return ModelTransform.origin(x, y, z);
-		*///?} else {
-		return ModelTransform.pivot(x, y, z);
-		//?}
+		return ModelTransform.origin(x, y, z);
+		//?} else {
+		/*return ModelTransform.pivot(x, y, z);
+		*///?}
 	}
 
 	public static boolean night(World world) {
@@ -373,17 +373,17 @@ public class Util {
 
 	public static World entityWorld(Entity entity) {
 		//? if <1.21.10 {
-		return entity.getWorld();
-		//?} else {
-		/*return entity.getEntityWorld();
-		*///?}
+		/*return entity.getWorld();
+		*///?} else {
+		return entity.getEntityWorld();
+		//?}
 	}
 
 	public static Vec3d entityPos(Entity entity) {
 		//? if <1.21.10 {
-		return entity.getPos();
-		//?} else {
-		/*return entity.getEntityPos();
-		 *///?}
+		/*return entity.getPos();
+		*///?} else {
+		return entity.getEntityPos();
+		 //?}
 	}
 }

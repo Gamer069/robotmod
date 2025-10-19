@@ -16,12 +16,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class HitNearestEntityAction extends CustomAction {
-	public static final int HIT_RADIUS = 8;
+	public static final double HIT_RADIUS = 8;
 
 	@Override
 	public void run(RobotEntity robot) {
 		World world = Util.entityWorld(robot);
-		Robotmod.LOGGER.info("action ran");
 
 		Box box = new Box(
 			robot.getX() - HIT_RADIUS, robot.getY() - HIT_RADIUS, robot.getZ() - HIT_RADIUS,

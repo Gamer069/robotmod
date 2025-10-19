@@ -60,10 +60,10 @@ public class ModNetworking {
 		ClientPlayNetworking.registerGlobalReceiver(UpdateActionDebugS2CPayload.ID, ((((updateActionDebugS2CPayload, context) -> {
 			MinecraftClient client = context.client();
 			//? if <1.21.10 {
-			((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.stream().filter(e -> e.getId() == updateActionDebugS2CPayload.eid()).findFirst().ifPresent(robot -> robot.actionI = updateActionDebugS2CPayload.actionI());
-			//?} else {
-			/*((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.stream().filter(e -> e.getId() == updateActionDebugS2CPayload.eid()).findFirst().ifPresent(robot -> robot.actionI = updateActionDebugS2CPayload.actionI());
-			*///?}
+			/*((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.stream().filter(e -> e.getId() == updateActionDebugS2CPayload.eid()).findFirst().ifPresent(robot -> robot.actionI = updateActionDebugS2CPayload.actionI());
+			*///?} else {
+			((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.stream().filter(e -> e.getId() == updateActionDebugS2CPayload.eid()).findFirst().ifPresent(robot -> robot.actionI = updateActionDebugS2CPayload.actionI());
+			//?}
 		}))));
 
 		ClientPlayNetworking.registerGlobalReceiver(UpdateHeldItemS2CPayload.ID, ((updateHeldItemS2CPayload, context) -> {

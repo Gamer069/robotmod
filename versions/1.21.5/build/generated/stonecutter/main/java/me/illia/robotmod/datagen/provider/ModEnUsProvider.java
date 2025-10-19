@@ -57,6 +57,7 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		Util.add(b, "bool.robotmod.false", "False");
 		Util.add(b, "menu.robotmod.actions", "Actions");
 		Util.add(b, "menu.robotmod.tp", "Teleport");
+		Util.add(b, "menu.robotmod.robot_inv", "Robot Inventory");
 		Util.add(b, "direction.robotmod.north", "North");
 		Util.add(b, "direction.robotmod.east", "East");
 		Util.add(b, "direction.robotmod.south", "South");
