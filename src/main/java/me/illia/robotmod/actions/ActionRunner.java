@@ -1,5 +1,6 @@
 package me.illia.robotmod.actions;
 
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.entity.RobotEntity;
 import me.illia.robotmod.registry.ModRegistries;

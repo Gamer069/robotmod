@@ -117,6 +117,13 @@ public class ActionsWidget extends ClickableWidget {
 			}
 			handled |= widget.widget().mouseClicked(mouseX, mouseY, button);
 		}
+
+		if (!handled) {
+			for (ParamWidgetDescriptor w : paramWidgets) {
+				w.widget().setFocused(false);
+			}
+		}
+
 		return handled || super.mouseClicked(mouseX, mouseY, button);
 	}
 
@@ -154,6 +161,12 @@ public class ActionsWidget extends ClickableWidget {
 			}
 			handled |= widget.widget().mouseClicked(click, doubled);
 		}
+		if (!handled) {
+			for (ParamWidgetDescriptor w : paramWidgets) {
+				w.widget().setFocused(false);
+			}
+		}
+
 		return handled || super.mouseClicked(click, doubled);
 	}
 
