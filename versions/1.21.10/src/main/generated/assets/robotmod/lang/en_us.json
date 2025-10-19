@@ -22,12 +22,14 @@
   "menu.robotmod.action_param_walk_to": " to ",
   "menu.robotmod.action_param_yaw": " to ",
   "menu.robotmod.action_type": "Type",
+  "menu.robotmod.action_type_attack": "Attack",
   "menu.robotmod.action_type_break_block": "Break Block",
   "menu.robotmod.action_type_drop": "Drop",
   "menu.robotmod.action_type_harvest": "Harvest",
   "menu.robotmod.action_type_hit_nearest_entity": "Hit Nearest Entity",
   "menu.robotmod.action_type_home": "Home",
   "menu.robotmod.action_type_jump": "Jump",
+  "menu.robotmod.action_type_repeat_last_action": "Repeat Previous",
   "menu.robotmod.action_type_say": "Say",
   "menu.robotmod.action_type_set_home": "Set Home",
   "menu.robotmod.action_type_set_pitch": "Set Pitch",
@@ -41,5 +43,6 @@
   "menu.robotmod.add": "+",
   "menu.robotmod.no_points": "No Teleport Points!",
   "menu.robotmod.robot": "Robot",
+  "menu.robotmod.robot_inv": "Robot Inventory",
   "menu.robotmod.tp": "Teleport"
 }

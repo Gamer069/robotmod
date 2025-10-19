@@ -3,6 +3,7 @@ package me.illia.robotmod;
 import me.illia.robotmod.actions.ExecuteActionCallback;
 import me.illia.robotmod.actions.ModActionTypes;
 import me.illia.robotmod.attachment.ModAttachmentTypes;
+import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.debug.DebugRenderers;
 import me.illia.robotmod.entity.ModEntities;

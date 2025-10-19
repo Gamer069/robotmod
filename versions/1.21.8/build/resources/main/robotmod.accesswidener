@@ -1,4 +1,0 @@
-accessWidener v2 named
-accessible field net/minecraft/block/MapColor COLORS [Lnet/minecraft/block/MapColor;
-accessible class net/minecraft/server/command/FillCommand$Mode
-accessible field net/minecraft/block/CarvedPumpkinBlock IS_GOLEM_HEAD_PREDICATE Ljava/util/function/Predicate;
