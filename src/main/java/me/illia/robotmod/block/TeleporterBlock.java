@@ -37,7 +37,7 @@ public class TeleporterBlock extends SlabBlock {
 	@Override
 	public ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (stack.getItem() == ModItems.PACKED_ENDER_PEARL && !world.isClient() && world instanceof ServerWorld serverWorld) {
-			TeleportPointAttachedData attachedData = TeleportPointAttachedData.DATA == null ? TeleportPointAttachedData.DEFAULT : TeleportPointAttachedData.DATA;
+			TeleportPointAttachedData attachedData = serverWorld.getAttachedOrElse(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DEFAULT);
 			if (attachedData.findPointByPos(pos).isPresent()) return ActionResult.CONSUME;
 
 			serverWorld.setBlockState(pos, state.with(CHARGED, true));

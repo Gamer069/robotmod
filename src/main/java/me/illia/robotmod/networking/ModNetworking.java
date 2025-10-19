@@ -8,6 +8,8 @@ import me.illia.robotmod.block.ModBlocks;
 import me.illia.robotmod.block.TeleporterBlock;
 import me.illia.robotmod.debug.DebugRenderers;
 import me.illia.robotmod.entity.*;
+import me.illia.robotmod.item.TeleporterItem;
+import me.illia.robotmod.screen.ChooseTeleportScreen;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
@@ -47,6 +49,7 @@ public class ModNetworking {
 		}));
 
 		ServerPlayNetworking.registerGlobalReceiver(GetTeleportPointsC2SPayload.ID, ((getTeleportPointsC2SPayload, context) -> {
+			Robotmod.LOGGER.info("uh great c2s packet received");
 			MinecraftServer server = context.server();
 			ServerWorld world = server.getWorld(getTeleportPointsC2SPayload.world());
 			TeleportPointAttachedData data = world.getAttachedOrElse(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DEFAULT);
@@ -54,7 +57,24 @@ public class ModNetworking {
 		}));
 
 		ClientPlayNetworking.registerGlobalReceiver(GetTeleportPointsS2CPayload.ID, (((getTeleportPointsS2CPayload, context) -> {
+			Robotmod.LOGGER.info("get teleport points s2c received");
 			TeleportPointAttachedData.DATA = getTeleportPointsS2CPayload.data();
+
+			MinecraftClient client = context.client();
+			client.execute(() -> {
+				// If the player previously requested points via the item, open the chooser immediately
+				if (TeleporterItem.sentPacket) {
+					client.setScreen(new ChooseTeleportScreen(TeleportPointAttachedData.DATA));
+					// reset the flag so future uses behave normally
+					TeleporterItem.sentPacket = false;
+					return;
+				}
+
+				// Otherwise, if the chooser is open, refresh it with the new data
+				if (client.currentScreen instanceof ChooseTeleportScreen) {
+					client.setScreen(new ChooseTeleportScreen(TeleportPointAttachedData.DATA));
+				}
+			});
 		})));
 
 		ClientPlayNetworking.registerGlobalReceiver(UpdateActionDebugS2CPayload.ID, ((((updateActionDebugS2CPayload, context) -> {

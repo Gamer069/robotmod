@@ -27,11 +27,13 @@ public class TeleporterItem extends Item {
 			if (TeleportPointAttachedData.DATA == null && !sentPacket) {
 				ClientPlayNetworking.send(new GetTeleportPointsC2SPayload(world.getRegistryKey()));
 				sentPacket = true;
-			} else if (TeleportPointAttachedData.DATA != null && sentPacket) {
+			} else if (TeleportPointAttachedData.DATA != null) {
 				if (TeleportPointAttachedData.DATA.points().isEmpty()) {
 					user.sendMessage(Util.t("menu.robotmod.no_points").styled(s -> s.withColor(TextColor.fromRgb(0xFF0000))), true);
 				} else {
 					MinecraftClient.getInstance().setScreen(new ChooseTeleportScreen(TeleportPointAttachedData.DATA));
+					// opened the chooser, clear the request flag so future logic isn't blocked
+					sentPacket = false;
 				}
 			}
 		}

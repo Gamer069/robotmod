@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": "robotmod:packed_ender_pearl",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone_block"
+  },
+  "pattern": [
+    "IEI",
+    "ERE",
+    "IEI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "robotmod:teleporter"
+  }
+}
