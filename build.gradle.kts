@@ -22,8 +22,12 @@ val versions: Array<String> = arrayOf("1.21.2", "1.21.3", "1.21.5", "1.21.6", "1
 
 publishMods {
     changelog = """
-        # 1.0.2 (bugfix)
-        ## reposition remove last button
+        # 1.0.3 (bugfix)
+        ## Remove "separator"
+        ## Use less padding
+        ## Fix wait action
+        ## Implement quickMove so you can shift+click items into the robot inventory
+        ## Made "Remove Last" button not go off-screen
     """.trimIndent()
     type = STABLE
     file = tasks.remapJar.map { it.archiveFile.get() }
