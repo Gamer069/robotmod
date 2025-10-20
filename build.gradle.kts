@@ -22,12 +22,8 @@ val versions: Array<String> = arrayOf("1.21.2", "1.21.3", "1.21.5", "1.21.6", "1
 
 publishMods {
     changelog = """
-        # 1.0.1
-        ## Added screen for changing the robot's inventory, which can be accessed by right clicking the robot while crouching.
-        ## Added padding to action rendering
-        ## Fix set yaw and set pitch actions
-        ## Add "Repeat Last Action" and "Attack" actions
-        ## Add 1.21.10 support
+        # 1.0.2 (bugfix)
+        ## reposition remove last button
     """.trimIndent()
     type = STABLE
     file = tasks.remapJar.map { it.archiveFile.get() }
