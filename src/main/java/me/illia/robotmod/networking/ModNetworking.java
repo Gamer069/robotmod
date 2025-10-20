@@ -48,33 +48,6 @@ public class ModNetworking {
 			}
 		}));
 
-		ServerPlayNetworking.registerGlobalReceiver(GetTeleportPointsC2SPayload.ID, ((getTeleportPointsC2SPayload, context) -> {
-			MinecraftServer server = context.server();
-			ServerWorld world = server.getWorld(getTeleportPointsC2SPayload.world());
-			TeleportPointAttachedData data = world.getAttachedOrElse(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DEFAULT);
-			context.responseSender().sendPacket(new GetTeleportPointsS2CPayload(data));
-		}));
-
-		ClientPlayNetworking.registerGlobalReceiver(GetTeleportPointsS2CPayload.ID, (((getTeleportPointsS2CPayload, context) -> {
-			TeleportPointAttachedData.DATA = getTeleportPointsS2CPayload.data();
-
-			MinecraftClient client = context.client();
-			client.execute(() -> {
-				// If the player previously requested points via the item, open the chooser immediately
-				if (TeleporterItem.sentPacket) {
-					client.setScreen(new ChooseTeleportScreen(TeleportPointAttachedData.DATA));
-					// reset the flag so future uses behave normally
-					TeleporterItem.sentPacket = false;
-					return;
-				}
-
-				// Otherwise, if the chooser is open, refresh it with the new data
-				if (client.currentScreen instanceof ChooseTeleportScreen) {
-					client.setScreen(new ChooseTeleportScreen(TeleportPointAttachedData.DATA));
-				}
-			});
-		})));
-
 		ClientPlayNetworking.registerGlobalReceiver(UpdateActionDebugS2CPayload.ID, ((((updateActionDebugS2CPayload, context) -> {
 			MinecraftClient client = context.client();
 			//? if <1.21.10 {

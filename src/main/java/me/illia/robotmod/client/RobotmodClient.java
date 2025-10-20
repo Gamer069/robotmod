@@ -4,6 +4,7 @@ import me.illia.robotmod.Util;
 import me.illia.robotmod.entity.ModEntities;
 import me.illia.robotmod.entity.RobotEntityModel;
 import me.illia.robotmod.entity.RobotEntityRenderer;
+import me.illia.robotmod.screen.ChooseTeleportScreen;
 import me.illia.robotmod.screen.ModScreenHandlers;
 import me.illia.robotmod.screen.RobotInventoryScreen;
 import me.illia.robotmod.screen.RobotScreen;
@@ -22,6 +23,7 @@ public class RobotmodClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		HandledScreens.register(ModScreenHandlers.ROBOT_SCREEN_HANDLER, RobotScreen::new);
 		HandledScreens.register(ModScreenHandlers.ROBOT_INVENTORY_SCREEN_HANDLER, RobotInventoryScreen::new);
+		HandledScreens.register(ModScreenHandlers.CHOOSE_TELEPORT_SCREEN_HANDLER, ChooseTeleportScreen::new);
 
 		// DEPRECATED, but i really dont wanna switch to vanilla's alternative
 		EntityRendererRegistry.register(ModEntities.ROBOT, RobotEntityRenderer::new);

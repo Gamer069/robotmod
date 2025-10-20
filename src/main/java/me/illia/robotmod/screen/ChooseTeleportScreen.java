@@ -1,51 +1,33 @@
 package me.illia.robotmod.screen;
 
-import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.attachment.TeleportPoint;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
-import me.illia.robotmod.networking.GetTeleportPointsC2SPayload;
 import me.illia.robotmod.networking.RequestTeleportC2SPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 //? if >=1.21.10 {
 import net.minecraft.client.input.KeyInput;
 //?}
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import me.illia.robotmod.item.TeleporterItem;
 
-public class ChooseTeleportScreen extends Screen {
-	public TeleportPointAttachedData points;
-
-	public ChooseTeleportScreen(TeleportPointAttachedData points) {
-		super(Util.t("menu.robotmod.tp"));
-		this.points = points;
+public class ChooseTeleportScreen extends HandledScreen<ChooseTeleportScreenHandler> {
+	public ChooseTeleportScreen(ChooseTeleportScreenHandler handler, PlayerInventory playerInv, Text title) {
+		super(handler, playerInv, title);
 	}
 
 	@Override
 	protected void init() {
-		// If client doesn't have data yet, request it from the server and wait for the response.
-		// This avoids showing stale/empty lists when the client hasn't fetched the authoritative attachment.
-		if (TeleportPointAttachedData.DATA == null) {
-			Robotmod.LOGGER.info("teleport point attached data data == null");
-			if (MinecraftClient.getInstance().world != null) {
-				Robotmod.LOGGER.info("sending packet");
-				ClientPlayNetworking.send(new GetTeleportPointsC2SPayload(MinecraftClient.getInstance().world.getRegistryKey()));
-				TeleporterItem.sentPacket = true;
-				Robotmod.LOGGER.info("sent packet = true");
-			}
-			// don't populate UI yet; it will be recreated when the packet arrives
-			return;
-		}
-
-		// Use the freshest client data
-		this.points = TeleportPointAttachedData.DATA;
+		TeleportPointAttachedData points = handler.data;
 
 		int i = 0;
 		for (TeleportPoint point : points.points()) {
@@ -69,9 +51,7 @@ public class ChooseTeleportScreen extends Screen {
 	}
 
 	@Override
-	public void close() {
-		TeleportPointAttachedData.DATA = null;
-		super.close();
+	protected void drawBackground(DrawContext context, float deltaTicks, int mouseX, int mouseY) {
 	}
 
 	//? if <1.21.10 {
@@ -87,9 +67,6 @@ public class ChooseTeleportScreen extends Screen {
 
 	@Override
 	public boolean keyPressed(KeyInput input) {
-		// failsafe for something that will never happen
-		if (client == null) client = MinecraftClient.getInstance();
-
 		if (client.options.inventoryKey.matchesKey(input)) {
 			close();
 			return true;

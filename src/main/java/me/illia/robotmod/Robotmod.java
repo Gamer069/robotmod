@@ -36,9 +36,7 @@ public class Robotmod implements ModInitializer {
 
 		PayloadTypeRegistry.playC2S().register(RequestTeleportC2SPayload.ID, RequestTeleportC2SPayload.REQUEST_TELEPORT_CODEC);
 		PayloadTypeRegistry.playC2S().register(RobotActionsSyncC2SPayload.ID, RobotActionsSyncC2SPayload.ROBOT_ACTIONS_SYNC_CODEC);
-		PayloadTypeRegistry.playC2S().register(GetTeleportPointsC2SPayload.ID, GetTeleportPointsC2SPayload.GET_TP_POINTS_CODEC);
 
-		PayloadTypeRegistry.playS2C().register(GetTeleportPointsS2CPayload.ID, GetTeleportPointsS2CPayload.GET_TP_POINTS_CODEC);
 		PayloadTypeRegistry.playS2C().register(UpdateActionDebugS2CPayload.ID, UpdateActionDebugS2CPayload.UPDATE_ACTION_DEBUG_CODEC);
 		PayloadTypeRegistry.playS2C().register(UpdateHeldItemS2CPayload.ID, UpdateHeldItemS2CPayload.UPDATE_HELD_ITEM_CODEC);
 		PayloadTypeRegistry.playS2C().register(RobotEntityUpdateHeadRotationS2CPayload.ID, RobotEntityUpdateHeadRotationS2CPayload.ENTITY_UPDATE_HEAD_ROTATION_PC);
