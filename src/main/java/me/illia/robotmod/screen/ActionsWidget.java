@@ -29,7 +29,7 @@ public class ActionsWidget extends ClickableWidget {
 	private final ArrayList<Action> actions;
 	private final List<ParamWidgetDescriptor> paramWidgets = new ArrayList<>();
 
-	public static final int ACTION_PADDING = 4;
+	public static final int ACTION_PADDING = 3;
 
 	public ActionsWidget(int x, int y, int w, int h, ArrayList<Action> actions) {
 		super(x, y, w, h, Util.t("menu.robotmod.actions"));
@@ -299,14 +299,8 @@ public class ActionsWidget extends ClickableWidget {
 			String actionTxt = Util.str(action).getString();
 			int y = getY() + (renderer.fontHeight + 10) * i + ACTION_PADDING;
 
-			int actionW = renderer.getWidth(actionTxt);
-
-			int separatorWidth = actionW + action.getParams().size() * 30 + ACTION_PADDING;
-			int separatorHeight = 2 + ACTION_PADDING;
-
 			int textX = getX() + ACTION_PADDING;
 
-			context.fill(getX(), y, getX() + separatorWidth, y + separatorHeight, Colors.LIGHT_GRAY);
 			context.drawText(renderer, actionTxt, textX, y, Colors.CYAN, true);
 			i++;
 		}

@@ -72,7 +72,8 @@ public class RobotScreen extends PlainHandledScreen<RobotScreenHandler> {
 		this.addDrawableChild(ButtonWidget.builder(Util.t("menu.robotmod.remove_last"), (btn) -> {
 			ArrayList<Action> actions = actionsWidget.save();
 
-			actions.removeLast();
+			if (!actions.isEmpty())
+				actions.removeLast();
 
 			int prevWidth = actionsWidget.getWidth();
 			int prevHeight = actionsWidget.getHeight();
