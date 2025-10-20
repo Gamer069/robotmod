@@ -22,9 +22,10 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RobotScreen extends HandledScreen<RobotScreenHandler> {
+public class RobotScreen extends PlainHandledScreen<RobotScreenHandler> {
 	private CyclingButtonWidget<Identifier> actionTypeBtn;
 	private ActionsWidget actionsWidget;
 
@@ -61,14 +62,18 @@ public class RobotScreen extends HandledScreen<RobotScreenHandler> {
 		this.addDrawableChild(actionsWidget);
 
 		this.addDrawableChild(ButtonWidget.builder(Util.t("menu.robotmod.add"), button -> {
+			ArrayList<Action> actions = actionsWidget.save();
+
 			HashMap<String, Action.ParamValue> args = new HashMap<>();
-			robot.actions.add(new Action(actionTypeBtn.getValue(), args));
+			actions.add(new Action(actionTypeBtn.getValue(), args));
 
 			int prevWidth = actionsWidget.getWidth();
 			int prevHeight = actionsWidget.getHeight();
 			this.remove(actionsWidget);
-			actionsWidget = new ActionsWidget(x, y + 50, prevWidth, prevHeight, robot.actions);
+			actionsWidget = new ActionsWidget(x, y + 50, prevWidth, prevHeight, actions);
 			this.addDrawableChild(actionsWidget);
+
+			robot.actions = actions;
 		}).dimensions(x, y + 10, 20, 20).build());
 
 		super.init();

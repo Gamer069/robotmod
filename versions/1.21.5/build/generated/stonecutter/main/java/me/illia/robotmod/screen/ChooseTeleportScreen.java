@@ -16,50 +16,76 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import me.illia.robotmod.item.TeleporterItem;
 
 public class ChooseTeleportScreen extends PlainHandledScreen<ChooseTeleportScreenHandler> {
-	private final GridWidget grid = new GridWidget().setColumnSpacing(10).setRowSpacing(20);
+	private GridWidget grid = new GridWidget().setColumnSpacing(5).setRowSpacing(5);
+	private Random random;
 
 	public ChooseTeleportScreen(ChooseTeleportScreenHandler handler, PlayerInventory playerInv, Text title) {
 		super(handler, playerInv, title);
 	}
 
 	@Override
-	protected void init() {
+	public void resize(MinecraftClient client, int width, int height) {
+		grid.forEachChild(this::remove);
+
+		grid = new GridWidget().setColumnSpacing(10).setRowSpacing(20);
+
+		initGrid();
+
+		super.resize(client, width, height);
+	}
+
+	public void handleTeleport(TeleportPoint point) {
+		BlockPos pos = point.pos();
+
+		client.player.playSound(SoundEvents.ENTITY_PLAYER_TELEPORT, 1.0f, 3.0f);
+
+		client.player.getStackInHand(client.player.getActiveHand()).damage(1, client.player);
+
+		World world = Util.entityWorld(client.player);
+
+		ClientPlayNetworking.send(new RequestTeleportC2SPayload(pos, world.getRegistryKey()));
+
+		client.player.closeScreen();
+
+		client.player.sendMessage(Util.t("menu.robotmod.teleported", point.name()), true);
+	}
+
+	public void initGrid() {
 		TeleportPointAttachedData points = handler.data;
 
 		grid.getMainPositioner()
 			.alignHorizontalCenter()
 			.alignVerticalCenter()
-			.margin(2)
-			.marginY(2)
-			.marginBottom(20);
+			.margin(2);
 
-		GridWidget.Adder adder = grid.createAdder(4);
+		int scaledWidth = MinecraftClient.getInstance().getWindow().getScaledWidth();
+
+		GridWidget.Adder adder = grid.createAdder(scaledWidth / (100 + 5));
 
 		for (TeleportPoint point : points.points()) {
 			adder.add(ButtonWidget.builder(Text.literal(point.name()), button -> {
-				BlockPos pos = point.pos();
-				ClientPlayerEntity player = MinecraftClient.getInstance().player;
-
-				player.playSound(SoundEvents.ENTITY_PLAYER_TELEPORT, 1.0f, 3.0f);
-
-				player.getStackInHand(player.getActiveHand()).damage(1, player);
-
-				World world = Util.entityWorld(player);
-
-				ClientPlayNetworking.send(new RequestTeleportC2SPayload(pos, world.getRegistryKey()));
-				player.closeScreen();
+				handleTeleport(point);
 			}).size(80, 20).build());
 		}
 
+		adder.add(ButtonWidget.builder(Util.t("menu.robotmod.random"), button -> {
+			handleTeleport(points.points().get(random.nextBetween(0, points.points().size())));
+		}).size(80, 20).build());
+
 		grid.forEachChild(this::addDrawableChild);
 
-		this.grid.refreshPositions();
 		this.refreshWidgetPositions();
+	}
 
+	@Override
+	protected void init() {
+		this.random = Random.create(System.nanoTime());
+
+		initGrid();
 		super.init();
 	}
 

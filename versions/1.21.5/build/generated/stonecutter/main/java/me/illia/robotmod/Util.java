@@ -246,6 +246,10 @@ public class Util {
 		return Text.translatable(key);
 	}
 
+	public static MutableText t(String key, Object... args) {
+		return Text.translatable(key, args);
+	}
+
 	public static Block block(Identifier id, Function<AbstractBlock.Settings, Block> blockFactory, AbstractBlock.Settings settings) {
 		RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, id);
 		Block block = blockFactory.apply(settings.registryKey(blockKey));

@@ -9,8 +9,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.*;
 //? if >=1.21.10 {
-import net.minecraft.client.input.KeyInput;
-//?}
+/*import net.minecraft.client.input.KeyInput;
+*///?}
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.sound.SoundEvents;
@@ -104,7 +104,7 @@ public class ChooseTeleportScreen extends PlainHandledScreen<ChooseTeleportScree
 	}
 
 	//? if <1.21.10 {
-	/*@Override
+	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (client.options.inventoryKey.matchesKey(keyCode, scanCode)) {
 			close();
@@ -112,8 +112,8 @@ public class ChooseTeleportScreen extends PlainHandledScreen<ChooseTeleportScree
 		}
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
-	*///?} else {
-
+	//?} else {
+/*
 	@Override
 	public boolean keyPressed(KeyInput input) {
 		if (client.options.inventoryKey.matchesKey(input)) {
@@ -122,5 +122,5 @@ public class ChooseTeleportScreen extends PlainHandledScreen<ChooseTeleportScree
 		}
 		return super.keyPressed(input);
 	}
-	//?}
+	*///?}
 }

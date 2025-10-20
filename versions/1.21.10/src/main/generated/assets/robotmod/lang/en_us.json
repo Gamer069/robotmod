@@ -42,7 +42,8 @@
   "menu.robotmod.actions": "Actions",
   "menu.robotmod.add": "+",
   "menu.robotmod.no_points": "No Teleport Points!",
+  "menu.robotmod.random": "Random",
   "menu.robotmod.robot": "Robot",
   "menu.robotmod.robot_inv": "Robot Inventory",
-  "menu.robotmod.tp": "Teleport"
+  "menu.robotmod.teleported": "Teleported to %s"
 }

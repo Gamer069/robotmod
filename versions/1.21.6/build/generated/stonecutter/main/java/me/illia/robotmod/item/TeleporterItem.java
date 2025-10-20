@@ -1,13 +1,20 @@
 package me.illia.robotmod.item;
 
 import me.illia.robotmod.Util;
+import me.illia.robotmod.attachment.ModAttachmentTypes;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.networking.GetTeleportPointsC2SPayload;
 import me.illia.robotmod.screen.ChooseTeleportScreen;
+import me.illia.robotmod.screen.ChooseTeleportScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -23,16 +30,26 @@ public class TeleporterItem extends Item {
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public ActionResult use(World world, PlayerEntity user, Hand hand) {
-		if (world.isClient()) {
-			if (TeleportPointAttachedData.DATA == null && !sentPacket) {
-				ClientPlayNetworking.send(new GetTeleportPointsC2SPayload(world.getRegistryKey()));
-				sentPacket = true;
-			} else if (TeleportPointAttachedData.DATA != null && sentPacket) {
-				if (TeleportPointAttachedData.DATA.points().isEmpty()) {
-					user.sendMessage(Util.t("menu.robotmod.no_points").styled(s -> s.withColor(TextColor.fromRgb(0xFF0000))), true);
-				} else {
-					MinecraftClient.getInstance().setScreen(new ChooseTeleportScreen(TeleportPointAttachedData.DATA));
-				}
+		if (!world.isClient()) {
+			if (Util.serverEntityWorld(user).getAttachedOrElse(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DEFAULT).points().isEmpty()) {
+				user.sendMessage(Util.t("menu.robotmod.no_points").styled(s -> s.withColor(TextColor.fromRgb(0xFF0000))), true);
+			} else {
+				user.openHandledScreen(new ExtendedScreenHandlerFactory<TeleportPointAttachedData>() {
+					@Override
+					public ChooseTeleportScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+						return new ChooseTeleportScreenHandler(syncId, playerInventory, Util.serverEntityWorld(player).getAttachedOrElse(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DEFAULT));
+					}
+
+					@Override
+					public Text getDisplayName() {
+						return Util.e();
+					}
+
+					@Override
+					public TeleportPointAttachedData getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
+						return Util.serverEntityWorld(serverPlayerEntity).getAttachedOrElse(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DEFAULT);
+					}
+				});
 			}
 		}
 

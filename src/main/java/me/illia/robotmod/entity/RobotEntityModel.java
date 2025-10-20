@@ -12,7 +12,11 @@ import net.minecraft.util.math.RotationAxis;
 // Made with Blockbench 4.12.6
 // Exported for Minecraft version 1.17+ for Yarn
 // Paste this class into your mod and generate all required imports
-public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implements ModelWithArms<RobotEntityRenderState>, ModelWithHead {
+//? if >1.21.8 {
+/*public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implements ModelWithArms<RobotEntityRenderState>, ModelWithHead {
+*///? } else {
+public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implements ModelWithArms, ModelWithHead {
+//? }
 	private final ModelPart head;
 	private final ModelPart legs;
 	private final ModelPart left;
@@ -66,10 +70,10 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 
 	@Override
 	//? if <1.21.10 {
-	/*public void setArmAngle(Arm arm, MatrixStack matrices) {
-	*///?} else {
-	public void setArmAngle(RobotEntityRenderState state, Arm arm, MatrixStack matrices) {
-	//?}
+	public void setArmAngle(Arm arm, MatrixStack matrices) {
+	//?} else {
+	/*public void setArmAngle(RobotEntityRenderState state, Arm arm, MatrixStack matrices) {
+	*///?}
 		ModelPart armPart = (arm == Arm.RIGHT) ? this.right : this.left;
 
 		float shoulderX = (arm == Arm.RIGHT) ? -5.0f : 5.0f;

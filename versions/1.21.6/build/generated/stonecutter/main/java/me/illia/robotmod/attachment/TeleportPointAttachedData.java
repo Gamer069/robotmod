@@ -1,5 +1,6 @@
 package me.illia.robotmod.attachment;
 
+import com.mojang.serialization.Codec;
 import me.illia.robotmod.Robotmod;
 import net.minecraft.util.math.BlockPos;
 
@@ -8,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public record TeleportPointAttachedData(List<TeleportPoint> points) {
+	public static final Codec<TeleportPointAttachedData> CODEC = TeleportPoint.CODEC.listOf().xmap(TeleportPointAttachedData::new, TeleportPointAttachedData::points);
 	public static TeleportPointAttachedData DEFAULT = new TeleportPointAttachedData(List.of());
-	public static TeleportPointAttachedData DATA;
 
 	public TeleportPointAttachedData addPoint(TeleportPoint point) {
 		ArrayList<TeleportPoint> points2 = new ArrayList<>(points);

@@ -1,7 +1,14 @@
 {
   "mappings": {
-    "me/illia/robotmod/mixin/FillCommandMixin": {
-      "execute": "Lnet/minecraft/class_3057;method_13354(Lnet/minecraft/class_2168;Lnet/minecraft/class_3341;Lnet/minecraft/class_2247;Lnet/minecraft/class_3057$class_3058;Ljava/util/function/Predicate;Z)I"
+    "me/illia/robotmod/mixin/CarvedPumpkinBlockMixin": {
+      "trySpawnEntity": "Lnet/minecraft/class_2276;method_9731(Lnet/minecraft/class_1937;Lnet/minecraft/class_2338;)V"
+    },
+    "me/illia/robotmod/mixin/DebugMixin": {
+      "processF3": "Lnet/minecraft/class_309;method_1468(I)Z"
+    },
+    "me/illia/robotmod/mixin/DebugRendererMixin": {
+      "<init>": "Lnet/minecraft/class_863;<init>(Lnet/minecraft/class_310;)V",
+      "render": "Lnet/minecraft/class_863;method_23099(Lnet/minecraft/class_4587;Lnet/minecraft/class_4604;Lnet/minecraft/class_4597$class_4598;DDD)V"
     },
     "me/illia/robotmod/mixin/ScreenInventoryTextMixin": {
       "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V": "Lnet/minecraft/class_465;method_2388(Lnet/minecraft/class_332;II)V",
@@ -12,8 +19,15 @@
   },
   "data": {
     "named:intermediary": {
-      "me/illia/robotmod/mixin/FillCommandMixin": {
-        "execute": "Lnet/minecraft/class_3057;method_13354(Lnet/minecraft/class_2168;Lnet/minecraft/class_3341;Lnet/minecraft/class_2247;Lnet/minecraft/class_3057$class_3058;Ljava/util/function/Predicate;Z)I"
+      "me/illia/robotmod/mixin/CarvedPumpkinBlockMixin": {
+        "trySpawnEntity": "Lnet/minecraft/class_2276;method_9731(Lnet/minecraft/class_1937;Lnet/minecraft/class_2338;)V"
+      },
+      "me/illia/robotmod/mixin/DebugMixin": {
+        "processF3": "Lnet/minecraft/class_309;method_1468(I)Z"
+      },
+      "me/illia/robotmod/mixin/DebugRendererMixin": {
+        "<init>": "Lnet/minecraft/class_863;<init>(Lnet/minecraft/class_310;)V",
+        "render": "Lnet/minecraft/class_863;method_23099(Lnet/minecraft/class_4587;Lnet/minecraft/class_4604;Lnet/minecraft/class_4597$class_4598;DDD)V"
       },
       "me/illia/robotmod/mixin/ScreenInventoryTextMixin": {
         "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V": "Lnet/minecraft/class_465;method_2388(Lnet/minecraft/class_332;II)V",

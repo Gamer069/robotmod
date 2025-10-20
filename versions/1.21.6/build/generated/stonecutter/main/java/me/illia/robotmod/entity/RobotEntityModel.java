@@ -1,11 +1,10 @@
 package me.illia.robotmod.entity;
 
-import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.ModelWithArms;
-import net.minecraft.client.render.entity.state.EntityRenderState;
+import net.minecraft.client.render.entity.model.ModelWithHead;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.math.RotationAxis;
@@ -13,7 +12,11 @@ import net.minecraft.util.math.RotationAxis;
 // Made with Blockbench 4.12.6
 // Exported for Minecraft version 1.17+ for Yarn
 // Paste this class into your mod and generate all required imports
-public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implements ModelWithArms {
+//? if >1.21.8 {
+/*public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implements ModelWithArms<RobotEntityRenderState>, ModelWithHead {
+*///? } else {
+public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implements ModelWithArms, ModelWithHead {
+//? }
 	private final ModelPart head;
 	private final ModelPart legs;
 	private final ModelPart left;
@@ -60,13 +63,16 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 	@Override
 	public void setAngles(RobotEntityRenderState state) {
 		super.setAngles(state);
+
+		this.head.yaw = state.headYaw * ((float)Math.PI / 180f);
+		this.head.pitch = state.headPitch * ((float)Math.PI / 180f);
 	}
 
 	@Override
 	//? if <1.21.10 {
 	public void setArmAngle(Arm arm, MatrixStack matrices) {
 	//?} else {
-	/*public void setArmAngle(EntityRenderState state, Arm arm, MatrixStack matrices) {
+	/*public void setArmAngle(RobotEntityRenderState state, Arm arm, MatrixStack matrices) {
 	*///?}
 		ModelPart armPart = (arm == Arm.RIGHT) ? this.right : this.left;
 
@@ -80,5 +86,10 @@ public class RobotEntityModel extends EntityModel<RobotEntityRenderState> implem
 		matrices.multiply(RotationAxis.POSITIVE_X.rotation(armPart.pitch));
 
 		matrices.scale(0.7f, 0.7f, 0.7f);
+	}
+
+	@Override
+	public ModelPart getHead() {
+		return head;
 	}
 }

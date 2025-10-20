@@ -33,14 +33,14 @@ import net.minecraft.server.ServerTask;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if >= 1.21.6 {
-import net.minecraft.storage.ReadView;
+/*import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
-//?} else {
-/*import net.minecraft.nbt.NbtCompound;
+*///?} else {
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.inventory.Inventories;
 import me.illia.robotmod.Robotmod;
-*///?}
+//?}
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
@@ -131,7 +131,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 
 	//? if >= 1.21.6 {
-	@Override
+	/*@Override
 	protected void readCustomData(ReadView view) {
 		this.actions = new ArrayList<>(view.read("actions", Action.CODEC.codec().listOf()).orElse(List.of()));
 		this.home = view.read("home", BlockPos.CODEC).orElse(BlockPos.ORIGIN);
@@ -169,13 +169,13 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		super.writeCustomData(view);
 	}
 
-	//?} else {
-	/*@Override
+	*///?} else {
+	@Override
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 
 		//? if 1.21.3 {
-		/^this.slot = nbt.getInt("slot");
+		this.slot = nbt.getInt("slot");
 
 		this.waiting = nbt.getBoolean("waiting");
 
@@ -183,8 +183,8 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			this.waitStartTick = nbt.getInt("waitStartTick");
 			this.waitEndTick = nbt.getInt("waitEndTick");
 		}
-		^///? } else {
-		this.slot = nbt.getInt("slot", 0);
+		//? } else {
+		/*this.slot = nbt.getInt("slot", 0);
 
 		this.waiting = nbt.getBoolean("waiting", false);
 
@@ -192,7 +192,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			this.waitStartTick = nbt.getInt("waitStartTick", 0);
 			this.waitEndTick = nbt.getInt("waitEndTick", 0);
 		}
-		//? }
+		*///? }
 
 		if (nbt.contains("actions")) {
 			this.actions = new ArrayList<>(
@@ -228,7 +228,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 		return nbt;
 	}
-	*///?}
+	//?}
 
 	@Override
 	public ItemStack getMainHandStack() {

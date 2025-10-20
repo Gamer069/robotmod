@@ -27,9 +27,9 @@ public record ExecuteActionCallback(int eid, int actionI, RegistryKey<World> wor
 	}
 
 	//? if >1.21.3 {
-	@Override
+	/*@Override
 	public MapCodec<? extends ExecuteActionCallback> getCodec() {
 		return CODEC;
 	}
-	//? }
+	*///? }
 }

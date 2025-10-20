@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 //? if <1.21.10 {
-/*@Mixin(DebugRenderer.class)
+@Mixin(DebugRenderer.class)
 public class DebugRendererMixin implements DebugRenderers {
 	@Unique
 	private ActionDebugRenderer actionDebugRenderer;
@@ -43,8 +43,8 @@ public class DebugRendererMixin implements DebugRenderers {
 		actionDebugRenderer = renderer;
 	}
 }
-*///?} else {
-@Mixin(DebugRenderer.class)
+//?} else {
+/*@Mixin(DebugRenderer.class)
 public class DebugRendererMixin implements DebugRenderers {
 	@Shadow
 	@Final
@@ -68,4 +68,4 @@ public class DebugRendererMixin implements DebugRenderers {
 		actionDebugRenderer = renderer;
 	}
 }
-//?}
+*///?}
