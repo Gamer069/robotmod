@@ -5,11 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.CustomAction;
-import me.illia.robotmod.actions.Direction;
 import me.illia.robotmod.attachment.TeleportPoint;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.registry.ModRegistries;
-import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -17,25 +15,22 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 //? if >= 1.21.5 {
-/*import net.minecraft.client.data.*;
-*///?} else {
+import net.minecraft.client.data.*;
+//?} else {
+/*import net.minecraft.data.client.*;
+*///?}
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.data.client.*;
-//?}
 import net.minecraft.entity.Entity;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
-import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.*;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -123,7 +118,7 @@ public class Util {
 	}
 
 	//? if <1.21.10 {
-	public static SpawnEggItem spawnEgg(Identifier id, BiFunction<EntityType<? extends MobEntity>, Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
+	/*public static SpawnEggItem spawnEgg(Identifier id, BiFunction<EntityType<? extends MobEntity>, Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
 		return (SpawnEggItem) Registry.register(
@@ -132,8 +127,8 @@ public class Util {
 			func.apply(entity, settings.registryKey(key))
 		);
 	}
-	//?} else {
-	/*public static SpawnEggItem spawnEgg(Identifier id, Function<Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
+	*///?} else {
+	public static SpawnEggItem spawnEgg(Identifier id, Function<Item.Settings, Item> func, EntityType<? extends MobEntity> entity, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
 		return (SpawnEggItem) Registry.register(
@@ -142,7 +137,7 @@ public class Util {
 			func.apply(settings.registryKey(key).spawnEgg(entity))
 		);
 	}
-	*///?}
+	//?}
 
 	public static SpawnEggItem spawnEgg(Identifier id, IOQuadFunction<EntityType<? extends MobEntity>, Integer, Integer, Item.Settings, SpawnEggItem> func, EntityType<? extends MobEntity> entity, int primaryColor, int secondaryColor, Item.Settings settings) {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
@@ -227,10 +222,10 @@ public class Util {
 
 	public static ModelTransform pivot(float x, float y, float z) {
 		//? if >= 1.21.5 {
-		/*return ModelTransform.origin(x, y, z);
-		*///?} else {
-		return ModelTransform.pivot(x, y, z);
-		//?}
+		return ModelTransform.origin(x, y, z);
+		//?} else {
+		/*return ModelTransform.pivot(x, y, z);
+		*///?}
 	}
 
 	public static boolean night(World world) {
@@ -306,26 +301,26 @@ public class Util {
 
 	public static World entityWorld(Entity entity) {
 		//? if <1.21.10 {
-		return entity.getWorld();
-		//?} else {
-		/*return entity.getEntityWorld();
-		*///?}
+		/*return entity.getWorld();
+		*///?} else {
+		return entity.getEntityWorld();
+		//?}
 	}
 
 	public static Vec3d entityPos(Entity entity) {
 		//? if <1.21.10 {
-		return entity.getPos();
-		//?} else {
-		/*return entity.getEntityPos();
-		 *///?}
+		/*return entity.getPos();
+		*///?} else {
+		return entity.getEntityPos();
+		 //?}
 	}
 
 	public static ServerWorld serverEntityWorld(Entity entity) {
 		//? if <1.21.10 {
-		return (ServerWorld)entity.getWorld();
-		 //?} else {
-		/*return (ServerWorld)entity.getEntityWorld();
-		*///?}
+		/*return (ServerWorld)entity.getWorld();
+		 *///?} else {
+		return (ServerWorld)entity.getEntityWorld();
+		//?}
 	}
 
 	public static Text e() {
@@ -334,9 +329,9 @@ public class Util {
 
 	public static void border(DrawContext ctx, int x, int y, int w, int h, int col) {
 		//? if <1.21.10 {
-		ctx.drawBorder(x, y, w, h, col);
-		//? } else {
-		/*ctx.drawStrokedRectangle(x, y, w, h, col);
-		*///? }
+		/*ctx.drawBorder(x, y, w, h, col);
+		*///? } else {
+		ctx.drawStrokedRectangle(x, y, w, h, col);
+		//? }
 	}
 }

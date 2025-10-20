@@ -14,12 +14,12 @@ public class DropAction extends CustomAction {
 	@Override
 	public void run(RobotEntity robot) {
 		//? if > 1.21.3 {
-		/*robot.dropItem(robot.inv.getStack(robot.slot), false, false);
-		 *///?} else {
-		RegistryKey<World> world = robot.getWorld().getRegistryKey();
+		robot.dropItem(robot.inv.getStack(robot.slot), false, false);
+		 //?} else {
+		/*RegistryKey<World> world = robot.getWorld().getRegistryKey();
 		ServerWorld serverWorld = robot.getServer().getWorld(world);
 		robot.dropStack(serverWorld, robot.inv.getStack(robot.slot), 2);
-		//?}
+		*///?}
 		robot.inv.setStack(robot.slot, ItemStack.EMPTY);
 	}
 

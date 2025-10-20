@@ -55,6 +55,7 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 		Util.add(b, "menu.robotmod.action_param_break_fluid", "Break fluids?");
 		Util.add(b, "menu.robotmod.teleported", "Teleported to %s");
 		Util.add(b, "menu.robotmod.random", "Random");
+		Util.add(b, "menu.robotmod.remove_last", "Remove Last");
 
 
 		Util.add(b, "bool.robotmod.true", "True");

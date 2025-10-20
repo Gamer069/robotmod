@@ -61,26 +61,26 @@ public class Robotmod implements ModInitializer {
 			if (!(entity instanceof RobotEntity robot)) return;
 			MinecraftClient client = MinecraftClient.getInstance();
 			//? if <1.21.10 {
-			((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.add(robot);
-			//?} else {
-			/*((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
-			*///?}
+			/*((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.add(robot);
+			*///?} else {
+			((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
+			//?}
 		}));
 
 		ClientEntityEvents.ENTITY_UNLOAD.register((((entity, clientWorld) -> {
 			if (!(entity instanceof RobotEntity robot)) return;
 			MinecraftClient client = MinecraftClient.getInstance();
 			//? if <1.21.10 {
-			((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
-			//?} else {
-			/*((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
-			*///?}
+			/*((DebugRenderers)client.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
+			*///?} else {
+			((DebugRenderers)client.worldRenderer.debugRenderer).robotmod$getActionDebugRenderer().entities.remove(robot);
+			//?}
 		})));
 
 		//? if >1.21.3 {
-		/*TimerCallbackSerializer.INSTANCE.registerSerializer(Util.id("exec_action"), ExecuteActionCallback.CODEC);
-		*///? } else {
-		TimerCallbackSerializer.INSTANCE.registerSerializer(new TimerCallback.Serializer<MinecraftServer, ExecuteActionCallback>(Util.id("exec_action"), ExecuteActionCallback.class) {
+		TimerCallbackSerializer.INSTANCE.registerSerializer(Util.id("exec_action"), ExecuteActionCallback.CODEC);
+		//? } else {
+		/*TimerCallbackSerializer.INSTANCE.registerSerializer(new TimerCallback.Serializer<MinecraftServer, ExecuteActionCallback>(Util.id("exec_action"), ExecuteActionCallback.class) {
 			@Override
 			public void serialize(NbtCompound nbt, ExecuteActionCallback callback) {
 				DataResult<NbtElement> res = ExecuteActionCallback.CODEC.encoder().encode(callback, NbtOps.INSTANCE, NbtOps.INSTANCE.empty());
@@ -100,6 +100,6 @@ public class Robotmod implements ModInitializer {
 				return res.getOrThrow();
 			}
 		});
-		//? }
+		*///? }
 	}
 }

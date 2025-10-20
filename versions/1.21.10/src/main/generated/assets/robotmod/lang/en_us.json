@@ -43,6 +43,7 @@
   "menu.robotmod.add": "+",
   "menu.robotmod.no_points": "No Teleport Points!",
   "menu.robotmod.random": "Random",
+  "menu.robotmod.remove_last": "Remove Last",
   "menu.robotmod.robot": "Robot",
   "menu.robotmod.robot_inv": "Robot Inventory",
   "menu.robotmod.teleported": "Teleported to %s"

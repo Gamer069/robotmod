@@ -5,10 +5,10 @@ import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.registry.ModRegistries;
 
 //? if >= 1.21.6 {
-/*import net.minecraft.client.gl.RenderPipelines;
-*///?} else {
-import net.minecraft.client.render.RenderLayer;
-//?}
+import net.minecraft.client.gl.RenderPipelines;
+//?} else {
+/*import net.minecraft.client.render.RenderLayer;
+*///?}
 
 import me.illia.robotmod.entity.RobotEntity;
 
@@ -45,6 +45,19 @@ public class RobotScreen extends PlainHandledScreen<RobotScreenHandler> {
 		return robotEntity;
 	}
 
+	public void recreateActionsWidget(int x, int y, int width, int height, ArrayList<Action> actions, boolean remove) {
+		RobotEntity robot = getRobot();
+
+		if (remove) {
+			this.remove(actionsWidget);
+		}
+
+		actionsWidget = new ActionsWidget(x, y, width, height, actions);
+		this.addDrawableChild(actionsWidget);
+
+		robot.actions = actions;
+	}
+
 	@Override
 	protected void init() {
 		int x = (width - backgroundWidth) / 2 + titleX;
@@ -52,13 +65,21 @@ public class RobotScreen extends PlainHandledScreen<RobotScreenHandler> {
 
 		actionTypeBtn = CyclingButtonWidget.<Identifier>builder(Util::str)
 			.values(ModRegistries.ACTION_TYPE.getIds())
-			.build(x + 25, y + 10, 100, 20, Util.t("menu.robotmod.action_type"));
+			.build(x + 25, y + 10, 120, 20, Util.t("menu.robotmod.action_type"));
 
 		this.addDrawableChild(actionTypeBtn);
 
-		RobotEntity robot = getRobot();
+		this.addDrawableChild(ButtonWidget.builder(Util.t("menu.robotmod.remove_last"), (btn) -> {
+			ArrayList<Action> actions = actionsWidget.save();
 
-		actionsWidget = new ActionsWidget(x, y + 35, 180, 80, robot.actions);
+			actions.removeLast();
+
+			int prevWidth = actionsWidget.getWidth();
+			int prevHeight = actionsWidget.getHeight();
+			recreateActionsWidget(x, y + 35, prevWidth, prevHeight, actions, true);
+		}).dimensions(x + 25, y + 10, 100, 20).build());
+
+		recreateActionsWidget(x, y + 35, 180, 80, getRobot().actions, false);
 		this.addDrawableChild(actionsWidget);
 
 		this.addDrawableChild(ButtonWidget.builder(Util.t("menu.robotmod.add"), button -> {
@@ -69,11 +90,7 @@ public class RobotScreen extends PlainHandledScreen<RobotScreenHandler> {
 
 			int prevWidth = actionsWidget.getWidth();
 			int prevHeight = actionsWidget.getHeight();
-			this.remove(actionsWidget);
-			actionsWidget = new ActionsWidget(x, y + 50, prevWidth, prevHeight, actions);
-			this.addDrawableChild(actionsWidget);
-
-			robot.actions = actions;
+			recreateActionsWidget(x, y + 35, prevWidth, prevHeight, actions, true);
 		}).dimensions(x, y + 10, 20, 20).build());
 
 		super.init();
@@ -91,10 +108,10 @@ public class RobotScreen extends PlainHandledScreen<RobotScreenHandler> {
 		int y = (height - backgroundHeight) / 2;
 
 		//? if >= 1.21.6 {
-		/*context.drawTexture(RenderPipelines.GUI_TEXTURED, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
-		*///?} else {
-		context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
-		//?}
+		context.drawTexture(RenderPipelines.GUI_TEXTURED, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		//?} else {
+		/*context.drawTexture(RenderLayer::getGuiTextured, Util.id("textures/gui/robot.png"), x, y, 0, 0, backgroundWidth, backgroundHeight, backgroundWidth, backgroundHeight);
+		*///?}
 	}
 
 	@Override
