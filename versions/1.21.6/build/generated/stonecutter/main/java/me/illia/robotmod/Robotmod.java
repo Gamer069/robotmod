@@ -1,5 +1,7 @@
 package me.illia.robotmod;
 
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.DataResult;
 import me.illia.robotmod.actions.ExecuteActionCallback;
 import me.illia.robotmod.actions.ModActionTypes;
 import me.illia.robotmod.attachment.ModAttachmentTypes;
@@ -20,6 +22,11 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.timer.TimerCallback;
 import net.minecraft.world.timer.TimerCallbackSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

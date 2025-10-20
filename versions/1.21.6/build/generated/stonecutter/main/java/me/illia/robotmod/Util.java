@@ -19,7 +19,8 @@ import net.minecraft.block.Block;
 //? if >= 1.21.5 {
 import net.minecraft.client.data.*;
 //?} else {
-/*import net.minecraft.data.client.*;
+/*import net.minecraft.client.gui.DrawContext;
+import net.minecraft.data.client.*;
 *///?}
 import net.minecraft.entity.Entity;
 import net.minecraft.client.model.ModelTransform;
@@ -404,5 +405,13 @@ public class Util {
 
 	public static Text e() {
 		return Text.empty();
+	}
+
+	public static void border(DrawContext ctx, int x, int y, int w, int h, int col) {
+		//? if <1.21.10 {
+		ctx.drawBorder(x, y, w, h, col);
+		//? } else {
+		/*ctx.drawStrokedRectangle(x, y, w, h, col);
+		*///? }
 	}
 }

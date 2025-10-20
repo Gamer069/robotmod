@@ -19,6 +19,7 @@ import net.minecraft.block.Block;
 //? if >= 1.21.5 {
 /*import net.minecraft.client.data.*;
 *///?} else {
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.data.client.*;
 //?}
 import net.minecraft.entity.Entity;
@@ -54,81 +55,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Util {
-	public static final PacketCodec<RegistryByteBuf, ArrayList<Action>> ACTIONS_PC = new PacketCodec<>() {
-		@Override
-		public void encode(RegistryByteBuf buf, ArrayList<Action> actions) {
-			buf.writeVarInt(actions.size());
-			for (Action action : actions) {
-				// Write action_type (int ID)
-				buf.writeIdentifier(action.getActionType());
-
-				// Write params
-				HashMap<String, Action.ParamValue> params = action.getParams();
-				buf.writeVarInt(params.size());
-
-				for (Map.Entry<String, Action.ParamValue> entry : params.entrySet()) {
-					String key = entry.getKey();
-					Action.ParamValue value = entry.getValue();
-
-					buf.writeString(key);
-
-					// Write type tag and value based on ParamValue type
-					switch (value) {
-						case Action.ParamValue.IntParam intParam -> {
-							buf.writeByte(0); // tag for int
-							buf.writeVarInt(intParam.value());
-						}
-						case Action.ParamValue.FloatParam floatParam -> {
-							buf.writeByte(1); // tag for float
-							buf.writeFloat(floatParam.value());
-						}
-						case Action.ParamValue.BoolParam boolParam -> {
-							buf.writeByte(2); // tag for bool
-							buf.writeBoolean(boolParam.value());
-						}
-						case Action.ParamValue.DirParam dirParam -> {
-							buf.writeByte(3);
-							buf.writeVarInt(dirParam.dir().ordinal());
-						}
-						default -> throw new IllegalArgumentException("Unsupported ParamValue type: " + value.getClass().getName());
-					}
-				}
-			}
-		}
-
-		@Override
-		public ArrayList<Action> decode(RegistryByteBuf buf) {
-			int size = buf.readVarInt();
-			ArrayList<Action> actions = new ArrayList<>(size);
-
-			for (int i = 0; i < size; i++) {
-				Identifier typeId = buf.readIdentifier();
-
-				int paramCount = buf.readVarInt();
-				HashMap<String, Action.ParamValue> params = new HashMap<>(paramCount);
-
-				for (int j = 0; j < paramCount; j++) {
-					String key = buf.readString();
-					byte tag = buf.readByte();
-
-					Action.ParamValue value = switch (tag) {
-						case 0 -> new Action.ParamValue.IntParam(buf.readVarInt());
-						case 1 -> new Action.ParamValue.FloatParam(buf.readFloat());
-						case 2 -> new Action.ParamValue.BoolParam(buf.readBoolean());
-						case 3 -> new Action.ParamValue.DirParam(Direction.values()[buf.readVarInt()]);
-						default -> throw new IllegalArgumentException("Unknown param tag: " + tag);
-					};
-
-					params.put(key, value);
-				}
-
-				actions.add(new Action(typeId, params));
-			}
-
-			return actions;
-		}
-	};
-
 	public static final Codec<TeleportPoint> TELEPORT_POINT_C = RecordCodecBuilder.create(inst -> inst.group(
 		Codec.STRING.fieldOf("name").forGetter(TeleportPoint::name),
 		BlockPos.CODEC.fieldOf("pos").forGetter(TeleportPoint::pos),
@@ -404,5 +330,13 @@ public class Util {
 
 	public static Text e() {
 		return Text.empty();
+	}
+
+	public static void border(DrawContext ctx, int x, int y, int w, int h, int col) {
+		//? if <1.21.10 {
+		ctx.drawBorder(x, y, w, h, col);
+		//? } else {
+		/*ctx.drawStrokedRectangle(x, y, w, h, col);
+		*///? }
 	}
 }

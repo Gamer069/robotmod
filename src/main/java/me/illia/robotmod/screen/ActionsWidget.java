@@ -1,5 +1,6 @@
 package me.illia.robotmod.screen;
 
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.*;
 import me.illia.robotmod.registry.ModRegistries;
@@ -18,6 +19,7 @@ import net.minecraft.client.gui.widget.CyclingButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.util.Colors;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -289,11 +291,7 @@ public class ActionsWidget extends ClickableWidget {
 
 	@Override
 	public void renderWidget(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-		//? if <1.21.10 {
-		context.drawBorder(getX(), getY(), this.width, this.height, 0xFFFF0000);
-		//?} else {
-		/*context.drawStrokedRectangle(getX(), getY(), this.width, this.height, 0xFFFF0000);
-		*///?}
+		Util.border(context, getX(), getY(), getWidth(), getHeight(), Colors.GRAY);
 
 		TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
 		int i = 0;
@@ -302,8 +300,8 @@ public class ActionsWidget extends ClickableWidget {
 			String actionTxt = Util.str(action).getString();
 			int y = getY() + (renderer.fontHeight + 10) * i;
 
-			context.fill(getX(), y, getX() + renderer.getWidth(actionTxt) + action.getParams().size() * 30, y, 0xFF0000FF);
-			context.drawText(renderer, actionTxt, getX(), y, 0xFF00FF00, true);
+			context.fill(getX(), y, getX() + renderer.getWidth(actionTxt) + action.getParams().size() * 30, y + 2, Colors.LIGHT_GRAY);
+			context.drawText(renderer, actionTxt, getX(), y, Colors.CYAN, true);
 			i++;
 		}
 
@@ -334,6 +332,12 @@ public class ActionsWidget extends ClickableWidget {
 		for (Action action : this.actions) {
 			builder.put(NarrationPart.TITLE, Util.str(action).getString());
 			CustomAction customAction = ModRegistries.ACTION_TYPE.get(action.actionType);
+
+			if (customAction == null) {
+				Robotmod.LOGGER.warn("There's no registered action for the given actionType: {}", action.actionType);
+				return;
+			}
+
 			for (ActionParamDescriptor desc : customAction.paramDescriptors()) {
 				builder.put(NarrationPart.HINT, desc.name().getString());
 				Action.ParamValue value = action.getParams().get(((TranslatableTextContent)desc.name().getContent()).getKey());
