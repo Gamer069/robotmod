@@ -1,3 +1,4 @@
+import net.fabricmc.loom.task.RemapJarTask
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.compile.JavaCompile
 
@@ -17,29 +18,33 @@ plugins {
     id("dev.kikugie.stonecutter") version "0.8-alpha.6"
 }
 
+val versions: Array<String> = arrayOf("1.21.2", "1.21.3", "1.21.5", "1.21.6", "1.21.8", "1.21.10");
+
 publishMods {
     changelog = """
         # 1.0.1
         ## Added screen for changing the robot's inventory, which can be accessed by right clicking the robot while crouching.
         ## Added padding to action rendering
         ## Fix set yaw and set pitch actions
-        ## Add "Repeast Last Action" and "Attack" actions
+        ## Add "Repeat Last Action" and "Attack" actions
         ## Add 1.21.10 support
     """.trimIndent()
     type = STABLE
-    file.set(tasks.named<Jar>("remapJar").flatMap { it.archiveFile })
+    file = tasks.remapJar.map { it.archiveFile.get() }
+    additionalFiles.from(tasks.remapSourcesJar.map { it.archiveFile.get() })
+    version = "${property("mod.version")}+${property("mod.mc_dep")}-fabric"
     modLoaders.add("fabric")
 
     modrinth {
         projectId = "LUAmt3Hg"
         accessToken = providers.environmentVariable("MR_API_KEY")
-        minecraftVersions.addAll("1.21.2", "1.21.3", "1.21.5", "1.21.6", "1.21.8", "1.21.10")
+        minecraftVersions.addAll(*versions)
     }
 
     curseforge {
         projectId = "1348071"
         accessToken = providers.environmentVariable("CF_API_KEY")
-        minecraftVersions.addAll("1.21.2", "1.21.3", "1.21.5", "1.21.6", "1.21.8", "1.21.10")
+        minecraftVersions.addAll(*versions)
     }
 
     github {
