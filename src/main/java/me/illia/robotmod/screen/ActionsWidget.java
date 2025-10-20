@@ -29,6 +29,8 @@ public class ActionsWidget extends ClickableWidget {
 	private final ArrayList<Action> actions;
 	private final List<ParamWidgetDescriptor> paramWidgets = new ArrayList<>();
 
+	public static final int ACTION_PADDING = 4;
+
 	public ActionsWidget(int x, int y, int w, int h, ArrayList<Action> actions) {
 		super(x, y, w, h, Util.t("menu.robotmod.actions"));
 		this.actions = actions;
@@ -185,13 +187,12 @@ public class ActionsWidget extends ClickableWidget {
 
 	private void initParamWidgets() {
 		TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
-		int yOffset = 0;
 		int actionI = 0;
 
 		for (Action action : actions) {
 			String actionTxt = Util.str(action).getString();
 			int actionTxtW = renderer.getWidth(actionTxt);
-			int y = getY() + (renderer.fontHeight + 10) * actionI;
+			int y = getY() + (renderer.fontHeight + 10) * actionI + ACTION_PADDING;
 
 			int i = 0;
 			CustomAction customAction = ModRegistries.ACTION_TYPE.get(action.actionType);
@@ -281,10 +282,8 @@ public class ActionsWidget extends ClickableWidget {
 					}
 				}
 
-				yOffset += 25; // spacing between widgets
 			}
 
-			yOffset += 10; // spacing between actions
 			actionI++;
 		}
 	}
@@ -298,24 +297,31 @@ public class ActionsWidget extends ClickableWidget {
 
 		for (Action action : actions) {
 			String actionTxt = Util.str(action).getString();
-			int y = getY() + (renderer.fontHeight + 10) * i;
+			int y = getY() + (renderer.fontHeight + 10) * i + ACTION_PADDING;
 
-			context.fill(getX(), y, getX() + renderer.getWidth(actionTxt) + action.getParams().size() * 30, y + 2, Colors.LIGHT_GRAY);
-			context.drawText(renderer, actionTxt, getX(), y, Colors.CYAN, true);
+			int actionW = renderer.getWidth(actionTxt);
+
+			int separatorWidth = actionW + action.getParams().size() * 30 + ACTION_PADDING;
+			int separatorHeight = 2 + ACTION_PADDING;
+
+			int textX = getX() + ACTION_PADDING;
+
+			context.fill(getX(), y, getX() + separatorWidth, y + separatorHeight, Colors.LIGHT_GRAY);
+			context.drawText(renderer, actionTxt, textX, y, Colors.CYAN, true);
 			i++;
 		}
 
 		// Render all param widgets
 		for (ParamWidgetDescriptor widget : paramWidgets) {
 			setWidth(Math.max(getWidth(), renderer.getWidth(widget.desc().name().getString())));
-			int actionH = (renderer.fontHeight + 10) * widget.actionI();
+			int actionH = (renderer.fontHeight + 10) * widget.actionI() + ACTION_PADDING;
 			setHeight(Math.max(getHeight(), actionH + widget.widget().getHeight()));
 
 			String paramName = widget.desc().name().getString();
 			context.drawText(
 				renderer,
 				paramName,
-				widget.paramLabelX(),
+				widget.paramLabelX() + ACTION_PADDING,
 				getY() + actionH,
 				0xFF0000FF,
 				true
