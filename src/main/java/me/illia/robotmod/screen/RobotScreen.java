@@ -25,7 +25,7 @@ import net.minecraft.util.Identifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RobotScreen extends HandledScreen<RobotScreenHandler> {
+public class RobotScreen extends PlainHandledScreen<RobotScreenHandler> {
 	private CyclingButtonWidget<Identifier> actionTypeBtn;
 	private ActionsWidget actionsWidget;
 

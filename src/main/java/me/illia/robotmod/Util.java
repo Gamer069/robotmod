@@ -397,4 +397,8 @@ public class Util {
 		return (ServerWorld)entity.getEntityWorld();
 		//?}
 	}
+
+	public static Text e() {
+		return Text.empty();
+	}
 }

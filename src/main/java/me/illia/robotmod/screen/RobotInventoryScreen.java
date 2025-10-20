@@ -12,7 +12,7 @@ import net.minecraft.text.Text;
 
 import net.minecraft.client.render.RenderLayer;
 
-public class RobotInventoryScreen extends HandledScreen<RobotInventoryScreenHandler> {
+public class RobotInventoryScreen extends PlainHandledScreen<RobotInventoryScreenHandler> {
 	public RobotInventoryScreen(RobotInventoryScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
 

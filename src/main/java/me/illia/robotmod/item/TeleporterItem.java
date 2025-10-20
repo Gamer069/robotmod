@@ -42,7 +42,7 @@ public class TeleporterItem extends Item {
 
 					@Override
 					public Text getDisplayName() {
-						return Util.t("menu.robotmod.tp");
+						return Util.e();
 					}
 
 					@Override

@@ -7,7 +7,6 @@ import me.illia.robotmod.networking.RequestTeleportC2SPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 //? if >=1.21.10 {
 import net.minecraft.client.input.KeyInput;
@@ -20,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import me.illia.robotmod.item.TeleporterItem;
 
-public class ChooseTeleportScreen extends HandledScreen<ChooseTeleportScreenHandler> {
+public class ChooseTeleportScreen extends PlainHandledScreen<ChooseTeleportScreenHandler> {
 	public ChooseTeleportScreen(ChooseTeleportScreenHandler handler, PlayerInventory playerInv, Text title) {
 		super(handler, playerInv, title);
 	}
@@ -52,6 +51,11 @@ public class ChooseTeleportScreen extends HandledScreen<ChooseTeleportScreenHand
 
 	@Override
 	protected void drawBackground(DrawContext context, float deltaTicks, int mouseX, int mouseY) {
+	}
+
+	@Override
+	public boolean renderTitle() {
+		return false;
 	}
 
 	//? if <1.21.10 {

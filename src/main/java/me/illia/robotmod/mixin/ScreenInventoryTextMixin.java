@@ -2,6 +2,7 @@ package me.illia.robotmod.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import me.illia.robotmod.screen.PlainHandledScreen;
 import me.illia.robotmod.screen.RobotInventoryScreen;
 import me.illia.robotmod.screen.RobotScreen;
 import net.minecraft.client.gui.DrawContext;
@@ -25,16 +26,10 @@ public abstract class ScreenInventoryTextMixin {
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V")
 	)
 	public void removeInventoryText(HandledScreen<?> instance, DrawContext context, int mouseX, int mouseY, Operation<Void> original) {
-		HandledScreen<?> screen = null;
-
-		if (instance instanceof RobotScreen rs) {
-			screen = rs;
-		} else if (instance instanceof RobotInventoryScreen ris) {
-			screen = ris;
-		}
-
-		if (screen != null) {
-			context.drawText(screen.getTextRenderer(), screen.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), Colors.DARK_GRAY, false);
+		if (instance instanceof PlainHandledScreen<?> phs) {
+			if (phs.renderTitle()) {
+				context.drawText(phs.getTextRenderer(), phs.getTitle(), robotmod$getTitleX(), robotmod$getTitleY(), Colors.DARK_GRAY, false);
+			}
 		} else {
 			original.call(instance, context, mouseX, mouseY);
 		}
