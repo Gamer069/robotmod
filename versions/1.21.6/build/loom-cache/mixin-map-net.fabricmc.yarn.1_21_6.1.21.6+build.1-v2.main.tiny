@@ -1,4 +1,0 @@
-v1	named	intermediary
-FIELD	me/illia/robotmod/mixin/DebugMixin	Lnet/minecraft/client/MinecraftClient;	client	field_1678
-METHOD	me/illia/robotmod/mixin/DebugMixin	(Lnet/minecraft/text/Text;)V	debugLog	method_37272
-METHOD	me/illia/robotmod/mixin/CarvedPumpkinBlockMixin	(Lnet/minecraft/world/World;Lnet/minecraft/block/pattern/BlockPattern$Result;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;)V	spawnEntity	method_45455

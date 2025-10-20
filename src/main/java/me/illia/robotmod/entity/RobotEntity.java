@@ -77,11 +77,6 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	public RobotEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
 		super(entityType, world);
-		if (world.isClient()) {
-			Robotmod.LOGGER.info("AAAAH");
-		} else {
-			Robotmod.LOGGER.info("OOOOH");
-		}
 
 		this.actions = new ArrayList<>();
 		this.inv = new SimpleInventory(16);

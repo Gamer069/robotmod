@@ -21,6 +21,6 @@ public class ModItemGroups {
 	);
 
 	public static void init() {
-		Robotmod.LOGGER.info("Registering item groups for " + Robotmod.MODID);
+		Robotmod.LOGGER.info("Initializing item groups for " + Robotmod.MODID);
 	}
 }

@@ -61,9 +61,6 @@ public class ModNetworking {
 			MinecraftClient client = context.client();
 			Entity entity = client.world.getEntityById(updateHeldItemS2CPayload.eid());
 
-			Robotmod.LOGGER.info("Entity: " + entity);
-			Robotmod.LOGGER.info("eid: " + updateHeldItemS2CPayload.eid());
-
 			EntityRenderer<?, ?> renderer = client.getEntityRenderDispatcher().getRenderer(entity);
 			if (renderer instanceof RobotEntityRenderer robotEntityRenderer && entity instanceof RobotEntity robotEntity) {
 				robotEntity.inv.setStack(robotEntity.slot, updateHeldItemS2CPayload.heldItem());
