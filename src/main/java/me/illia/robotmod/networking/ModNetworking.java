@@ -49,7 +49,6 @@ public class ModNetworking {
 		}));
 
 		ServerPlayNetworking.registerGlobalReceiver(GetTeleportPointsC2SPayload.ID, ((getTeleportPointsC2SPayload, context) -> {
-			Robotmod.LOGGER.info("uh great c2s packet received");
 			MinecraftServer server = context.server();
 			ServerWorld world = server.getWorld(getTeleportPointsC2SPayload.world());
 			TeleportPointAttachedData data = world.getAttachedOrElse(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DEFAULT);
@@ -57,7 +56,6 @@ public class ModNetworking {
 		}));
 
 		ClientPlayNetworking.registerGlobalReceiver(GetTeleportPointsS2CPayload.ID, (((getTeleportPointsS2CPayload, context) -> {
-			Robotmod.LOGGER.info("get teleport points s2c received");
 			TeleportPointAttachedData.DATA = getTeleportPointsS2CPayload.data();
 
 			MinecraftClient client = context.client();

@@ -20,7 +20,6 @@ public class TeleporterItem extends Item {
 		super(settings);
 	}
 
-	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public ActionResult use(World world, PlayerEntity user, Hand hand) {
 		if (world.isClient()) {

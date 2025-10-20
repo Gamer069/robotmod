@@ -1,9 +1,11 @@
 package me.illia.robotmod.screen;
 
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.attachment.TeleportPoint;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.networking.GetTeleportPointsC2SPayload;
+import me.illia.robotmod.networking.RequestTeleportC2SPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -31,9 +33,12 @@ public class ChooseTeleportScreen extends Screen {
 		// If client doesn't have data yet, request it from the server and wait for the response.
 		// This avoids showing stale/empty lists when the client hasn't fetched the authoritative attachment.
 		if (TeleportPointAttachedData.DATA == null) {
+			Robotmod.LOGGER.info("teleport point attached data data == null");
 			if (MinecraftClient.getInstance().world != null) {
+				Robotmod.LOGGER.info("sending packet");
 				ClientPlayNetworking.send(new GetTeleportPointsC2SPayload(MinecraftClient.getInstance().world.getRegistryKey()));
 				TeleporterItem.sentPacket = true;
+				Robotmod.LOGGER.info("sent packet = true");
 			}
 			// don't populate UI yet; it will be recreated when the packet arrives
 			return;
@@ -54,13 +59,19 @@ public class ChooseTeleportScreen extends Screen {
 
 				World world = Util.entityWorld(player);
 
-				ClientPlayNetworking.send(new me.illia.robotmod.networking.RequestTeleportC2SPayload(pos, world.getRegistryKey()));
+				ClientPlayNetworking.send(new RequestTeleportC2SPayload(pos, world.getRegistryKey()));
 				player.closeScreen();
 			}).dimensions(100, 20 + 30 * i, 100, 20).build());
 			i++;
 		}
 
 		super.init();
+	}
+
+	@Override
+	public void close() {
+		TeleportPointAttachedData.DATA = null;
+		super.close();
 	}
 
 	//? if <1.21.10 {

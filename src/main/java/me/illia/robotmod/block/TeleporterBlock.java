@@ -24,6 +24,8 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
+import java.util.function.UnaryOperator;
+
 public class TeleporterBlock extends SlabBlock {
 	public static final BooleanProperty CHARGED = BooleanProperty.of("charged");
 	public static final VoxelShape SHAPE = VoxelShapes.cuboid(0, 0, 0, 1, 0.4, 1);
