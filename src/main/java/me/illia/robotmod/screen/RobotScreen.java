@@ -77,7 +77,7 @@ public class RobotScreen extends PlainHandledScreen<RobotScreenHandler> {
 			int prevWidth = actionsWidget.getWidth();
 			int prevHeight = actionsWidget.getHeight();
 			recreateActionsWidget(x, y + 35, prevWidth, prevHeight, actions, true);
-		}).dimensions(x + 25, y + 10, 100, 20).build());
+		}).dimensions(x + 150, y + 10, 100, 20).build());
 
 		recreateActionsWidget(x, y + 35, 180, 80, getRobot().actions, false);
 		this.addDrawableChild(actionsWidget);
