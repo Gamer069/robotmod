@@ -1,4 +1,3 @@
-
 package me.illia.robotmod.screen;
 
 import me.illia.robotmod.Util;
@@ -7,30 +6,41 @@ import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.networking.RequestTeleportC2SPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.widget.*;
 //? if >=1.21.10 {
 /*import net.minecraft.client.input.KeyInput;
 *///?}
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import me.illia.robotmod.item.TeleporterItem;
 
-public class ChooseTeleportScreen extends Screen {
-	public TeleportPointAttachedData points;
+public class ChooseTeleportScreen extends PlainHandledScreen<ChooseTeleportScreenHandler> {
+	private final GridWidget grid = new GridWidget().setColumnSpacing(10).setRowSpacing(20);
 
-	public ChooseTeleportScreen(TeleportPointAttachedData points) {
-		super(Util.t("menu.robotmod.tp"));
-		this.points = points;
+	public ChooseTeleportScreen(ChooseTeleportScreenHandler handler, PlayerInventory playerInv, Text title) {
+		super(handler, playerInv, title);
 	}
 
 	@Override
 	protected void init() {
-		int i = 0;
+		TeleportPointAttachedData points = handler.data;
+
+		grid.getMainPositioner()
+			.alignHorizontalCenter()
+			.alignVerticalCenter()
+			.margin(2)
+			.marginY(2)
+			.marginBottom(20);
+
+		GridWidget.Adder adder = grid.createAdder(4);
+
 		for (TeleportPoint point : points.points()) {
-			this.addDrawableChild(ButtonWidget.builder(Text.literal(point.name()), button -> {
+			adder.add(ButtonWidget.builder(Text.literal(point.name()), button -> {
 				BlockPos pos = point.pos();
 				ClientPlayerEntity player = MinecraftClient.getInstance().player;
 
@@ -42,11 +52,29 @@ public class ChooseTeleportScreen extends Screen {
 
 				ClientPlayNetworking.send(new RequestTeleportC2SPayload(pos, world.getRegistryKey()));
 				player.closeScreen();
-			}).dimensions(100, 20 + 30 * i, 100, 20).build());
-			i++;
+			}).size(80, 20).build());
 		}
 
+		grid.forEachChild(this::addDrawableChild);
+
+		this.grid.refreshPositions();
+		this.refreshWidgetPositions();
+
 		super.init();
+	}
+
+	@Override
+	protected void refreshWidgetPositions() {
+		grid.refreshPositions();
+	}
+
+	@Override
+	protected void drawBackground(DrawContext context, float deltaTicks, int mouseX, int mouseY) {
+	}
+
+	@Override
+	public boolean renderTitle() {
+		return false;
 	}
 
 	//? if <1.21.10 {
@@ -62,9 +90,6 @@ public class ChooseTeleportScreen extends Screen {
 /*
 	@Override
 	public boolean keyPressed(KeyInput input) {
-		// failsafe for something that will never happen
-		if (client == null) client = MinecraftClient.getInstance();
-
 		if (client.options.inventoryKey.matchesKey(input)) {
 			close();
 			return true;

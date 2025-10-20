@@ -7,7 +7,7 @@ import me.illia.robotmod.networking.RequestTeleportC2SPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.*;
 //? if >=1.21.10 {
 import net.minecraft.client.input.KeyInput;
 //?}
@@ -17,20 +17,39 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import me.illia.robotmod.item.TeleporterItem;
 
 public class ChooseTeleportScreen extends PlainHandledScreen<ChooseTeleportScreenHandler> {
+	private GridWidget grid = new GridWidget().setColumnSpacing(5).setRowSpacing(5);
+
 	public ChooseTeleportScreen(ChooseTeleportScreenHandler handler, PlayerInventory playerInv, Text title) {
 		super(handler, playerInv, title);
 	}
 
 	@Override
-	protected void init() {
+	public void resize(MinecraftClient client, int width, int height) {
+		grid.forEachChild(this::remove);
+
+		grid = new GridWidget().setColumnSpacing(10).setRowSpacing(20);
+
+		initGrid();
+
+		super.resize(client, width, height);
+	}
+
+	public void initGrid() {
 		TeleportPointAttachedData points = handler.data;
 
-		int i = 0;
+		grid.getMainPositioner()
+			.alignHorizontalCenter()
+			.alignVerticalCenter()
+			.margin(2);
+
+		int scaledWidth = MinecraftClient.getInstance().getWindow().getScaledWidth();
+
+		GridWidget.Adder adder = grid.createAdder(scaledWidth / (100 + 5));
+
 		for (TeleportPoint point : points.points()) {
-			this.addDrawableChild(ButtonWidget.builder(Text.literal(point.name()), button -> {
+			adder.add(ButtonWidget.builder(Text.literal(point.name()), button -> {
 				BlockPos pos = point.pos();
 				ClientPlayerEntity player = MinecraftClient.getInstance().player;
 
@@ -42,11 +61,23 @@ public class ChooseTeleportScreen extends PlainHandledScreen<ChooseTeleportScree
 
 				ClientPlayNetworking.send(new RequestTeleportC2SPayload(pos, world.getRegistryKey()));
 				player.closeScreen();
-			}).dimensions(100, 20 + 30 * i, 100, 20).build());
-			i++;
+			}).size(80, 20).build());
 		}
 
+		grid.forEachChild(this::addDrawableChild);
+
+		this.refreshWidgetPositions();
+	}
+
+	@Override
+	protected void init() {
+		initGrid();
 		super.init();
+	}
+
+	@Override
+	protected void refreshWidgetPositions() {
+		grid.refreshPositions();
 	}
 
 	@Override

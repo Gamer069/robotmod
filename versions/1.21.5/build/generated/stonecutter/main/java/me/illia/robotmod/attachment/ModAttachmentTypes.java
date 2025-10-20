@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import java.util.ArrayList;
 
 public class ModAttachmentTypes {
-	//? if > 1.21.3 {
+	//? if >1.21.3 {
 	@SuppressWarnings("UnstableApiUsage")
 	public static final AttachmentType<TeleportPointAttachedData> TELEPORT_POINTS = AttachmentRegistry.create(
 		Util.id("teleport_points"),

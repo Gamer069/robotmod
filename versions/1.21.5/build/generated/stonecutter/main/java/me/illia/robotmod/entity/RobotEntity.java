@@ -1,6 +1,7 @@
 package me.illia.robotmod.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import me.illia.robotmod.Robotmod;
 import me.illia.robotmod.Util;
 import me.illia.robotmod.actions.Action;
 import me.illia.robotmod.actions.ActionRunner;
@@ -11,18 +12,24 @@ import me.illia.robotmod.screen.RobotInventoryScreenHandler;
 import me.illia.robotmod.screen.RobotScreenHandler;
 import me.illia.robotmod.screen.RobotScreenHandlerData;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.InventoryOwner;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.ServerTask;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 //? if >= 1.21.6 {
@@ -52,6 +59,7 @@ import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<RobotEntity> {
 	public ArrayList<Action> actions;
@@ -65,8 +73,16 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 	public long waitEndTick = -1;
 	public boolean waiting = false;
 
+	public float headPitch = 0;
+
 	public RobotEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
 		super(entityType, world);
+		if (world.isClient()) {
+			Robotmod.LOGGER.info("AAAAH");
+		} else {
+			Robotmod.LOGGER.info("OOOOH");
+		}
+
 		this.actions = new ArrayList<>();
 		this.inv = new SimpleInventory(16);
 		addListener();
@@ -83,6 +99,14 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 		return super.getStackInArm(arm);
 	}
 
+	public void setHeadPitch(float headPitch) {
+		this.headPitch = headPitch;
+	}
+
+	public float getHeadPitch() {
+		return headPitch;
+	}
+
 	public void addListener() {
 		inv.addListener((inv) -> send(inv, null));
 	}
@@ -94,7 +118,7 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 			UpdateHeldItemS2CPayload payload = new UpdateHeldItemS2CPayload(getId(), stack);
 
 			if (entity == null) {
-				for (PlayerEntity player : world.getPlayers()) {
+				for (PlayerEntity player : ((ServerWorld)world).getChunkManager().chunkLoadingManager.getPlayersWatchingChunk(getChunkPos())) {
 					if (player instanceof ServerPlayerEntity serverPlayerEntity) {
 						ServerPlayNetworking.send(serverPlayerEntity, payload);
 					}
@@ -371,7 +395,9 @@ public class RobotEntity extends PathAwareEntity implements SmartBrainOwner<Robo
 
 	@Override
 	public void onStartedTrackingBy(ServerPlayerEntity player) {
-		send(inv, player);
+		World world = Util.entityWorld(this);
+		world.getServer().send(new ServerTask(1, () -> send(inv, player)));
+
 		super.onStartedTrackingBy(player);
 	}
 }

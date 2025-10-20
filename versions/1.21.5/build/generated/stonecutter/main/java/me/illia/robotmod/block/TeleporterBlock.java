@@ -24,6 +24,8 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
+import java.util.function.UnaryOperator;
+
 public class TeleporterBlock extends SlabBlock {
 	public static final BooleanProperty CHARGED = BooleanProperty.of("charged");
 	public static final VoxelShape SHAPE = VoxelShapes.cuboid(0, 0, 0, 1, 0.4, 1);
@@ -37,7 +39,8 @@ public class TeleporterBlock extends SlabBlock {
 	@Override
 	public ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (stack.getItem() == ModItems.PACKED_ENDER_PEARL && !world.isClient() && world instanceof ServerWorld serverWorld) {
-			if (TeleportPointAttachedData.DATA.findPointByPos(pos).isPresent()) return ActionResult.CONSUME;
+			TeleportPointAttachedData attachedData = serverWorld.getAttachedOrElse(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DEFAULT);
+			if (attachedData.findPointByPos(pos).isPresent()) return ActionResult.CONSUME;
 
 			serverWorld.setBlockState(pos, state.with(CHARGED, true));
 			serverWorld.playSound(player, pos, SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, 1.0f, 0.3f);
@@ -47,7 +50,7 @@ public class TeleporterBlock extends SlabBlock {
 
 			player.setStackInHand(hand, stack2);
 
-			serverWorld.setAttached(ModAttachmentTypes.TELEPORT_POINTS, TeleportPointAttachedData.DATA.addPoint(new TeleportPoint("" + (TeleportPointAttachedData.DATA.points().size() + 1), pos, world.getRegistryKey())));
+			serverWorld.setAttached(ModAttachmentTypes.TELEPORT_POINTS, attachedData.addPoint(new TeleportPoint("" + (attachedData.points().size() + 1), pos, world.getRegistryKey())));
 
 			return ActionResult.CONSUME;
 		}

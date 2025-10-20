@@ -9,6 +9,7 @@ import me.illia.robotmod.actions.Direction;
 import me.illia.robotmod.attachment.TeleportPoint;
 import me.illia.robotmod.attachment.TeleportPointAttachedData;
 import me.illia.robotmod.registry.ModRegistries;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -33,6 +34,8 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
@@ -385,5 +388,17 @@ public class Util {
 		//?} else {
 		/*return entity.getEntityPos();
 		 *///?}
+	}
+
+	public static ServerWorld serverEntityWorld(Entity entity) {
+		//? if <1.21.10 {
+		return (ServerWorld)entity.getWorld();
+		 //?} else {
+		/*return (ServerWorld)entity.getEntityWorld();
+		*///?}
+	}
+
+	public static Text e() {
+		return Text.empty();
 	}
 }
