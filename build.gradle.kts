@@ -13,7 +13,40 @@ val sbl_version: String by project
 plugins {
     id("fabric-loom") version "1.11-SNAPSHOT"
     id("maven-publish")
+    id("me.modmuss50.mod-publish-plugin") version "1.0.0"
     id("dev.kikugie.stonecutter") version "0.8-alpha.6"
+}
+
+publishMods {
+    changelog = """
+        # 1.0.1
+        ## Added screen for changing the robot's inventory, which can be accessed by right clicking the robot while crouching.
+        ## Added padding to action rendering
+        ## Fix set yaw and set pitch actions
+        ## Add "Repeast Last Action" and "Attack" actions
+        ## Add 1.21.10 support
+    """.trimIndent()
+    type = STABLE
+    file.set(tasks.named<Jar>("remapJar").flatMap { it.archiveFile })
+    modLoaders.add("fabric")
+
+    modrinth {
+        projectId = "LUAmt3Hg"
+        accessToken = providers.environmentVariable("MR_API_KEY")
+        minecraftVersions.addAll("1.21.2", "1.21.3", "1.21.5", "1.21.6", "1.21.8", "1.21.10")
+    }
+
+    curseforge {
+        projectId = "1348071"
+        accessToken = providers.environmentVariable("CF_API_KEY")
+        minecraftVersions.addAll("1.21.2", "1.21.3", "1.21.5", "1.21.6", "1.21.8", "1.21.10")
+    }
+
+    github {
+        accessToken = providers.environmentVariable("GITHUB_TOKEN")
+        repository = "Gamer069/robotmod"
+        commitish = "master"
+    }
 }
 
 stonecutter {
