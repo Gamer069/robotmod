@@ -1,14 +1,15 @@
-name: Discord
-
+name: Discord Notification
 on:
   push:
   release:
+    types: [published]
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send to Discord
+      - name: Send to Discord (Push)
+        if: github.event_name == 'push'
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
@@ -19,5 +20,41 @@ jobs:
           URL="${{ github.event.head_commit.url }}"
           
           curl -H "Content-Type: application/json" \
-               -d "{\"content\": \"**[$REPO]** Push to \`$BRANCH\` by $AUTHOR\n\`\`\`$COMMIT_MSG\`\`\`\n$URL\"}" \
+               -d "{
+                 \"embeds\": [{
+                   \"title\": \"New Push to $BRANCH\",
+                   \"description\": \"\`\`\`$COMMIT_MSG\`\`\`\",
+                   \"color\": 5814783,
+                   \"fields\": [
+                     {\"name\": \"Repository\", \"value\": \"$REPO\", \"inline\": true},
+                     {\"name\": \"Author\", \"value\": \"$AUTHOR\", \"inline\": true}
+                   ],
+                   \"url\": \"$URL\"
+                 }]
+               }" \
+               $DISCORD_WEBHOOK
+      
+      - name: Send to Discord (Release)
+        if: github.event_name == 'release'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          RELEASE_NAME="${{ github.event.release.name }}"
+          TAG="${{ github.event.release.tag_name }}"
+          REPO="${{ github.repository }}"
+          URL="${{ github.event.release.html_url }}"
+          
+          curl -H "Content-Type: application/json" \
+               -d "{
+                 \"embeds\": [{
+                   \"title\": \"🚀 New Release: $RELEASE_NAME\",
+                   \"description\": \"Version \`$TAG\` has been released!\",
+                   \"color\": 3066993,
+                   \"fields\": [
+                     {\"name\": \"Repository\", \"value\": \"$REPO\", \"inline\": true},
+                     {\"name\": \"Tag\", \"value\": \"$TAG\", \"inline\": true}
+                   ],
+                   \"url\": \"$URL\"
+                 }]
+               }" \
                $DISCORD_WEBHOOK
